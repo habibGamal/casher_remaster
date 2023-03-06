@@ -1,0 +1,11 @@
+\App\Models\User::create(['name'=>'maha','email'=>'admin@admin.com','password'=>Hash::make('admin'),'active'=>true]);
+
+change php version
+delete all files except .env and backup
+git pull in specific folder
+make storage:link
+migrate
+appServiceProvider
+$this->app->bind('path.public', function() {
+            return base_path().'/public_html';
+        });

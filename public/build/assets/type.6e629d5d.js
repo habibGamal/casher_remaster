@@ -1,0 +1,1 @@
+import{o as n}from"./app.0e9403f5.js";function u(a,t){var o=n({},a);return Array.isArray(t)&&t.forEach(function(r){delete o[r]}),o}var c=function(){for(var t=arguments.length,o=new Array(t),r=0;r<t;r++)o[r]=arguments[r];return o};export{u as o,c as t};

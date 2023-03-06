@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: tajawal;
+    src: url("../assets/fonts/Tajawal-Light.ttf");
+    font-weight: 300;
+}
+@font-face {
+    font-family: tajawal;
+    src: url("../assets/fonts/Tajawal-Regular.ttf");
+}
+@font-face {
+    font-family: tajawal;
+    src: url("../assets/fonts/Tajawal-Medium.ttf");
+    font-weight: 500;
+}
+@font-face {
+    font-family: tajawal;
+    src: url("../assets/fonts/Tajawal-Bold.ttf");
+    font-weight: 700;
+}
+@font-face {
+    font-family: tajawal;
+    src: url("./assets/fonts/Tajawal-ExtraBold.ttf");
+    font-weight: 900;
+}
+
+* {
+    font-family: tajawal;
+}
+
+html {
+    direction: rtl;
+}
+
+body {
+    @apply bg-zinc-100;
+}
+
+::placeholder {
+    font-family: tajawal;
+}
+// reset confelict of tailwind and ant
+.ant-btn-primary {
+    // background-color: #6366f1;
+    background-color: #47388d;
+    box-shadow: none;
+}
+// .ant-btn-primary:not(:disabled):hover {
+//     background-color: #9197ff;
+// }
+.ant-btn-primary:not(:disabled):hover {
+    background-color: #645699;
+}
+.ant-btn-default {
+    background-color: #ffffff;
+}
+button img {
+    display: inline;
+}
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+    // display: block;
+    vertical-align: unset;
+}
+
+// scrollbar
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+// table
+.isolate {
+    @apply p-6 bg-white border border-indigo-500 shadow-xl rounded-xl
+}
