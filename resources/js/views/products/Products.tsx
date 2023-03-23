@@ -6,7 +6,7 @@ import useTableController from "../../hooks/useTableController";
 import useModal from "../../hooks/useModal";
 import ProductsTable from "../common/tables/ProductsTable";
 import ProductForm from "../common/forms/ProductForm";
-import ProductService from "../../services/ProductService";
+import ProductServices from "../../services/ProductServices";
 import IconSax from "../components/IconSax";
 
 export default function Products() {
@@ -31,7 +31,7 @@ export default function Products() {
 
     const exitSearchModeAndGoIndex = () => {
         exitSearchMode();
-        ProductService.indexPreserveState();
+        ProductServices.index();
     };
 
     return (

@@ -8,7 +8,8 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductGroupController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\OpeningStockItemController;
 use App\Mail\Feedback;
 use App\Models\Exam;
 use App\Models\ProductGroup;
@@ -41,11 +42,23 @@ Route::get('/', function () {
 })->name('home');
 // product
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-// Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
 Route::post('/products/store', [ProductController::class, 'store']);
 Route::post('/products/update/{product}', [ProductController::class, 'update']);
 Route::delete('/products/{product}', [ProductController::class, 'delete']);
 // product-group
 Route::get('/product-groups', [ProductGroupController::class, 'index'])->name('product-groups.index');
-Route::get('/product-groups/search', [ProductGroupController::class, 'search'])->name('product-groups.search');
-Route::get('/product-groups/{productGroup}', [ProductGroupController::class, 'show'])->name('product-groups.index');
+Route::post('/product-groups/store', [ProductGroupController::class, 'store']);
+Route::post('/product-groups/update/{productGroup}', [ProductGroupController::class, 'update']);
+Route::get('/product-groups/{productGroup}', [ProductGroupController::class, 'show']);
+Route::delete('/product-groups/{productGroup}', [ProductGroupController::class, 'delete']);
+// product
+Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
+Route::post('/stocks/store', [StockController::class, 'store']);
+Route::post('/stocks/update/{stock}', [StockController::class, 'update']);
+Route::delete('/stocks/{stock}', [StockController::class, 'delete']);
+// opening-stock
+Route::get('/opening-stocks', [OpeningStockItemController::class, 'index'])->name('opening-stocks.index');
+Route::post('/opening-stocks/store', [OpeningStockItemController::class, 'store']);
+Route::post('/opening-stocks/update/{openingStock}', [OpeningStockItemController::class, 'update']);
+Route::delete('/opening-stocks/{openingStock}', [OpeningStockItemController::class, 'delete']);
+

@@ -8,11 +8,8 @@ import useSortTable from "../../../hooks/useSortTable";
 import useTablePagination from "../../../hooks/useTablePagination";
 import useWhileTyping from "../../../hooks/useWhileTyping";
 import { ProductWithProductGroup } from "../../../interfaces/Product";
-import ProductService, {
-    ProductTablePaginateSettings,
-} from "../../../services/ProductService";
+import ProductServices from "../../../services/ProductServices";
 import Pagination from "../../../interfaces/Pagination";
-import { Inertia } from "@inertiajs/inertia";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
 import sortInfoMapping from "../../../helpers/sortInfoMapping";
 import { usePage } from "@inertiajs/inertia-react";
@@ -27,7 +24,7 @@ interface TableProps {
 
 const ProductsTable = ({ searchMode, search, attribute }: TableProps) => {
     const tableState = useLoading();
-    const paginate = usePage().props.paginate as Pagination<Model>;
+    const products = usePage().props.products as Pagination<Model>;
 
     const { tableParams, updateTableParams, resetPagination } =
         useTablePagination<Model>();
@@ -96,7 +93,12 @@ const ProductsTable = ({ searchMode, search, attribute }: TableProps) => {
                     <Button
                         danger
                         type="dashed"
-                        onClick={() => ProductService.delete(record.id)}
+                        onClick={() =>
+                            ModelServices.delete(
+                                record.id!,
+                                ProductServices.BASE_ROUTE
+                            )
+                        }
                         icon={<DeleteOutlined />}
                     />
                 </Space>
@@ -108,7 +110,12 @@ const ProductsTable = ({ searchMode, search, attribute }: TableProps) => {
         () => {
             resetPagination();
             resetSortState();
-            ProductService.search(search, attribute, tableState.stateLoading);
+            const service = ModelServices.setTableGlobalSettings({
+                stateLoading: tableState.stateLoading,
+                search,
+                attribute,
+            });
+            service.updateTableData("products");
         },
         searchMode,
         [searchMode, search]
@@ -120,28 +127,16 @@ const ProductsTable = ({ searchMode, search, attribute }: TableProps) => {
         sorter: SorterResult<Model> | SorterResult<Model>[]
     ) => {
         updateTableParams(pagination, filters, sorter);
-        // const productServices = new ProductService();
-        // productServices.setTablePaginateSettings(
-        //     new ProductTablePaginateSettings(
-        //         pagination.current!,
-        //         pagination.pageSize!,
-        //         sortInfoMapping<Model>(sorter as SorterResult<Model>),
-        //         tableState.stateLoading,
-        //         search,
-        //         attribute
-        //     )
-        // );
-        // if (searchMode) productServices.searchPaginate();
-        // else productServices.paginate();
+        const sortInfo = sortInfoMapping<Model>(sorter as SorterResult<Model>);
         const service = ModelServices.setTableGlobalSettings({
             page: pagination.current!,
             pageSize: pagination.pageSize!,
-            sortInfo: sortInfoMapping<Model>(sorter as SorterResult<Model>),
+            sortInfo,
             stateLoading: tableState.stateLoading,
             search,
             attribute,
         });
-        service.updateTableData("paginate");
+        service.updateTableData("products");
     };
     return (
         <>
@@ -163,10 +158,10 @@ const ProductsTable = ({ searchMode, search, attribute }: TableProps) => {
             <Table
                 columns={columns}
                 rowKey={(record) => record.id!}
-                dataSource={paginate.data}
+                dataSource={products.data}
                 pagination={{
                     ...tableParams.pagination,
-                    total: paginate.total,
+                    total: products.total,
                 }}
                 expandable={{
                     expandedRowRender: (record) => (
@@ -201,7 +196,7 @@ const ProductsTable = ({ searchMode, search, attribute }: TableProps) => {
                 bordered
                 onChange={handleTableChange}
                 scroll={{ x: true }}
-                footer={() => "عدد النتائج : " + paginate.total}
+                footer={() => "عدد النتائج : " + products.total}
             />
         </>
     );

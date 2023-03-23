@@ -1,7 +1,8 @@
 import TableGlobalSettings from "../interfaces/TableGlobalSettings";
 
 import FormGlobalSettings from "../interfaces/FormGlobalSettings";
-import { Inertia } from "@inertiajs/inertia";
+import { ErrorBag, Errors, Inertia } from "@inertiajs/inertia";
+import { message } from "antd";
 
 export default class ModelServices<T> {
     private tableGlobalSettings?: TableGlobalSettings;
@@ -13,13 +14,18 @@ export default class ModelServices<T> {
     }
 
     private extractDataFromTableGlobalSettings() {
-        const {
-            stateLoading,
-            sortInfo: { order, columnKey },
-            ...remaining
-        } = this.tableGlobalSettings!;
-
-        return { columnKey, order, ...remaining };
+        const settings = this.tableGlobalSettings!;
+        if (settings.sortInfo) {
+            const {
+                stateLoading,
+                sortInfo: { order, columnKey },
+                ...remaining
+            } = settings;
+            return { columnKey, order, ...remaining };
+        } else {
+            const { stateLoading, ...remaining } = settings;
+            return remaining;
+        }
     }
 
     private preNamingData(slug: string, data: { [key: string]: any }) {
@@ -49,13 +55,58 @@ export default class ModelServices<T> {
         });
     }
 
-    private formGlobalSettings?: FormGlobalSettings<T>;
+    private formGlobalSettings?: FormGlobalSettings;
 
-    static setFormGlobalSettings<T>(
-        tableGlobalSettings: FormGlobalSettings<T>
-    ) {
+    static setFormGlobalSettings<T>(tableGlobalSettings: FormGlobalSettings) {
         const instance = new this<T>();
         instance.formGlobalSettings = tableGlobalSettings;
         return instance;
+    }
+
+    public update(baseRoute: string) {
+        if (this.formGlobalSettings === undefined) return;
+        if (!this.formGlobalSettings.modelId) return;
+        Inertia.post(
+            `${baseRoute}/update/${this.formGlobalSettings.modelId}`,
+            this.formGlobalSettings.formValues,
+            {
+                ...this.formGlobalSettings.stateLoading,
+                onSuccess: () => {
+                    message.success("تم التعديل بنجاح");
+                    this.formGlobalSettings!.closeFormModal();
+                },
+                onError: (errors: any) => {
+                    this.formGlobalSettings!.setErrors(
+                        errors as Errors & ErrorBag
+                    );
+                },
+            }
+        );
+    }
+
+    public create(baseRoute: string) {
+        if (this.formGlobalSettings === undefined) return;
+        Inertia.post(`${baseRoute}/store`, this.formGlobalSettings.formValues, {
+            ...this.formGlobalSettings.stateLoading,
+            onSuccess: () => {
+                message.success("تمت الاضافة بنجاح");
+                this.formGlobalSettings!.form.resetFields();
+            },
+            onError: (errors: any) => {
+                this.formGlobalSettings!.setErrors(errors as Errors & ErrorBag);
+            },
+        });
+    }
+
+    static delete(id: number,baseRoute: string) {
+        Inertia.delete(`${baseRoute}/${id}`, {
+            onSuccess: () => {
+                message.success("تم الحذف بنجاح");
+            },
+            onError: () => {
+                message.error("حدث خطأ ما");
+            },
+            preserveState: true,
+        });
     }
 }

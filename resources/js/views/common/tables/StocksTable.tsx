@@ -1,155 +1,157 @@
-import React, { useEffect, useState } from "react";
-import { Button, Modal, Space, Table, message } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import React, { useState } from "react";
+import { Button, Modal, Space, Table } from "antd";
+import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import Product from "../../../app/models/Product";
 import useModal from "../../../hooks/useModal";
-import ProductForm from "../forms/ProductForm";
 import useSortTable from "../../../hooks/useSortTable";
-import ProductService from "../../../app/services/ProductService";
 import useTablePagination from "../../../hooks/useTablePagination";
 import useWhileTyping from "../../../hooks/useWhileTyping";
-import { QueryResult } from "tauri-plugin-sql-api";
-import OpeningStockForm from "../forms/OpeningStockForm";
+import { ProductWithProductGroup } from "../../../interfaces/Product";
+import Pagination from "../../../interfaces/Pagination";
+import { FilterValue, SorterResult } from "antd/es/table/interface";
+import sortInfoMapping from "../../../helpers/sortInfoMapping";
+import { usePage } from "@inertiajs/inertia-react";
+import useLoading from "../../../hooks/useLoading";
+import ModelServices from "../../../services/ModelServices";
 import StockForm from "../forms/StockForm";
-
-interface StocksTableProps {
-  searchMode: boolean;
-  search: string;
-  attribute: string;
-  refresh: boolean;
-  setRefresh: (refresh: boolean) => void;
+import StockServices from "../../../services/StockServices";
+type Model = ProductWithProductGroup;
+interface TableProps {
+    searchMode: boolean;
+    search: string;
+    attribute: string;
 }
 
-const StocksTable = ({
-  searchMode,
-  search,
-  attribute,
-  refresh,
-  setRefresh,
-}: StocksTableProps) => {
-  const [loading, setLoading] = useState(false);
-  const { tableParams, handleTableChange, resetPagination } =
-    useTablePagination<Product>();
-  const [data, setData] = useState<Product[]>([]);
-  const [total, setTotal] = useState<number>(0);
-  const [productToEdit, setProductToEdit] = useState<Product | null>(null);
-  const {
-    open,
-    closeModal,
-    confirmLoading,
-    showModal,
-    handleOk,
-    handleCancel,
-  } = useModal();
-  const { getSortProps, sortDB, sortedInfo } = useSortTable<Product>();
+const ProductsTable = ({ searchMode, search, attribute }: TableProps) => {
+    const tableState = useLoading();
+    const stocks = usePage().props.stocks as Pagination<Model>;
 
-  const editModel = (product: Product) => {
-    setProductToEdit(product);
-    showModal();
-  };
+    const { tableParams, updateTableParams, resetPagination } =
+        useTablePagination<Model>();
 
-  const columns: ColumnsType<Product> = [
-    {
-      title: "أسم المخزن",
-      dataIndex: "name",
-      key: "name",
-      ...getSortProps("name"),
-    },
-    {
-      title: "المسؤول",
-      dataIndex: "barcode",
-      key: "barcode",
-    },
-    {
-      title: "المخزن يحتوي على بضائع",
-      dataIndex: "selling_price",
-      key: "selling_price",
-    },
-    {
-      title: "تحكم",
-      key: "control",
-      render: (record: Product) => (
-        <Space size="middle">
-          <Button
-            type="primary"
-            onClick={() => editModel(record)}
-            icon={<EditOutlined />}
-          />
-          <Button
-            danger
-            onClick={() => handleDelete(record)}
-            icon={<DeleteOutlined />}
-          />
-        </Space>
-      ),
-    },
-  ];
-
-  const fetchData = async (search?: string) => {
-    setLoading(true);
-    const { products, count } = await ProductService.chunk(
-      tableParams,
-      sortDB(),
-      search
+    const [modelToEdit, setModelToEdit] = useState<Model | undefined>(
+        undefined
     );
-    setData(products);
-    setTotal(count);
-    setLoading(false);
-  };
 
-  const handleDelete = async (product: Product) => {
-    const res = (await product.delete()) as QueryResult;
-    if (res && res.rowsAffected === 1) {
-      setRefresh(!refresh);
-      message.info("تم حذف الصنف بنجاح");
-    } else {
-      message.error("حدث خطأ أثناء حذف الصنف");
-    }
-  };
+    const {
+        open,
+        closeModal,
+        confirmLoading,
+        showModal,
+        handleOk,
+        handleCancel,
+    } = useModal();
 
-  useEffect(() => {
-    searchMode ? fetchData(`${attribute} LIKE '%${search}%'`) : fetchData();
-  }, [JSON.stringify(tableParams), searchMode, attribute, sortedInfo, refresh]);
+    const { getSortProps, resetSortState } = useSortTable<Model>("created_at");
 
-  useWhileTyping(
-    () => {
-      resetPagination();
-      fetchData(`${attribute} LIKE '%${search}%'`);
-    },
-    searchMode,
-    [searchMode, search]
-  );
+    const editModel = (model: Model) => {
+        setModelToEdit(model);
+        showModal();
+    };
 
-  return (
-    <>
-      <Modal
-        title="تعديل بيانات المخزن"
-        open={open}
-        onOk={handleOk}
-        footer={null}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-        destroyOnClose={true}
-        width="90%"
-      >
-        <StockForm
-          closeModal={closeModal}
-          modelToEdit={productToEdit || undefined}
-        />
-      </Modal>
-      <Table
-        columns={columns}
-        rowKey={(record) => record.id!}
-        dataSource={data}
-        pagination={{ ...tableParams.pagination, total }}
-        loading={loading}
-        bordered
-        onChange={handleTableChange}
-        footer={() => "عدد النتائج : " + total}
-      />
-    </>
-  );
+    const columns: ColumnsType<Model> = [
+        {
+            title: "أسم المخزن",
+            dataIndex: "name",
+            key: "name",
+            ...getSortProps("name"),
+        },
+        {
+            title: "المخزن يحتوي على بضائع",
+            dataIndex: "selling_price",
+            key: "selling_price",
+        },
+        {
+            title: "تحكم",
+            key: "control",
+            render: (record: Model) => (
+                <Space size="middle">
+                    <Button
+                        onClick={() => editModel(record)}
+                        icon={<EditOutlined className="text-indigo-900" />}
+                    />
+                    <Button
+                        danger
+                        type="dashed"
+                        onClick={() =>
+                            ModelServices.delete(
+                                record.id!,
+                                StockServices.BASE_ROUTE
+                            )
+                        }
+                        icon={<DeleteOutlined />}
+                    />
+                </Space>
+            ),
+        },
+    ];
+
+    useWhileTyping(
+        () => {
+            resetPagination();
+            resetSortState();
+            const service = ModelServices.setTableGlobalSettings({
+                stateLoading: tableState.stateLoading,
+                search,
+                attribute,
+            });
+            service.updateTableData("stocks");
+        },
+        searchMode,
+        [searchMode, search]
+    );
+
+    const handleTableChange = (
+        pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        sorter: SorterResult<Model> | SorterResult<Model>[]
+    ) => {
+        updateTableParams(pagination, filters, sorter);
+        const sortInfo = sortInfoMapping<Model>(sorter as SorterResult<Model>);
+        const service = ModelServices.setTableGlobalSettings({
+            page: pagination.current!,
+            pageSize: pagination.pageSize!,
+            sortInfo,
+            stateLoading: tableState.stateLoading,
+            search,
+            attribute,
+        });
+        service.updateTableData("stocks");
+    };
+
+    return (
+        <>
+            <Modal
+                title="تعديل بيانات المخزن"
+                open={open}
+                onOk={handleOk}
+                footer={null}
+                confirmLoading={confirmLoading}
+                onCancel={handleCancel}
+                destroyOnClose={true}
+                width="90%"
+            >
+                <StockForm
+                    closeModal={closeModal}
+                    modelToEdit={modelToEdit || undefined}
+                />
+            </Modal>
+            <Table
+                columns={columns}
+                rowKey={(record) => record.id!}
+                dataSource={stocks.data}
+                pagination={{
+                    ...tableParams.pagination,
+                    total: stocks.total,
+                }}
+                loading={tableState.loading}
+                bordered
+                onChange={handleTableChange}
+                scroll={{ x: true }}
+                footer={() => "عدد النتائج : " + stocks.total}
+            />
+        </>
+    );
 };
 
-export default StocksTable;
+export default ProductsTable;

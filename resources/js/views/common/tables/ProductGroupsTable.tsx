@@ -11,13 +11,12 @@ import { ProductGroupWithProductsCount } from "../../../interfaces/ProductGroup"
 import Pagination from "../../../interfaces/Pagination";
 import { usePage } from "@inertiajs/inertia-react";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
-import ProductGroupServices, {
-    ProductGroupTablePaginateSettings,
-} from "../../../services/ProductGroupServices";
 import sortInfoMapping from "../../../helpers/sortInfoMapping";
 import ProductsInGroup from "../../products/modals/ProductsInGroup";
 import { Inertia } from "@inertiajs/inertia";
 import useLoading from "../../../hooks/useLoading";
+import ModelServices from "../../../services/ModelServices";
+import ProductGroupServices from "../../../services/ProductGroupServices";
 type Model = ProductGroupWithProductsCount;
 interface TableProps {
     searchMode: boolean;
@@ -27,7 +26,7 @@ interface TableProps {
 
 const ProductGroupsTable = ({ searchMode, search, attribute }: TableProps) => {
     const tableState = useLoading();
-    const paginate = usePage().props.paginate as Pagination<Model>;
+    const productGroups = usePage().props.productGroups as Pagination<Model>;
 
     const { tableParams, updateTableParams, resetPagination } =
         useTablePagination<Model>();
@@ -57,13 +56,7 @@ const ProductGroupsTable = ({ searchMode, search, attribute }: TableProps) => {
     };
 
     const showProductsInGroup = (id: number) => {
-        Inertia.reload({
-            data: {
-                id,
-            },
-            only: ["productsInGroup"],
-            preserveState: true,
-        });
+        ProductGroupServices.getProductsInGroup(id);
         showProductsInGroupModal();
     };
 
@@ -95,7 +88,12 @@ const ProductGroupsTable = ({ searchMode, search, attribute }: TableProps) => {
                     <Button
                         danger
                         type="dashed"
-                        onClick={() => {}}
+                        onClick={() =>
+                            ModelServices.delete(
+                                record.id!,
+                                ProductGroupServices.BASE_ROUTE
+                            )
+                        }
                         icon={<DeleteOutlined />}
                     />
                 </Space>
@@ -107,11 +105,11 @@ const ProductGroupsTable = ({ searchMode, search, attribute }: TableProps) => {
         () => {
             resetPagination();
             resetSortState();
-            ProductGroupServices.search(
+            const service = ModelServices.setTableGlobalSettings({
                 search,
                 attribute,
-                tableState.stateLoading
-            );
+            });
+            service.updateTableData("productGroups");
         },
         searchMode,
         [searchMode, search]
@@ -123,19 +121,16 @@ const ProductGroupsTable = ({ searchMode, search, attribute }: TableProps) => {
         sorter: SorterResult<Model> | SorterResult<Model>[]
     ) => {
         updateTableParams(pagination, filters, sorter);
-        const services = new ProductGroupServices();
-        services.setTablePaginateSettings(
-            new ProductGroupTablePaginateSettings(
-                pagination.current!,
-                pagination.pageSize!,
-                sortInfoMapping<Model>(sorter as SorterResult<Model>),
-                tableState.stateLoading,
-                search,
-                attribute
-            )
-        );
-        if (searchMode) services.searchPaginate();
-        else services.paginate();
+        const sortInfo = sortInfoMapping<Model>(sorter as SorterResult<Model>);
+        const service = ModelServices.setTableGlobalSettings({
+            page: pagination.current!,
+            pageSize: pagination.pageSize!,
+            sortInfo,
+            stateLoading: tableState.stateLoading,
+            search,
+            attribute,
+        });
+        service.updateTableData("productGroups");
     };
     return (
         <>
@@ -157,23 +152,23 @@ const ProductGroupsTable = ({ searchMode, search, attribute }: TableProps) => {
                 destroyOnClose={true}
                 width="90%"
             >
-                {/* <ProductGroupForm
-          closeModal={closeEditForm}
-          modelToEdit={productToEdit || undefined}
-        /> */}
+                <ProductGroupForm
+                    closeModal={closeEditForm}
+                    modelToEdit={modelToEdit || undefined}
+                />
             </Modal>
             <Table
                 columns={columns}
                 rowKey={(record) => record.id!}
-                dataSource={paginate.data}
+                dataSource={productGroups.data}
                 pagination={{
                     ...tableParams.pagination,
-                    total: paginate.total,
+                    total: productGroups.total,
                 }}
                 loading={tableState.loading}
                 bordered
                 onChange={handleTableChange}
-                footer={() => "عدد النتائج : " + paginate.total}
+                footer={() => "عدد النتائج : " + productGroups.total}
                 className="custom-table"
             />
         </>

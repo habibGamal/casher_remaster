@@ -34,7 +34,7 @@ export default function OpeningStocks() {
         destroyOnClose={true}
         width="90%"
       >
-        <OpeningStockForm setRefresh={setRefresh} />
+        {/* <OpeningStockForm setRefresh={setRefresh} /> */}
       </Modal>
       <Col span="24" className="isolate">
         <TableController
@@ -56,8 +56,6 @@ export default function OpeningStocks() {
           searchMode={searchMode}
           search={search}
           attribute={attribute}
-          refresh={refresh}
-          setRefresh={setRefresh}
         />
       </Col>
     </Row>

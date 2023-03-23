@@ -2,51 +2,20 @@ import { Checkbox, Radio, Select, Space, message } from "antd";
 import { Button, Col, Form, Input, InputNumber, Row } from "antd";
 import React, { useState } from "react";
 import useFormError from "../../../hooks/useFormError";
-import ProductService, {
-    ProductFormSettings,
-} from "../../../services/ProductService";
+import ProductServices from "../../../services/ProductServices";
 import { ProductWithProductGroup } from "../../../interfaces/Product";
 import SelectSearch, { SetOptions } from "../../components/SelectSearch";
-import { Inertia } from "@inertiajs/inertia";
-import { usePage } from "@inertiajs/inertia-react";
 import useLoading from "../../../hooks/useLoading";
+import { FORM_COLUMNS_LAYOUT, FORM_LAYOUT_1 } from "../../../Layouts";
+import ModelServices from "../../../services/ModelServices";
 
-const { Option } = Select;
-
-const formItemLayout = {
-    labelCol: {
-        md: {
-            span: 12,
-        },
-        lg: {
-            span: 24,
-        },
-        xl: {
-            span: 20,
-        },
-    },
-    wrapperCol: {
-        md: {
-            span: 12,
-        },
-        lg: {
-            span: 24,
-        },
-        xl: {
-            span: 20,
-        },
-    },
-};
-const columnsLayout = {
-    md: 24,
-    lg: 12,
-    xl: 8,
-};
 type Model = ProductWithProductGroup;
+
 interface FormProps {
     modelToEdit?: Model;
     closeModal: () => void;
 }
+
 const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
     const [form] = Form.useForm();
 
@@ -57,23 +26,20 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
     const { setErrors, getError } = useFormError();
 
     const onFinish = (values: any) => {
-        const productServices = new ProductService();
-        productServices.setFormSettings(
-            new ProductFormSettings(
-                modelToEdit,
-                form,
-                values,
-                submitState.stateLoading,
-                closeModal,
-                setErrors
-            )
-        );
-        if (modelToEdit) productServices.update();
-        else productServices.create();
+        const services = ModelServices.setFormGlobalSettings({
+            modelId: modelToEdit?.id,
+            form,
+            formValues: values,
+            stateLoading: submitState.stateLoading,
+            closeFormModal: closeModal,
+            setErrors,
+        });
+        if (modelToEdit) services.update(ProductServices.BASE_ROUTE);
+        else services.create(ProductServices.BASE_ROUTE);
     };
 
     const onSelectProductGroup = (value: string, setOptions: SetOptions) => {
-        ProductService.selectSearchProductGroup(value, (page: any) => {
+        ProductServices.selectSearchProductGroup(value, (page: any) => {
             if (!page.props.productGroups) return;
             const options = page.props.productGroups as {
                 id: number;
@@ -90,7 +56,7 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
 
     return (
         <Form
-            {...formItemLayout}
+            {...FORM_LAYOUT_1}
             form={form}
             name="product_form"
             onFinish={onFinish}
@@ -100,7 +66,7 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
             scrollToFirstError
         >
             <Row gutter={24}>
-                <Col {...columnsLayout}>
+                <Col {...FORM_COLUMNS_LAYOUT}>
                     <Form.Item
                         name="name"
                         label="أسم الصنف"
@@ -134,7 +100,7 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
                     </Form.Item>
                 </Col>
 
-                <Col {...columnsLayout}>
+                <Col {...FORM_COLUMNS_LAYOUT}>
                     <Form.Item
                         name="buying_price"
                         label="سعر الشراء"
@@ -158,7 +124,7 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
                         <InputNumber min={0} style={{ width: "100%" }} />
                     </Form.Item>
                 </Col>
-                <Col {...columnsLayout}>
+                <Col {...FORM_COLUMNS_LAYOUT}>
                     <Form.Item
                         name="has_expire_date"
                         initialValue={1}
@@ -193,7 +159,11 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
             </Row>
             <Form.Item className="grid place-items-center mt-8">
                 <Space>
-                    <Button type="primary" htmlType="submit" loading={submitState.loading}>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={submitState.loading}
+                    >
                         حفظ
                     </Button>
                     <Button htmlType="button" onClick={() => {}}>

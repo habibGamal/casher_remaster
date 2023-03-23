@@ -14,10 +14,10 @@ class ProductGroupController extends Controller
     public function index(Request $request, ProductGroupServices $productGroupServices)
     {
         return Inertia::render($this->index, [
-            'paginate' =>  fn () => $productGroupServices->paginate($request),
-            'productsInGroup' => Inertia::lazy(function () use ($request) {
-                if (!$request->id) return;
-                return ProductGroup::select(['id','name'])->with('products:id,name,barcode,product_group_id')->find($request->id);
+            'productGroups' =>  fn () => $productGroupServices->get_product_groups($request, 'productGroups'),
+            'productsInGroup' => Inertia::lazy(function () use ($request, $productGroupServices) {
+                if (!$request->productGroupId) return;
+                return $productGroupServices->get_products_in_groups($request, 'productsInGroup');
             }),
         ]);
     }
@@ -29,14 +29,28 @@ class ProductGroupController extends Controller
         ]);
     }
 
-    public function search(Request $request, ProductGroupServices $productGroupServices)
+    public function store(Request $request)
     {
-        return Inertia::render($this->index, [
-            'paginate' =>  fn () => $productGroupServices->paginateWithSearch($request),
-            'productsInGroup' => Inertia::lazy(function () use ($request) {
-                if (!$request->id) return;
-                return ProductGroup::select(['id','name'])->with('products:id,name,barcode')->find($request->id);
-            }),
+        $request->validate([
+            'name' => 'required|string',
         ]);
+        ProductGroup::create($request->all());
+        return redirect()->route('product-groups.index');
+    }
+
+
+    public function update(Request $request,ProductGroup $productGroup)
+    {
+        $request->validate([
+            'name' => 'required|string',
+        ]);
+        $productGroup->update($request->all());
+        return redirect()->route('product-groups.index');
+    }
+
+    public function delete(ProductGroup $productGroup)
+    {
+        $productGroup->delete();
+        return redirect()->route('product-groups.index');
     }
 }

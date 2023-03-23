@@ -11,6 +11,7 @@ import { FilterValue, SorterResult } from "antd/es/table/interface";
 import Product from "../../../interfaces/Product";
 import { ProductGroupWithProducts } from "../../../interfaces/ProductGroup";
 import useLoading from "../../../hooks/useLoading";
+import ModelServices from "../../../services/ModelServices";
 
 interface TableProps {
     searchMode: boolean;
@@ -54,7 +55,11 @@ const ProductsInGroupTable = ({
 
     useWhileTyping(
         () => {
-            // ProductGroupServices.search(search, attribute, stateLoading);
+            const service = ModelServices.setTableGlobalSettings({
+                search,
+                attribute,
+            });
+            service.updateTableData("productsInGroup");
         },
         searchMode,
         [searchMode, search]
@@ -76,7 +81,7 @@ const ProductsInGroupTable = ({
                 bordered
                 footer={() =>
                     "عدد النتائج : " + productsInGroup
-                        ? productsInGroup.products.length
+                        ? productsInGroup?.products.length
                         : 0
                 }
             />

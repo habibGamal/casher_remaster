@@ -7,8 +7,11 @@ import { Badge, Button, MenuProps } from "antd";
 import { Menu } from "antd";
 import IconSax from "./IconSax";
 import logo from "../../../assets/images/logo.png";
-import ProductService from "../../services/ProductService";
+import ProductServices from "../../services/ProductServices";
 import { Inertia } from "@inertiajs/inertia";
+import ProductGroupServices from "../../services/ProductGroupServices";
+import StockServices from "../../services/StockServices";
+import OpeningStockServices from "../../services/OpeningStockServices";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -106,8 +109,10 @@ const items: MenuProps["items"] = [
 const Navbar = () => {
   const onClick: MenuProps["onClick"] = (e) => {
     // inertia routing
-    if(e.key === "add_products") ProductService.index();
-    if(e.key === "product_groups") Inertia.get('/product-groups');
+    if(e.key === "add_products") ProductServices.index();
+    if(e.key === "product_groups") ProductGroupServices.index();
+    if(e.key === "add_stock") StockServices.index();
+    if(e.key === "openning_stock") OpeningStockServices.index();
   };
   const width = 280;
   const [collapsed, setCollapsed] = useState(false);

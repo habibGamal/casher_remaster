@@ -14,27 +14,13 @@ class ProductController extends Controller
 
     public function index(Request $request, ProductServices $productServices)
     {
-        // dump($request->query('paginate_order'));
         return Inertia::render($this->index, [
-            'paginate' =>  fn () => $request->searchMode
-                ? $productServices->paginateWithSearch($request,'paginate')
-                : $productServices->paginate($request,'paginate'),
+            'products' =>  fn () => $productServices->get_products($request, 'products'),
             'productGroups' => Inertia::lazy(function () use ($request, $productServices) {
-                return $productServices->searchInProductGroups($request);
+                return $productServices->search_in_product_groups($request);
             }),
         ]);
     }
-
-    public function search(Request $request, ProductServices $productServices)
-    {
-        return Inertia::render($this->index, [
-            'paginate' => fn () => $productServices->paginateWithSearch($request),
-            'productGroups' => Inertia::lazy(function () use ($request, $productServices) {
-                return $productServices->searchInProductGroups($request);
-            }),
-        ]);
-    }
-
     public function store(Request $request)
     {
         $request->validate([
