@@ -1,13 +1,11 @@
-import { Checkbox, Radio, Select, Space, message } from "antd";
-import { Button, Col, Form, Input, InputNumber, Row } from "antd";
+import { Checkbox, Radio, Select } from "antd";
+import { Input, InputNumber } from "antd";
 import React, { useState } from "react";
-import useFormError from "../../../hooks/useFormError";
 import ProductServices from "../../../services/ProductServices";
 import { ProductWithProductGroup } from "../../../interfaces/Product";
 import SelectSearch, { SetOptions } from "../../components/SelectSearch";
-import useLoading from "../../../hooks/useLoading";
-import { FORM_COLUMNS_LAYOUT, FORM_LAYOUT_1 } from "../../../Layouts";
-import ModelServices from "../../../services/ModelServices";
+import FormComponent from "../../components/FormComponent";
+import getFieldsNames from "../../../helpers/getFieldsNames";
 
 type Model = ProductWithProductGroup;
 
@@ -17,27 +15,6 @@ interface FormProps {
 }
 
 const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
-    const [form] = Form.useForm();
-
-    const submitState = useLoading();
-
-    const [unitOrWeight, setUnitOrWeight] = useState(0);
-
-    const { setErrors, getError } = useFormError();
-
-    const onFinish = (values: any) => {
-        const services = ModelServices.setFormGlobalSettings({
-            modelId: modelToEdit?.id,
-            form,
-            formValues: values,
-            stateLoading: submitState.stateLoading,
-            closeFormModal: closeModal,
-            setErrors,
-        });
-        if (modelToEdit) services.update(ProductServices.BASE_ROUTE);
-        else services.create(ProductServices.BASE_ROUTE);
-    };
-
     const onSelectProductGroup = (value: string, setOptions: SetOptions) => {
         ProductServices.selectSearchProductGroup(value, (page: any) => {
             if (!page.props.productGroups) return;
@@ -54,124 +31,113 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
         });
     };
 
+    const [unitOrWeight, setUnitOrWeight] = useState(0);
+
+    const formItems = [
+        { col: true },
+        {
+            name: "name",
+            label: "أسم الصنف",
+            component: <Input />,
+        },
+        {
+            name: "barcode",
+            label: "كود الصنف",
+            component: <Input />,
+        },
+        {
+            name: "product_group_id",
+            label: "مجموعة الصنف",
+            component: (
+                <SelectSearch
+                    onSearch={onSelectProductGroup}
+                    placeholder="أختر مجموعة الصنف"
+                    defaultValue={
+                        modelToEdit
+                            ? modelToEdit?.product_group?.name
+                            : undefined
+                    }
+                />
+            ),
+        },
+        { col: true },
+        {
+            name: "buying_price",
+            label: "سعر الشراء",
+            component: <InputNumber min={0} style={{ width: "100%" }} />,
+        },
+        {
+            name: "selling_price",
+            label: "سعر البيع",
+            component: <InputNumber min={0} style={{ width: "100%" }} />,
+        },
+        {
+            name: "minimum_stock",
+            label: "الحد الادنى من المخزون",
+            component: <InputNumber min={0} style={{ width: "100%" }} />,
+        },
+        { col: true },
+        {
+            name: "unit_or_weight",
+            label: "وحدة أو وزن",
+            component: (
+                <Radio.Group onChange={(e) => setUnitOrWeight(e.target.value)}>
+                    <Radio value={0}>وحدة</Radio>
+
+                    <Radio value={1}>وزن</Radio>
+                </Radio.Group>
+            ),
+        },
+        {
+            name: "unit",
+            label: "الوحدة",
+            component: (
+                <Select
+                    placeholder="أختر الوحدة"
+                    disabled={unitOrWeight ? true : false}
+                >
+                    <Select.Option value="قطعة">قطعة</Select.Option>
+                    <Select.Option value="علبة">علبة</Select.Option>
+                    <Select.Option value="كرتونة">كرتونة</Select.Option>
+                    <Select.Option value="طن">طن</Select.Option>
+                    <Select.Option value="كيلو">كيلو</Select.Option>
+                    <Select.Option value="جرام">جرام</Select.Option>
+                    <Select.Option value="مليغرام">مليغرام</Select.Option>
+                    <Select.Option value="متر">متر</Select.Option>
+                    <Select.Option value="سم">سم</Select.Option>
+                    <Select.Option value="مليمتر">مليمتر</Select.Option>
+                    <Select.Option value="لتر">لتر</Select.Option>
+                    <Select.Option value="ملي لتر">ملي لتر</Select.Option>
+                </Select>
+            ),
+        },
+        {
+            name: "has_expire_date",
+            component: <Checkbox>يمتلك صلاحية</Checkbox>,
+            valuePropName: "checked",
+        },
+    ];
+
+    const initValues = modelToEdit
+        ? modelToEdit
+        : {
+              has_expire_date: false,
+              unit_or_weight: unitOrWeight,
+          };
+
+    const fields = getFieldsNames(formItems);
+    console.log(fields);
+
     return (
-        <Form
-            {...FORM_LAYOUT_1}
-            form={form}
-            name="product_form"
-            onFinish={onFinish}
-            initialValues={modelToEdit}
-            className="p-8 border-2 border-indigo-500 rounded-md bg-indigo-50 "
-            layout="vertical"
-            scrollToFirstError
-        >
-            <Row gutter={24}>
-                <Col {...FORM_COLUMNS_LAYOUT}>
-                    <Form.Item
-                        name="name"
-                        label="أسم الصنف"
-                        {...getError("name")}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="barcode"
-                        label="كود الصنف"
-                        {...getError("barcode")}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="product_group_id"
-                        label="مجموعة الصنف"
-                        {...getError("product_group_id")}
-                    >
-                        <SelectSearch
-                            onSearch={onSelectProductGroup}
-                            placeholder="بحث"
-                            defaultValue={
-                                modelToEdit
-                                    ? modelToEdit?.product_group?.name
-                                    : undefined
-                            }
-                        />
-                    </Form.Item>
-                </Col>
-
-                <Col {...FORM_COLUMNS_LAYOUT}>
-                    <Form.Item
-                        name="buying_price"
-                        label="سعر الشراء"
-                        {...getError("buying_price")}
-                    >
-                        <InputNumber min={0} style={{ width: "100%" }} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="selling_price"
-                        label="سعر البيع"
-                        {...getError("selling_price")}
-                    >
-                        <InputNumber min={0} style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                        name="minimum_stock"
-                        label="الحد الادنى من المخزون"
-                        {...getError("minimum_stock")}
-                    >
-                        <InputNumber min={0} style={{ width: "100%" }} />
-                    </Form.Item>
-                </Col>
-                <Col {...FORM_COLUMNS_LAYOUT}>
-                    <Form.Item
-                        name="has_expire_date"
-                        initialValue={1}
-                        valuePropName="checked"
-                        {...getError("has_expire_date")}
-                    >
-                        <Checkbox>يمتلك صلاحية</Checkbox>
-                    </Form.Item>
-
-                    <Form.Item
-                        initialValue={0}
-                        name="unit_or_weight"
-                        {...getError("unit_or_weight")}
-                    >
-                        <Radio.Group
-                            onChange={(e) => setUnitOrWeight(e.target.value)}
-                        >
-                            <Radio.Button value={0}>وحدة</Radio.Button>
-                            <Radio.Button value={1}>وزن</Radio.Button>
-                        </Radio.Group>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="unit"
-                        label="اسم الوحدة"
-                        initialValue="قطعة"
-                        {...getError("unit")}
-                    >
-                        <Input disabled={unitOrWeight === 1} />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Form.Item className="grid place-items-center mt-8">
-                <Space>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={submitState.loading}
-                    >
-                        حفظ
-                    </Button>
-                    <Button htmlType="button" onClick={() => {}}>
-                        اعادة ملئ المدخلات
-                    </Button>
-                </Space>
-            </Form.Item>
-        </Form>
+        <FormComponent
+            baseRoute={ProductServices.BASE_ROUTE}
+            formName="products_form"
+            formItems={formItems}
+            initValues={initValues}
+            fields={fields}
+            modelToEdit={modelToEdit}
+            closeModal={closeModal}
+        />
     );
 };
 

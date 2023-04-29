@@ -8,18 +8,23 @@ use Illuminate\Http\Request;
 
 class ProductServices
 {
-    public $defaultOrderColumn = 'created_at';
+    private $defaultOrderColumn = 'created_at';
+
+    private function tableSettings($request, $slug){
+        return new TableSettingsServices($request, $slug, $this->defaultOrderColumn);
+    }
+
 
     private function paginate_products(Request $request, string $slug)
     {
-        $settings = new TableSettingsServices($request, $slug, $this->defaultOrderColumn);
+        $settings = $this->tableSettings($request, $slug);
         $paginate = Product::with('productGroup:id,name')->orderBy($settings->columnKey, $settings->order)->paginate($settings->pageSize, ['*'], $slug . '_page');
         return $paginate;
     }
 
     private function paginate_products_with_search(Request $request, string $slug)
     {
-        $settings = new TableSettingsServices($request, $slug, $this->defaultOrderColumn);
+        $settings = $this->tableSettings($request, $slug);
         $paginate = Product::with('productGroup:id,name')
             ->where($settings->attribute, 'like', '%' . $settings->search . '%')
             ->orderBy($settings->columnKey, $settings->order)
@@ -34,7 +39,6 @@ class ProductServices
             : $this->paginate_products($request, $slug);
     }
 
-    // public function
 
     public function search_in_product_groups(Request $request)
     {

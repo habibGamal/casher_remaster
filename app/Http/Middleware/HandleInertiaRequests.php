@@ -43,7 +43,14 @@ class HandleInertiaRequests extends Middleware
             // Synchronously
             'auth' => Auth::check() && $active,
             'semi_auth' => Auth::check(),
-            'admin' => $id === 1
+            'admin' => $id === 1,
+
+            'flash' => function () use ($request) {
+                return [
+                    'success' => $request->session()->get('success'),
+                    'error' => $request->session()->get('error'),
+                ];
+            },
 
         ]);
     }

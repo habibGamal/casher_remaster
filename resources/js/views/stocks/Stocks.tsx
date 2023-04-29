@@ -2,7 +2,7 @@ import { Col, Modal, Row, message } from "antd";
 import React, { useState } from "react";
 import PageTitle from "../components/PageTitle";
 import TableController from "../components/TableController";
-import useTableController from "../../hooks/useTableController";
+import useTableSearch from "../../hooks/useTableSearch";
 import useModal from "../../hooks/useModal";
 import StockForm from "../common/forms/StockForm";
 import StocksTable from "../common/tables/StocksTable";
@@ -16,7 +16,7 @@ export default function Stocks() {
         searchMode,
         enterSearchMode,
         exitSearchMode,
-    } = useTableController("name");
+    } = useTableSearch("name");
     const {
         open,
         confirmLoading,

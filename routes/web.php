@@ -38,10 +38,11 @@ use Inertia\Inertia;
 // public routing
 
 Route::get('/', function () {
-    return Inertia::render('products/Products');
+    return Inertia::render('Home');
 })->name('home');
 // product
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/remove-product-from-group/{product}', [ProductController::class, 'remove_product_from_group']);
 Route::post('/products/store', [ProductController::class, 'store']);
 Route::post('/products/update/{product}', [ProductController::class, 'update']);
 Route::delete('/products/{product}', [ProductController::class, 'delete']);
@@ -49,7 +50,7 @@ Route::delete('/products/{product}', [ProductController::class, 'delete']);
 Route::get('/product-groups', [ProductGroupController::class, 'index'])->name('product-groups.index');
 Route::post('/product-groups/store', [ProductGroupController::class, 'store']);
 Route::post('/product-groups/update/{productGroup}', [ProductGroupController::class, 'update']);
-Route::get('/product-groups/{productGroup}', [ProductGroupController::class, 'show']);
+Route::get('/product-groups/display-products-in-group', [ProductGroupController::class, 'display_products_in_group']);
 Route::delete('/product-groups/{productGroup}', [ProductGroupController::class, 'delete']);
 // product
 Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');

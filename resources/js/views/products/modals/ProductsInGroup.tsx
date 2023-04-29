@@ -1,43 +1,64 @@
 import React, { useState } from "react";
-import useTableController from "../../../hooks/useTableController";
-import { Col, Row } from "antd";
-import ProductsInGroupTable from "../../common/tables/ProductsInGroupTable";
-import TableController from "../../components/TableController";
-import { usePage } from "@inertiajs/inertia-react";
+import { Button, Col, Modal, Row, Space } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import ModelContext from "../../../interfaces/ModelContext";
+import ModelConfig from "../../../interfaces/ModelConfig";
+import DisplayModelAsModal from "../../components/DisplayModelAsModal";
+import Product from "../../../interfaces/Product";
+import ProductGroupServices from "../../../services/ProductGroupServices";
+import ProductServices from "../../../services/ProductServices";
+const modelColumns = [
+    {
+        title: "أسم الصنف",
+        dataIndex: "name",
+        key: "name",
+    },
+    {
+        title: "كود الصنف",
+        dataIndex: "barcode",
+        key: "barcode",
+    },
+    {
+        title: "تحكم",
+        key: "control",
+        render: (record: Product) => (
+            <Space size="middle">
+                <Button
+                    danger
+                    onClick={() => {
+                        ProductServices.removeProductFromGroup(record.id);
+                    }}
+                    icon={<DeleteOutlined />}
+                >
+                    ازالة من المجموعة
+                </Button>
+            </Space>
+        ),
+    },
+];
+
+const config = {
+    modelColumns,
+    search: {
+        defaultValue: "name",
+        options: [
+            { value: "name", label: "اسم الصنف" },
+            { value: "barcode", label: "كود الصنف" },
+        ],
+    },
+    exitSearchMode: (ctx: ModelContext<any>) => {
+        ctx.search?.exitSearchMode();
+        // just getting the id from url
+        const id = new URLSearchParams(window.location.search).get(
+            "productGroupId"
+        );
+        if (!id) return;
+        ProductGroupServices.getProductsInGroup(parseInt(id));
+    },
+    addButton: null,
+    slug: "productsInGroup",
+};
 
 export default function ProductsInGroup() {
-    const {
-        search,
-        setSearch,
-        attribute,
-        setAttribute,
-        searchMode,
-        enterSearchMode,
-        exitSearchMode,
-    } = useTableController("name");
-
-
-    return (
-        <Row gutter={[0, 25]} className="m-8">
-            <Col span="24" className="isolate">
-                <TableController
-                    searchButtonAction={() => enterSearchMode()}
-                    setSearch={setSearch}
-                    setAttribute={setAttribute}
-                    showSearchCancelButton={searchMode}
-                    exitSearchMode={exitSearchMode}
-                    defaultValue="name"
-                    options={[
-                        { label: 'اسم الصنف', value: 'name' },
-                        { label: 'كود الصنف', value: 'barcode' },
-                    ]}
-                />
-                <ProductsInGroupTable
-                    searchMode={searchMode}
-                    search={search}
-                    attribute={attribute}
-                />
-            </Col>
-        </Row>
-    );
+    return <DisplayModelAsModal config={config as ModelConfig} />;
 }

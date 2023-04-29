@@ -12,6 +12,7 @@ export default interface Pagination<T> {
     prev_page_url: string;
     to: number;
     total: number;
+    [key: string]: any;
 }
 
 export interface Link {

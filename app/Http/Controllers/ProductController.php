@@ -53,12 +53,22 @@ class ProductController extends Controller
             'product_group_id' => 'nullable|exists:product_groups,id',
         ]);
         $product->update($request->all());
-        return redirect()->route('products.index');
+        return redirect()->back();
+    }
+
+    public function remove_product_from_group(Product $product){
+        $product->product_group_id = null;
+        $product->save();
+        return redirect()->back();
     }
 
     public function delete(Product $product)
     {
-        $product->delete();
-        return redirect()->route('products.index');
+        try {
+            $product->deleteOrFail();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors(['message'=> 'لا يمكن حذف هذا المنتج لوجود حركات عليه']);
+        }
+        return redirect()->back()->with('success', 'تم حذف المنتج بنجاح');
     }
 }

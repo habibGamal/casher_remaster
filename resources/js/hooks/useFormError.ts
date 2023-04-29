@@ -14,7 +14,7 @@ const useFormError = () => {
         validateStatus: isError(property),
         help: isError(property) ? getErrorMessage(property)! : "",
     });
-    return { setErrors, getError };
+    return { setErrors, getError ,errors};
 };
 
 export default useFormError;

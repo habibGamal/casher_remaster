@@ -2,7 +2,7 @@ import { Col, Modal, Row, message } from "antd";
 import React, { useState } from "react";
 import PageTitle from "../components/PageTitle";
 import TableController from "../components/TableController";
-import useTableController from "../../hooks/useTableController";
+import useTableSearch from "../../hooks/useTableSearch";
 import useModal from "../../hooks/useModal";
 import OpeningStocksTable from "../common/tables/OpeningStocksTable";
 import OpeningStockForm from "../common/forms/OpeningStockForm";
@@ -16,7 +16,7 @@ export default function OpeningStocks() {
     searchMode,
     enterSearchMode,
     exitSearchMode,
-  } = useTableController("name");
+  } = useTableSearch("name");
   const { open, confirmLoading, showModal, handleOk, handleCancel } =
     useModal();
   const [refresh, setRefresh] = useState<boolean>(false);

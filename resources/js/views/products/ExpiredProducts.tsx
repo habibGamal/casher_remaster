@@ -2,7 +2,7 @@ import { Col, Modal, Row, message } from "antd";
 import React, { useState } from "react";
 import PageTitle from "../components/PageTitle";
 import TableController from "../components/TableController";
-import useTableController from "../../hooks/useTableController";
+import useTableSearch from "../../hooks/useTableSearch";
 import ExpiredProductsTable from "../common/tables/ExpiredProductsTable";
 
 export default function ExpiredProducts() {
@@ -14,7 +14,7 @@ export default function ExpiredProducts() {
     searchMode,
     enterSearchMode,
     exitSearchMode,
-  } = useTableController("name");
+  } = useTableSearch("name");
   const [refresh, setRefresh] = useState<boolean>(false);
 
   return (

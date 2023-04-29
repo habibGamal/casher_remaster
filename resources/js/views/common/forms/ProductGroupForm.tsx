@@ -1,11 +1,9 @@
-import { Checkbox, Radio, Select, Space, message } from "antd";
-import { Button, Col, Form, Input, InputNumber, Row } from "antd";
+import { Input } from "antd";
 import React, { useState } from "react";
-import useFormError from "../../../hooks/useFormError";
-import useLoading from "../../../hooks/useLoading";
-import ModelServices from "../../../services/ModelServices";
 import ProductGroup from "../../../interfaces/ProductGroup";
 import ProductGroupServices from "../../../services/ProductGroupServices";
+import getFieldsNames from "../../../helpers/getFieldsNames";
+import FormComponent from "../../components/FormComponent";
 
 type Model = ProductGroup;
 
@@ -15,62 +13,26 @@ interface FormProps {
 }
 
 const ProductGroupForm = ({ modelToEdit, closeModal }: FormProps) => {
-    const [form] = Form.useForm();
+    const formItems = [
+        { col: true },
+        {
+            name: "name",
+            label: "اسم المجموعة",
+            component: <Input />,
+        },
+    ];
 
-    const submitState = useLoading();
-
-    const { setErrors, getError } = useFormError();
-
-    const onFinish = (values: any) => {
-        const services = ModelServices.setFormGlobalSettings({
-            modelId: modelToEdit?.id,
-            form,
-            formValues: values,
-            stateLoading: submitState.stateLoading,
-            closeFormModal: closeModal,
-            setErrors,
-        });
-        if (modelToEdit) services.update(ProductGroupServices.BASE_ROUTE);
-        else services.create(ProductGroupServices.BASE_ROUTE);
-    };
-
+    const formFieldsNames = getFieldsNames(formItems);
     return (
-        <Form
-            form={form}
-            name="product_group"
-            onFinish={onFinish}
-            initialValues={modelToEdit}
-            className="p-8 border-2 border-indigo-500 rounded-md bg-indigo-50 "
-            layout="vertical"
-            scrollToFirstError
-        >
-            <Row gutter={24} justify="center">
-                <Col md={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 8 }}>
-                    <Form.Item
-                        name="name"
-                        label="اسم المجموعة"
-                        {...getError("name")}
-                    >
-                        <Input />
-                    </Form.Item>
-                </Col>
-            </Row>
-
-            <Form.Item className="grid place-items-center mt-8">
-                <Space>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={submitState.loading}
-                    >
-                        حفظ
-                    </Button>
-                    <Button htmlType="button" onClick={() => {}}>
-                        اعادة ملئ المدخلات
-                    </Button>
-                </Space>
-            </Form.Item>
-        </Form>
+        <FormComponent
+            baseRoute={ProductGroupServices.BASE_ROUTE}
+            formName="product_group_form"
+            formItems={formItems}
+            fields={formFieldsNames}
+            initValues={modelToEdit}
+            modelToEdit={modelToEdit}
+            closeModal={closeModal}
+        />
     );
 };
 

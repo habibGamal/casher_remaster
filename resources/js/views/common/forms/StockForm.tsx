@@ -3,7 +3,7 @@ import { Button, Col, Form, Input, Row, Space } from "antd";
 import useLoading from "../../../hooks/useLoading";
 import Stock from "../../../interfaces/Stock";
 import useFormError from "../../../hooks/useFormError";
-import ModelServices from "../../../services/ModelServices";
+import ModelGeneralServices from "../../../services/ModelGeneralServices";
 import StockServices from "../../../services/StockServices";
 type Model = Stock;
 
@@ -19,7 +19,7 @@ const StockForm = ({ modelToEdit, closeModal }: FormProps) => {
     const { setErrors, getError } = useFormError();
 
     const onFinish = (values: any) => {
-        const services = ModelServices.setFormGlobalSettings({
+        const services = ModelGeneralServices.setFormGlobalSettings({
             modelId: modelToEdit?.id,
             form,
             formValues: values,

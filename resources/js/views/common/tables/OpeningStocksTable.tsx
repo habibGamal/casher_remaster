@@ -12,7 +12,7 @@ import { FilterValue, SorterResult } from "antd/es/table/interface";
 import sortInfoMapping from "../../../helpers/sortInfoMapping";
 import { usePage } from "@inertiajs/inertia-react";
 import useLoading from "../../../hooks/useLoading";
-import ModelServices from "../../../services/ModelServices";
+import ModelGeneralServices from "../../../services/ModelGeneralServices";
 import OpeningStockServices from "../../../services/OpeningStockServices";
 import { OpeningStockEntry } from "../../../interfaces/OpeningStockItem";
 
@@ -92,7 +92,7 @@ const OpeningStocksTable = ({ searchMode, search, attribute }: TableProps) => {
                         danger
                         type="dashed"
                         onClick={() =>
-                            ModelServices.delete(
+                            ModelGeneralServices.delete(
                                 record.id!,
                                 OpeningStockServices.BASE_ROUTE
                             )
@@ -108,7 +108,7 @@ const OpeningStocksTable = ({ searchMode, search, attribute }: TableProps) => {
         () => {
             resetPagination();
             resetSortState();
-            const service = ModelServices.setTableGlobalSettings({
+            const service = ModelGeneralServices.setTableGlobalSettings({
                 stateLoading: tableState.stateLoading,
                 search,
                 attribute,
@@ -126,7 +126,7 @@ const OpeningStocksTable = ({ searchMode, search, attribute }: TableProps) => {
     ) => {
         updateTableParams(pagination, filters, sorter);
         const sortInfo = sortInfoMapping<Model>(sorter as SorterResult<Model>);
-        const service = ModelServices.setTableGlobalSettings({
+        const service = ModelGeneralServices.setTableGlobalSettings({
             page: pagination.current!,
             pageSize: pagination.pageSize!,
             sortInfo,

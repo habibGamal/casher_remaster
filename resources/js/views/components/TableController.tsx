@@ -11,12 +11,11 @@ interface TableComponentProps {
           }[]
         | undefined;
     defaultValue?: string | null | undefined;
-    addButtonText?: string;
+    addButtonText?: string | null;
     addButtonAction?: () => void;
     searchButtonAction: () => void;
     setSearch: (value: string) => void;
     setAttribute: (value: string) => void;
-    showSearchCancelButton: boolean;
     exitSearchMode: () => void;
 }
 
@@ -28,7 +27,6 @@ export default function TableController({
     searchButtonAction,
     setSearch,
     setAttribute,
-    showSearchCancelButton,
     exitSearchMode,
 }: TableComponentProps) {
     return (
@@ -54,7 +52,7 @@ export default function TableController({
                 }}
                 enterButton
             />
-            {addButtonAction && (
+            {addButtonText && (
                 <Button
                     type="primary"
                     icon={<PlusCircleOutlined />}

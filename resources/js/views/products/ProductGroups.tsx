@@ -1,67 +1,96 @@
-import { Col, Modal, Row, message } from "antd";
 import React, { useState } from "react";
-import PageTitle from "../components/PageTitle";
-import TableController from "../components/TableController";
-import useTableController from "../../hooks/useTableController";
-import useModal from "../../hooks/useModal";
+import { Button, Col, Modal, Row, Space } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import ProductGroupForm from "../common/forms/ProductGroupForm";
-import ProductGroupsTable from "../common/tables/ProductGroupsTable";
 import ProductGroupServices from "../../services/ProductGroupServices";
+import ModelContext from "../../interfaces/ModelContext";
+import { ProductGroupWithProductsCount } from "../../interfaces/ProductGroup";
+import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
+import ModelGeneralServices from "../../services/ModelGeneralServices";
+import DisplayModel from "../components/DisplayModel";
+import ProductsInGroup from "./modals/ProductsInGroup";
+import { Inertia } from "@inertiajs/inertia";
 
-export default function ProductGroups() {
-    const {
-        search,
-        setSearch,
-        attribute,
-        setAttribute,
-        searchMode,
-        enterSearchMode,
-        exitSearchMode,
-    } = useTableController("name");
-    const {
-        open,
-        confirmLoading,
-        showModal,
-        handleOk,
-        handleCancel,
-        closeModal,
-    } = useModal();
+type ModelType = ProductGroupWithProductsCount;
+const modelColumns: ModelColumns[] = [
+    {
+        title: "أسم المجموعة",
+        dataIndex: "name",
+        key: "name",
+        sorting: true,
+    },
+    {
+        title: "عدد الاصناف في المجموعة",
+        dataIndex: "products_count",
+        key: "products_count",
+        sorting: true,
+    },
+    {
+        title: "تحكم",
+        key: "control",
+        renderWithCtx: (ctx: ModelContext<any>) => {
+            return (record: ModelType) => (
+                <Space size="middle">
+                    <Button
+                        onClick={() => {
+                            const currentUrl = window.location.href.replace(
+                                window.location.origin,
+                                ""
+                            );
+                            ProductGroupServices.getProductsInGroup(record.id);
+                            ctx.freeModal?.showModal();
+                            ctx.setFreeModalSettings!({
+                                children: <ProductsInGroup />,
+                                onClose: () => Inertia.get(currentUrl),
+                                title: "اصناف المجموعة",
+                            });
+                        }}
+                    >
+                        عرض اصناف المجموعة
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            ctx.setModelToEdit!(record);
+                            ctx.modalForm?.showModal();
+                        }}
+                        icon={<EditOutlined className="text-indigo-900" />}
+                    />
+                    <Button
+                        danger
+                        type="dashed"
+                        onClick={() =>
+                            ModelGeneralServices.delete(
+                                record.id!,
+                                ProductGroupServices.BASE_ROUTE
+                            )
+                        }
+                        icon={<DeleteOutlined />}
+                    />
+                </Space>
+            );
+        },
+    },
+];
 
-    const exitSearchModeAndGoIndex = () => {
-        exitSearchMode();
+const config = {
+    modelColumns,
+    pageTitle: "مجموعات الاصناف",
+    search: {
+        defaultValue: "name",
+    },
+    exitSearchMode: (ctx: ModelContext<any>) => {
+        ctx.search?.exitSearchMode();
         ProductGroupServices.index();
-    };
+    },
+    addButton: "اضافة مجموعة",
+    slug: "productGroups",
+    pagination: true,
+};
+export default function ProductGroups() {
     return (
-        <Row gutter={[0, 25]} className="m-8">
-            <PageTitle name="مجموعات الاصناف" />
-            <Modal
-                title="اضافة مجموعة"
-                open={open}
-                onOk={handleOk}
-                footer={null}
-                confirmLoading={confirmLoading}
-                onCancel={handleCancel}
-                destroyOnClose={true}
-                width="90%"
-            >
-                <ProductGroupForm closeModal={closeModal} />
-            </Modal>
-            <Col span="24" className="isolate">
-                <TableController
-                    addButtonText="اضافة مجموعة"
-                    addButtonAction={showModal}
-                    searchButtonAction={() => enterSearchMode()}
-                    setSearch={setSearch}
-                    setAttribute={setAttribute}
-                    showSearchCancelButton={searchMode}
-                    exitSearchMode={exitSearchModeAndGoIndex}
-                />
-                <ProductGroupsTable
-                    searchMode={searchMode}
-                    search={search}
-                    attribute={attribute}
-                />
-            </Col>
-        </Row>
+        <DisplayModel
+            ModelForm={ProductGroupForm}
+            config={config as ModelConfig}
+        />
     );
 }

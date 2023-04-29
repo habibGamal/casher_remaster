@@ -7,6 +7,16 @@ export default class ProductServices {
         Inertia.get(`${this.BASE_ROUTE}`);
     }
 
+    static removeProductFromGroup(id: number) {
+        Inertia.get(
+            ProductServices.BASE_ROUTE + `/remove-product-from-group/${id}`,
+            undefined,
+            {
+                preserveState: true,
+            }
+        );
+    }
+
     // fetching custom data with reloads
     static selectSearchProductGroup(
         value: string,

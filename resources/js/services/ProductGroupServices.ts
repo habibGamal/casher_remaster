@@ -9,16 +9,18 @@ export default class ProductGroupServices {
     }
 
     // fetching custom data with reloads
-    static getProductsInGroup(id:number){
-        Inertia.reload({
-            data: {
-                productGroupId:id,
+    static getProductsInGroup(id: number) {
+        Inertia.get(
+            this.BASE_ROUTE + "/display-products-in-group",
+            {
+                productGroupId: id,
                 // reset search to get all products if we close the modal and open it again
-                productsInGroup_search:"",
+                productsInGroup_search: "",
             },
-            only: ["productsInGroup"],
-            preserveState: true,
-        });
+            {
+                only: ["productsInGroup"],
+                preserveState: true,
+            }
+        );
     }
-
 }

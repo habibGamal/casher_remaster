@@ -47,4 +47,24 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    // public function render($request, Throwable $e)
+    // {
+    //     $response = parent::render($request, $e);
+
+    //     $status = $response->getStatusCode();
+
+    //     dump('sdflhadosfhiop');
+    //     if (!$request->isMethod('GET')) {
+    //         return redirect()->back()
+    //             ->with('error',' $this->messages[$status]');
+    //     }
+
+    //     // return inertia('error/page', [
+    //     //     'status' => $status,
+    //     //     'message' => $this->messages[$status],
+    //     // ])
+    //     //     ->toResponse($request)
+    //     //     ->setStatusCode($status);
+    // }
 }
