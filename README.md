@@ -1,33 +1,39 @@
 <h1> <img width="24" src="https://github.com/habibGamal/casher_remaster/blob/master/public/images/logo.png" /> Casher Remaster</h1>
 <p>This is a general POS system </p>
 
-# Screenshots
+# 📷 Screenshots
 
-# Sysetm Content
-## Products
+# ⚙️ Sysetm Content
+Products
 - [x] add products
 - [x] product groups
 - [ ] product details
 - [ ] expired products
 - [x] opening stocks
-## Managing stocks
+
+Managing stocks
 - [x] add stocks
 - [ ] tracking stocks
 - [ ] loss
 - [ ] transfer between stocks
-## Invoices
+
+Invoices
 - [x] display invoices
 - [x] create buying invoice
 - [x] create selling invoice
 - [x] return buying invoice
 - [ ] return selling invoice
-## Customers and suppliers
+
+Customers and suppliers
 - Comming soon...
-## Accounts
+
+Accounts
 - Comming soon...
-## Management
+
+Management
 - Comming soon...
-## Notification
+
+Notification
 - Comming soon...
 
 
@@ -37,7 +43,12 @@
 # 🎨 Design
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) 
 
-## How to use
+# 🚀 Features
+- Light & dark theme
+- Nice UI and convenient UX (most POS systems have bad UI/UX)
+<img src="https://github.com/habibGamal/casher_remaster/blob/master/screenshots/Screenshot%202023-05-17%20040309.png" />
+
+## ⌨️ How to use
 
 1 - Clone this repo
 
@@ -66,7 +77,7 @@ Note change the .env file to your suitable environment
 if you want to edit frontend run the following command in another terminal
 ### `npm run dev`
 
-<h1>Bugs</h1>
+<h1>🐞 Bugs</h1>
 
 - [ ] sorting … when switch between on column and another
 - [ ] when we open (عرض اصناف المجموعة) and make any pagination and click back button the url not restored to its original state that must return us to the main page
