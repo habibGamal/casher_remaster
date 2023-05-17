@@ -2,7 +2,7 @@ import ModelContext from "./ModelContext";
 
 export interface ModelColumns {
     title: string;
-    dataIndex?: string;
+    dataIndex?: string | string[];
     key: string;
     sorting?: boolean;
     render?: (record: any) => JSX.Element;
@@ -11,7 +11,7 @@ export interface ModelColumns {
 
 export default interface ModelConfig {
     modelColumns: ModelColumns[];
-    pageTitle: string;
+    pageTitle: string | null;
     search: {
         defaultValue: string;
         options: {
@@ -21,6 +21,7 @@ export default interface ModelConfig {
     };
     addButton: string | null;
     exitSearchMode: (ctx: ModelContext<any>) => void;
+    reshapeData?: (data: any | undefined) => any[];
     data?: (ctx: ModelContext<any>) => any;
     sorting: string[];
     slug: string;

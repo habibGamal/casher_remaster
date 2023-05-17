@@ -1,87 +1,82 @@
-import { Form, InputNumber } from "antd";
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Form, Input, InputRef } from "antd";
 import { EditableContext } from "./EditableRow";
 
-interface Item {
-  key: string;
+
+interface EditableCellProps<T> {
+    title: React.ReactNode;
+    editable: boolean;
+    children: React.ReactNode;
+    dataIndex: keyof T;
+    record: T;
+    handleSave: (record: T) => void;
 }
 
-interface EditableCellProps {
-  title: React.ReactNode;
-  editable: boolean;
-  children: React.ReactNode;
-  dataIndex: keyof Item;
-  record: Item;
-  handleSave: (record: Item) => void;
+function EditableCell<T>({
+    title,
+    editable,
+    children,
+    dataIndex,
+    record,
+    handleSave,
+    ...restProps
+}: EditableCellProps<T>) {
+    const [editing, setEditing] = useState(false);
+    const inputRef = useRef<InputRef>(null);
+    const form = useContext(EditableContext)!;
+
+    useEffect(() => {
+        if (editing) {
+            inputRef.current!.focus();
+            inputRef.current!.select();
+        }
+    }, [editing]);
+
+    const toggleEdit = () => {
+        setEditing(!editing);
+        form.setFieldsValue({ [dataIndex]: record[dataIndex] });
+    };
+
+    const save = async () => {
+        try {
+            const values = await form.validateFields();
+
+            toggleEdit();
+            handleSave({ ...record, ...values });
+        } catch (errInfo) {
+            console.log("Save failed:", errInfo);
+        }
+    };
+
+    let childNode = children;
+
+    if (editable) {
+        childNode = editing ? (
+            <Form.Item
+                style={{ margin: 0 }}
+                name={dataIndex as any}
+                className="w-24"
+                rules={[
+                    {
+                        required: true,
+                        message: `مطلوب ${title}`,
+                    },
+                ]}
+            >
+                <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+            </Form.Item>
+        ) : (
+            <div
+                className={`editable-cell-value-wrap editable-${dataIndex as any}`}
+                style={{ paddingRight: 24 }}
+                onClick={toggleEdit}
+            >
+                {children}
+            </div>
+        );
+    }
+
+    return <td {...restProps}>{childNode}</td>;
 }
-const EditableCell: React.FC<EditableCellProps> = ({
-  title,
-  editable,
-  children,
-  dataIndex,
-  record,
-  handleSave,
-  ...restProps
-}) => {
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const form = useContext(EditableContext)!;
-
-  useEffect(() => {
-    if (editing) {
-      inputRef.current!.focus();
-    }
-  }, [editing]);
-
-  const toggleEdit = () => {
-    setEditing(!editing);
-    form.setFieldsValue({ [dataIndex]: record[dataIndex] });
-  };
-
-  const save = async () => {
-    try {
-      const values = await form.validateFields();
-
-      toggleEdit();
-      handleSave({ ...record, ...values });
-    } catch (errInfo) {
-      console.log("Save failed:", errInfo);
-    }
-  };
-
-  let childNode = children;
-
-  if (editable) {
-    childNode = editing ? (
-      <Form.Item
-        style={{ margin: 0 }}
-        name={dataIndex}
-        rules={[
-          {
-            required: true,
-            message: `${title} is required.`,
-          },
-        ]}
-      >
-        <InputNumber
-          style={{ width: "100%" }}
-          ref={inputRef}
-          onPressEnter={save}
-          onBlur={save}
-        />
-      </Form.Item>
-    ) : (
-      <div
-        className="editable-cell-value-wrap"
-        style={{ paddingRight: 24 }}
-        onClick={toggleEdit}
-      >
-        {children}
-      </div>
-    );
-  }
-
-  return <td {...restProps}>{childNode}</td>;
-};
 
 export default EditableCell;

@@ -4,17 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\OpeningStockItem;
 use App\Models\StockItem;
-use App\Services\OpeningStockServices;
+use App\Services\TableSettingsServices;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class OpeningStockItemController extends Controller
+class OpeningStockController extends Controller
 {
     public $index = 'products/OpeningStocks';
-    public function index(Request $request, OpeningStockServices $openingStockServices)
+    public function index(Request $request)
     {
-        return Inertia::render($this->index, [
-            'openingStockItems' => fn () => $openingStockServices->get_stocks($request, 'openingStockItems'),
+        return inertia()->render($this->index, [
+            'openingStockItems' => fn () => TableSettingsServices::pagination(OpeningStockItem::with(['stockItem.product:id,name,barcode', 'stockItem.stock:id,name']), $request, 'openingStockItems'),
         ]);
     }
 

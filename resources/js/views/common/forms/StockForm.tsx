@@ -33,7 +33,7 @@ const StockForm = ({ modelToEdit, closeModal }: FormProps) => {
     return (
         <Form
             form={form}
-            name="register"
+            name="stock_form"
             onFinish={onFinish}
             initialValues={modelToEdit}
             className="p-8 border-2 border-indigo-500 rounded-md bg-indigo-50 "

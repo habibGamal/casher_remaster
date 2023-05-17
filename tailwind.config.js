@@ -2,6 +2,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: "class",
     content: [
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./storage/framework/views/*.php",
@@ -9,6 +10,9 @@ module.exports = {
         "./resources/js/**/*.tsx",
     ],
 
+    corePlugins: {
+        preflight: false, // <== disable this!
+    },
     theme: {
         extend: {
             container: {
@@ -21,15 +25,16 @@ module.exports = {
                 second: "#195cc5",
                 "x-blue": "#273044",
                 indigo: {
-                    100: "#E2DBF9",
-                    200: "#C6B8F3",
-                    300: "#9D8CDC",
-                    400: "#7666BA",
-                    500: "#47388D",
-                    600: "#352879",
-                    700: "#261C65",
-                    800: "#191151",
-                    900: "#100A43",
+                    50: "#EDE7F6",
+                    100: "#D1C4E9",
+                    200: "#B39DDB",
+                    300: "#9575CD",
+                    400: "#7E57C2",
+                    500: "#673AB7",
+                    600: "#5E35B1",
+                    700: "#512DA8",
+                    800: "#4527A0",
+                    900: "#311B92",
                 },
                 yellow: {
                     100: "#FFF7D4",
@@ -41,6 +46,18 @@ module.exports = {
                     700: "#B77D15",
                     800: "#935F0D",
                     900: "#7A4A08",
+                },
+                dark: {
+                    50: "#373737",
+                    100: "#353535",
+                    200: "#323232",
+                    300: "#2d2d2d",
+                    400: "#2c2c2c",
+                    500: "#272727",
+                    600: "#252525",
+                    700: "#222",
+                    800: "#1e1e1e",
+                    900: "#121212",
                 },
             },
         },

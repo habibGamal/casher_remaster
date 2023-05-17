@@ -72,10 +72,13 @@ export class ModelDisplayServices {
         // note : at some point we can access url that contains `slug_page`
         // and `slug_pageSize` parameters so we can init pagination with these values
         const params = new URLSearchParams(window.location.search);
-        const currentPage = params.get(this.config.slug + '_page') ?? '1';
-        const pageSize = params.get(this.config.slug + '_pageSize') ?? '10';
+        const currentPage = params.get(this.config.slug + "_page") ?? "1";
+        const pageSize = params.get(this.config.slug + "_pageSize") ?? "10";
         const { tableParams, updateTableParams, resetPagination } =
-            useTablePagination<ModelType>(parseInt(currentPage),parseInt(pageSize));
+            useTablePagination<ModelType>(
+                parseInt(currentPage),
+                parseInt(pageSize)
+            );
 
         // it just to update the UI arrows up and down or none
         // it has nothing to do with updating data just for UI
@@ -221,7 +224,7 @@ export class ModelDisplayServices {
                 exitSearchMode={() => {
                     ctx.config.exitSearchMode(ctx);
                 }}
-                defaultValue="name"
+                defaultValue={ctx.config.search.defaultValue}
                 options={ctx.config.search.options}
             />
         );
@@ -229,6 +232,10 @@ export class ModelDisplayServices {
 
     public ModelTable() {
         const ctx = useContext(this.ctx);
+        // run `reshapeData` to transform data to fit the table
+        const data: any[] | undefined = ctx.config.reshapeData
+            ? ctx.config.reshapeData(ctx.pagination?.data)
+            : ctx.pagination?.data;
         // add sorting props for each column need it
         const columns = ctx.config.modelColumns.map(
             ({ title, dataIndex, key, sorting, render, renderWithCtx }) => {
@@ -246,7 +253,7 @@ export class ModelDisplayServices {
             <Table
                 columns={columns}
                 rowKey={(record) => record.id!}
-                dataSource={ctx.pagination?.data}
+                dataSource={data}
                 pagination={{
                     ...ctx.tableParams!.pagination,
                     total: ctx.pagination?.total,
@@ -259,7 +266,12 @@ export class ModelDisplayServices {
                 bordered
                 onChange={ctx.handleTableChange}
                 scroll={{ x: true }}
-                footer={() => "عدد النتائج : " + ctx.pagination?.total}
+                footer={() =>
+                    "عدد النتائج : " +
+                    (ctx.pagination?.total === undefined
+                        ? 0
+                        : ctx.pagination?.total)
+                }
             />
         );
     }

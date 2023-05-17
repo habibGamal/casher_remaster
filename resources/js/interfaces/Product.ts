@@ -1,7 +1,8 @@
 export default interface Product {
     id: number;
     name: string;
-    buying_price: number;
+    barcode: string;
+    last_buying_price: number;
     selling_price: number;
     minimum_stock: number;
     has_expire_date: number;

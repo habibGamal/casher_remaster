@@ -6,6 +6,7 @@ import { ProductWithProductGroup } from "../../../interfaces/Product";
 import SelectSearch, { SetOptions } from "../../components/SelectSearch";
 import FormComponent from "../../components/FormComponent";
 import getFieldsNames from "../../../helpers/getFieldsNames";
+import SelectSearchUtils from "../../../services/SelectSearchUtils";
 
 type Model = ProductWithProductGroup;
 
@@ -15,21 +16,6 @@ interface FormProps {
 }
 
 const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
-    const onSelectProductGroup = (value: string, setOptions: SetOptions) => {
-        ProductServices.selectSearchProductGroup(value, (page: any) => {
-            if (!page.props.productGroups) return;
-            const options = page.props.productGroups as {
-                id: number;
-                name: string;
-            }[];
-            setOptions(
-                options.map((option) => ({
-                    value: option.id.toString(),
-                    label: option.name,
-                }))
-            );
-        });
-    };
 
     const [unitOrWeight, setUnitOrWeight] = useState(0);
 
@@ -50,7 +36,8 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
             label: "مجموعة الصنف",
             component: (
                 <SelectSearch
-                    onSearch={onSelectProductGroup}
+                    name="product_group_id"
+                    onSearch={SelectSearchUtils.getProductGroups}
                     placeholder="أختر مجموعة الصنف"
                     defaultValue={
                         modelToEdit
@@ -62,8 +49,8 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
         },
         { col: true },
         {
-            name: "buying_price",
-            label: "سعر الشراء",
+            name: "last_buying_price",
+            label: "اخر سعر شراء",
             component: <InputNumber min={0} style={{ width: "100%" }} />,
         },
         {
@@ -83,7 +70,6 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
             component: (
                 <Radio.Group onChange={(e) => setUnitOrWeight(e.target.value)}>
                     <Radio value={0}>وحدة</Radio>
-
                     <Radio value={1}>وزن</Radio>
                 </Radio.Group>
             ),
@@ -126,7 +112,6 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
           };
 
     const fields = getFieldsNames(formItems);
-    console.log(fields);
 
     return (
         <FormComponent

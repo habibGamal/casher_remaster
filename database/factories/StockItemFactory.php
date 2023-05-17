@@ -16,12 +16,12 @@ class StockItemFactory extends Factory
      */
     public function definition()
     {
+        $product = \App\Models\Product::factory()->createOne();
         return [
             'quantity' => $this->faker->randomFloat(2, 0, 1000),
-            'price' => $this->faker->randomFloat(2, 0, 1000),
-            'expiration_date' => $this->faker->date(),
+            'buying_price' => $this->faker->randomFloat(2, $product->selling_price - 10, $product->selling_price - 50),
             'stock_id' => \App\Models\Stock::factory(),
-            'product_id' => \App\Models\Product::factory(),
+            'product_id' => $product,
         ];
     }
 }

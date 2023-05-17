@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductGroup;
-use App\Services\ProductServices;
+use App\Services\TableSettingsServices;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,12 +12,14 @@ class ProductController extends Controller
 {
     private $index = 'products/Products';
 
-    public function index(Request $request, ProductServices $productServices)
+    public function index(Request $request)
     {
-        return Inertia::render($this->index, [
-            'products' =>  fn () => $productServices->get_products($request, 'products'),
-            'productGroups' => Inertia::lazy(function () use ($request, $productServices) {
-                return $productServices->search_in_product_groups($request);
+        return inertia()->render($this->index, [
+            'products' =>  fn () => TableSettingsServices::pagination(Product::with('productGroup:id,name'), $request, 'products'),
+            'productGroups' => Inertia::lazy(function () use ($request) {
+                return ProductGroup::select(['id', 'name'])
+                    ->where('name', 'like', '%' . $request->product_group_name . '%')
+                    ->get();;
             }),
         ]);
     }
@@ -25,8 +27,8 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'barcode' => 'required|string|min:1',
-            'buying_price' => 'required|numeric',
+            'barcode' => 'required|string|min:1|unique:products,barcode',
+            'last_buying_price' => 'required|numeric',
             'selling_price' => 'required|numeric',
             'minimum_stock' => 'nullable|numeric',
             'has_expire_date' => 'required|boolean',
@@ -43,8 +45,8 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'barcode' => 'required|string|min:1',
-            'buying_price' => 'required|numeric',
+            'barcode' => 'required|string|min:1|unique:products,barcode',
+            'last_buying_price' => 'required|numeric',
             'selling_price' => 'required|numeric',
             'minimum_stock' => 'nullable|numeric',
             'has_expire_date' => 'required|boolean',
@@ -56,7 +58,8 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function remove_product_from_group(Product $product){
+    public function remove_product_from_group(Product $product)
+    {
         $product->product_group_id = null;
         $product->save();
         return redirect()->back();
@@ -67,7 +70,7 @@ class ProductController extends Controller
         try {
             $product->deleteOrFail();
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withErrors(['message'=> 'لا يمكن حذف هذا المنتج لوجود حركات عليه']);
+            return redirect()->back()->withErrors(['message' => 'لا يمكن حذف هذا المنتج لوجود حركات عليه']);
         }
         return redirect()->back()->with('success', 'تم حذف المنتج بنجاح');
     }

@@ -8,7 +8,7 @@ export default class ProductGroupServices {
         Inertia.get(`${this.BASE_ROUTE}`);
     }
 
-    // fetching custom data with reloads
+    // to display the product that is in the group
     static getProductsInGroup(id: number) {
         Inertia.get(
             this.BASE_ROUTE + "/display-products-in-group",

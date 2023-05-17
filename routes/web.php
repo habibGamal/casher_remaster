@@ -1,28 +1,14 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\AssetsController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\ExamController;
-use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\OpeningStockController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductGroupController;
+use App\Http\Controllers\Invoices\BuyingInvoiceController;
+use App\Http\Controllers\Invoices\ReturnBuyingInvoiceController;
+use App\Http\Controllers\Invoices\SellingInvoiceController;
 use App\Http\Controllers\StockController;
-use App\Http\Controllers\OpeningStockItemController;
-use App\Mail\Feedback;
-use App\Models\Exam;
-use App\Models\ProductGroup;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\TrackingStockController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +24,7 @@ use Inertia\Inertia;
 // public routing
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    return inertia()->render('Home');
 })->name('home');
 // product
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -52,14 +38,38 @@ Route::post('/product-groups/store', [ProductGroupController::class, 'store']);
 Route::post('/product-groups/update/{productGroup}', [ProductGroupController::class, 'update']);
 Route::get('/product-groups/display-products-in-group', [ProductGroupController::class, 'display_products_in_group']);
 Route::delete('/product-groups/{productGroup}', [ProductGroupController::class, 'delete']);
-// product
+// stocks
 Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
 Route::post('/stocks/store', [StockController::class, 'store']);
 Route::post('/stocks/update/{stock}', [StockController::class, 'update']);
 Route::delete('/stocks/{stock}', [StockController::class, 'delete']);
 // opening-stock
-Route::get('/opening-stocks', [OpeningStockItemController::class, 'index'])->name('opening-stocks.index');
-Route::post('/opening-stocks/store', [OpeningStockItemController::class, 'store']);
-Route::post('/opening-stocks/update/{openingStock}', [OpeningStockItemController::class, 'update']);
-Route::delete('/opening-stocks/{openingStock}', [OpeningStockItemController::class, 'delete']);
-
+Route::get('/opening-stocks', [OpeningStockController::class, 'index'])->name('opening-stocks.index');
+Route::post('/opening-stocks/store', [OpeningStockController::class, 'store']);
+Route::post('/opening-stocks/update/{openingStock}', [OpeningStockController::class, 'update']);
+Route::delete('/opening-stocks/{openingStock}', [OpeningStockController::class, 'delete']);
+// buying-invoice
+Route::get('/buying-invoice', [BuyingInvoiceController::class, 'index'])->name('buying-invoice.index');
+Route::get('/buying-invoice/create', [BuyingInvoiceController::class, 'create'])->name('buying-invoice.create');
+Route::post('/buying-invoice/store', [BuyingInvoiceController::class, 'store']);
+Route::get('/buying-invoice/{invoice}', [BuyingInvoiceController::class, 'show']);
+// return-buying-invoice
+Route::get('/return-buying-invoice', [ReturnBuyingInvoiceController::class, 'index'])->name('return-buying-invoice.index');
+Route::get('/return-buying-invoice/create', [ReturnBuyingInvoiceController::class, 'create'])->name('return-buying-invoice.create');
+Route::post('/return-buying-invoice/store', [ReturnBuyingInvoiceController::class, 'store']);
+Route::get('/return-buying-invoice/{invoice}', [ReturnBuyingInvoiceController::class, 'show']);
+// selling-invoice
+Route::get('/selling-invoice', [SellingInvoiceController::class, 'index'])->name('selling-invoice.index');
+Route::get('/selling-invoice/create', [SellingInvoiceController::class, 'create'])->name('selling-invoice.create');
+Route::post('/selling-invoice/store', [SellingInvoiceController::class, 'store']);
+Route::get('/selling-invoice/{invoice}', [SellingInvoiceController::class, 'show']);
+// tracking stocks
+Route::get('/tracking-stocks', [TrackingStockController::class, 'index']);
+// settings
+Route::get('/settings', function () {
+    return inertia()->render('Settings');
+})->name('settings.index');
+// unimplemented
+Route::get('/display-invoices', function () {
+    return inertia()->render('invoices/DisplayInvoices');
+});

@@ -11,8 +11,7 @@ class StockItem extends Model
 
     protected $fillable = [
         'quantity',
-        'price',
-        'expiration_date',
+        'buying_price',
         'stock_id',
         'product_id',
     ];

@@ -1,102 +1,88 @@
-import { Button, Col, Form, Input, Radio, Row, Typography } from "antd";
+import { Col, Input, Select, Row, Table} from "antd";
 import React, { useState } from "react";
 import PageTitle from "../components/PageTitle";
-import TrackingStocksTable from "../common/tables/TrackingStocksTable";
-import SelectSearch, { SetOptions } from "../components/SelectSearch";
-import { SaveOutlined } from "@ant-design/icons";
-export default function TrackingStocks() {
-  const [form] = Form.useForm();
+import { ModelColumns } from "../../interfaces/ModelConfig";
+import useSearch from "../../hooks/useSearch";
+import { Inertia } from "@inertiajs/inertia";
+const modelColumns: ModelColumns[] = [
+    {
+        title: "أسم الصنف",
+        dataIndex: "name",
+        key: "name",
+    },
+    {
+        title: "الكمية",
+        dataIndex: "quantity",
+        key: "quantity",
+    },
+    {
+        title: "سعر شراء",
+        dataIndex: "buying_price",
+        key: "buying_price",
+    },
+    {
+        title: "المخزن",
+        dataIndex: "stock",
+        key: "stock",
+    },
+];
 
-  const onFinish = (values: any) => {
-    console.log("Finish:", values);
-  };
-  const onSearch = async (value: string, setOptions: SetOptions) => {};
+export default function TrackingStocks({ data }: { data: any }) {
+    const search = useSearch("barcode");
+    const [loading, setLoading] = useState(false);
+    const searchHandler = () => {
+        setLoading(true);
+        Inertia.reload({
+            data: search.data,
+            only: ["data"],
+            onSuccess: () => setLoading(false),
+        });
+    };
+    console.log(data);
+    const stockItems = data?.stock_items.map((item: any) => ({
+        ...item,
+        key: item.id,
+        name: data.name,
+        stock: item.stock.name,
+    }));
 
-  const [codeOrName, setCodeOrName] = useState<"name" | "barcode">("name");
-
-  return (
-    <Row gutter={[0, 25]} className="m-8">
-      <PageTitle name="جرد المخازن" />
-      <Col span="24" className="isolate">
-        <Form
-          form={form}
-          name="choose_stock"
-          layout="inline"
-          onFinish={onFinish}
-        >
-          <Form.Item label="رقم الجرد">
-            <span className="ant-form-text">1631</span>
-          </Form.Item>
-          <Form.Item
-            name="stock_id"
-            label="المخزن"
-            rules={[
-              {
-                required: true,
-                message: "هذا الحقل مطلوب",
-              },
-            ]}
-          >
-            <SelectSearch
-              onSearch={onSearch}
-              placeholder="اسم المخزن"
-              style={{ minWidth: "300px" }}
-            />
-          </Form.Item>
-        </Form>
-        <Form
-          form={form}
-          name="products"
-          layout="inline"
-          onFinish={onFinish}
-          className="mt-8"
-        >
-          <Form.Item initialValue={"name"} name="name_or_code">
-            <Radio.Group onChange={(e) => setCodeOrName(e.target.value)}>
-              <Radio.Button value={"name"}>بحث بالاسم</Radio.Button>
-              <Radio.Button value={"barcode"}>بحث باكود</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-          {codeOrName === "barcode" && (
-            <Form.Item
-              name="barcode"
-              label="الكود"
-              rules={[
-                {
-                  required: true,
-                  message: "هذا الحقل مطلوب",
-                },
-              ]}
-            >
-              <Input autoFocus />
-            </Form.Item>
-          )}
-          <Form.Item
-            name="product_id"
-            label="المنتج"
-            rules={[
-              {
-                required: true,
-                message: "هذا الحقل مطلوب",
-              },
-            ]}
-          >
-            <SelectSearch
-              onSearch={onSearch}
-              placeholder="المنتج - (الصلاحية)"
-              style={{ minWidth: "300px" }}
-            />
-          </Form.Item>
-        </Form>
-      </Col>
-      <Col span="24" className="isolate">
-        <TrackingStocksTable />
-        <div className="flex justify-center m-4">
-          <Button disabled type="primary" icon={<SaveOutlined />}>
-            حفظ
-          </Button>
-        </div>
-      </Col>
-    </Row>
-  );
+    return (
+        <Row gutter={[0, 25]} className="m-8">
+            <PageTitle name="جرد المخازن" />
+            <Col span="24" className="isolate">
+                <Input
+                    id="search_product"
+                    allowClear
+                    addonBefore={
+                        <Select
+                            defaultValue={search.data.attribute}
+                            onChange={search.changeSearchAttribute}
+                            options={[
+                                {
+                                    label: "الكود",
+                                    value: "barcode",
+                                },
+                            ]}
+                        />
+                    }
+                    placeholder="المنتج"
+                    className="placeholder:font-tajawal mb-4"
+                    value={search.data.value}
+                    onChange={(e) => {
+                        search.changeSearchValue(e.target.value);
+                    }}
+                    onPressEnter={searchHandler}
+                />
+                <Table
+                    columns={modelColumns}
+                    rowKey={(record: any) => record.id}
+                    dataSource={stockItems}
+                    pagination={false}
+                    loading={loading}
+                    bordered
+                    scroll={{ x: true }}
+                />
+            </Col>
+        </Row>
+    );
 }

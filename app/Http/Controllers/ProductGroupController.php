@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ProductGroup;
-use App\Services\ProductGroupServices;
+use App\Services\TableSettingsServices;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class ProductGroupController extends Controller
 {
     private $index = 'products/ProductGroups';
 
-    public function index(Request $request, ProductGroupServices $productGroupServices)
+    public function index(Request $request)
     {
-        return Inertia::render($this->index, [
-            'productGroups' =>  $productGroupServices->get_product_groups($request, 'productGroups'),
+        return inertia()->render($this->index, [
+            'productGroups' =>  TableSettingsServices::pagination(ProductGroup::withCount('products'), $request, 'productGroups'),
         ]);
     }
 
-    public function display_products_in_group(Request $request, ProductGroupServices $productGroupServices)
+    public function display_products_in_group(Request $request)
     {
-        return Inertia::render($this->index, [
-            'productsInGroup' => $productGroupServices->get_products_in_groups($request, 'productsInGroup')
+        return inertia()->render($this->index, [
+            'productsInGroup' => TableSettingsServices::pagination(Product::where('product_group_id', $request->productGroupId), $request, 'productsInGroup')
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:product_groups,name',
         ]);
         ProductGroup::create($request->all());
         return redirect()->route('product-groups.index');

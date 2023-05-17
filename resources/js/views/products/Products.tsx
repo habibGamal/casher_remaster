@@ -8,6 +8,8 @@ import ProductServices from "../../services/ProductServices";
 import ModelContext from "../../interfaces/ModelContext";
 import { ProductWithProductGroup } from "../../interfaces/Product";
 import ProductForm from "../common/forms/ProductForm";
+import DeleteButton from "../components/DeleteButton";
+import EditButton from "../components/EditButton";
 type ModelType = ProductWithProductGroup;
 const modelColumns: ModelColumns[] = [
     {
@@ -22,9 +24,9 @@ const modelColumns: ModelColumns[] = [
         key: "barcode",
     },
     {
-        title: "سعر الشراء",
-        dataIndex: "buying_price",
-        key: "buying_price",
+        title: "اخر سعر شراء",
+        dataIndex: "last_buying_price",
+        key: "last_buying_price",
         sorting: true,
     },
     {
@@ -47,23 +49,19 @@ const modelColumns: ModelColumns[] = [
         renderWithCtx: (ctx: ModelContext<any>) => {
             return (record: ModelType) => (
                 <Space size="middle">
-                    <Button
+                    <EditButton
                         onClick={() => {
                             ctx.setModelToEdit!(record);
                             ctx.modalForm?.showModal();
                         }}
-                        icon={<EditOutlined className="text-indigo-900" />}
                     />
-                    <Button
-                        danger
-                        type="dashed"
+                    <DeleteButton
                         onClick={() => {
                             ModelGeneralServices.delete(
                                 record.id!,
                                 ProductServices.BASE_ROUTE
                             );
                         }}
-                        icon={<DeleteOutlined />}
                     />
                 </Space>
             );
@@ -86,7 +84,6 @@ const config = {
         ProductServices.index();
     },
     addButton: "أضافة صنف",
-    sorting: ["name", "code", "price"],
     slug: "products",
     pagination: true,
     expandedRowRender: (record: ModelType) => (

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('barcode');
-            $table->double('buying_price');
+            $table->string('barcode')->unique();
+            $table->double('last_buying_price');
             $table->double('selling_price');
             $table->unsignedInteger('minimum_stock')->nullable();
             $table->boolean('has_expire_date');

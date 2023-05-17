@@ -11,7 +11,7 @@ class Product extends Model
     public $fillable = [
         'name',
         'barcode',
-        'buying_price',
+        'last_buying_price',
         'selling_price',
         'minimum_stock',
         'has_expire_date',
@@ -19,6 +19,18 @@ class Product extends Model
         'unit',
         'product_group_id',
     ];
+
+
+    public function setAvailableQuantityAttribute($value)
+    {
+        $this->attributes['available_quantity'] = $value;
+    }
+
+    public function getAvailableQuantityAttribute()
+    {
+        if (isset($this->attributes['available_quantity']))
+            return $this->attributes['available_quantity'];
+    }
 
     public function productGroup()
     {

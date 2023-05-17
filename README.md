@@ -1,66 +1,80 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<h1> <img width="24" src="https://github.com/habibGamal/casher_remaster/blob/master/public/images/logo.png" /> Casher Remaster</h1>
+<p>This is a general POS system </p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Screenshots
 
-## About Laravel
+# Sysetm Content
+## Products
+- [x] add products
+- [x] product groups
+- [ ] product details
+- [ ] expired products
+- [x] opening stocks
+## Managing stocks
+- [x] add stocks
+- [ ] tracking stocks
+- [ ] loss
+- [ ] transfer between stocks
+## Invoices
+- [x] display invoices
+- [x] create buying invoice
+- [x] create selling invoice
+- [x] return buying invoice
+- [ ] return selling invoice
+## Customers and suppliers
+- Comming soon...
+## Accounts
+- Comming soon...
+## Management
+- Comming soon...
+## Notification
+- Comming soon...
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# 🛠 Tech used:
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Inertia](https://img.shields.io/badge/inertia-%239554e9.svg?style=for-the-badge&logo=inertia&logoColor=black) ![PHP](https://img.shields.io/badge/php-%234d588e.svg?style=for-the-badge&logo=php&logoColor=white) ![Laravel](https://img.shields.io/badge/laravel-%23e3382b.svg?style=for-the-badge&logo=laravel&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Cypress](https://img.shields.io/badge/cypress-white.svg?style=for-the-badge&logo=cypress&logoColor=black) 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# 🎨 Design
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) 
 
-## Learning Laravel
+## How to use
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1 - Clone this repo
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### `git clone https://github.com/habibGamal/casher_remaster.git`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2 - Install deps
 
-## Laravel Sponsors
+### `npm install`
+### `composer install`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+3 - Copy .env.example to .env
 
-### Premium Partners
+### `cp .env.example .env`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Note change the .env file to your suitable environment
 
-## Contributing
+4 - Run Migrations and seed database
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### `php artisan migrate`
+### `php artisan db:seed`
 
-## Code of Conduct
+5 - Finally serve the app
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### `php artisan serve`
 
-## Security Vulnerabilities
+if you want to edit frontend run the following command in another terminal
+### `npm run dev`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+<h1>Bugs</h1>
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- [ ] sorting … when switch between on column and another
+- [ ] when we open (عرض اصناف المجموعة) and make any pagination and click back button the url not restored to its original state that must return us to the main page
+- [ ] change stock_item props from price to buying_price and selling_price
+- [ ] table sorting should reset pagination position
+- [ ] when delete product or any model ⇒ delete btn should be disabled after first click
+- [ ] timezone fix
+- [ ] barcode in product should be unique
+- [ ] `productGroup.name` should be unique
+- [ ] initial value of `selectsearch`
+- [ ] model search not working when we press enter

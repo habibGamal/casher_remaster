@@ -47,4 +47,16 @@ class TableSettingsServices
     {
         return $this->request->query($this->slug . '_search');
     }
+
+    static function pagination($elquentBuilder, Request $request, string $slug,  $defaultOrderColumn = "created_at")
+    {
+        $settings = new TableSettingsServices($request, $slug, $defaultOrderColumn);
+        if ($settings->isSearch()) {
+            $elquentBuilder->where($settings->attribute, 'like', '%' . $settings->search . '%');
+        }
+        $elquentBuilder->orderBy($settings->columnKey, $settings->order);
+        $data = $elquentBuilder->paginate($settings->pageSize, ['*'], $slug . '_page');
+
+        return $data;
+    }
 }

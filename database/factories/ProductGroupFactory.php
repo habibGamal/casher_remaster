@@ -17,7 +17,7 @@ class ProductGroupFactory extends Factory
     public function definition()
     {
         return [
-            'name'=>fake()->name(),
+            'name'=>fake()->unique()->word(),
         ];
     }
 }

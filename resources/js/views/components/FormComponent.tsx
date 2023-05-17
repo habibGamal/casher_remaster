@@ -70,7 +70,7 @@ const FormComponent = ({
             name={formName}
             onFinish={onFinish}
             initialValues={initValues}
-            className="p-8 border-2 border-indigo-500 rounded-md bg-indigo-50 "
+            className="p-8 border-2 border-indigo-500 rounded-md bg-indigo-50 dark:bg-transparent dark:border-none"
             layout="vertical"
             scrollToFirstError
         >

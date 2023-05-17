@@ -25,36 +25,32 @@
     src: url("./assets/fonts/Tajawal-ExtraBold.ttf");
     font-weight: 900;
 }
-
+.font-tajawal {
+    font-family: tajawal;
+}
 * {
     font-family: tajawal;
 }
-
+*,
+::before,
+::after {
+    border-width: 0;
+    border-style: solid;
+    border-color: theme("borderColor.DEFAULT", currentColor);
+}
 html {
     direction: rtl;
 }
 
 body {
-    @apply bg-zinc-100;
+    @apply bg-[#f8f9fe] dark:bg-dark-900 m-0;
 }
 
 ::placeholder {
     font-family: tajawal;
 }
-// reset confelict of tailwind and ant
 .ant-btn-primary {
-    // background-color: #6366f1;
-    background-color: #47388d;
     box-shadow: none;
-}
-// .ant-btn-primary:not(:disabled):hover {
-//     background-color: #9197ff;
-// }
-.ant-btn-primary:not(:disabled):hover {
-    background-color: #645699;
-}
-.ant-btn-default {
-    background-color: #ffffff;
 }
 button img {
     display: inline;
@@ -92,5 +88,8 @@ object {
 
 // table
 .isolate {
-    @apply p-6 bg-white border border-indigo-500 shadow-xl rounded-xl
+    @apply p-6 bg-white dark:bg-dark-700 border-2 border-gray-300 dark:border-none shadow-xl rounded-xl;
+}
+.isolate-2 {
+    @apply p-6 bg-white dark:bg-dark-700 border-2 border-gray-200 dark:border-none  rounded-xl;
 }

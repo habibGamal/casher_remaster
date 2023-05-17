@@ -16,11 +16,12 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $last_buying_price = fake()->randomFloat(2, 0, 100);
         return [
             'name'=>fake()->word(),
-            'barcode'=>fake()->ean13(),
-            'buying_price'=>fake()->randomFloat(2, 0, 100),
-            'selling_price'=>fake()->randomFloat(2, 0, 100),
+            'barcode'=>fake()->unique()->ean13(),
+            'last_buying_price'=>$last_buying_price,
+            'selling_price'=>fake()->randomFloat(2, $last_buying_price+10, $last_buying_price+50),
             'minimum_stock'=>fake()->randomNumber(2),
             'has_expire_date'=>fake()->boolean(),
             'unit_or_weight'=>fake()->boolean(),

@@ -16,11 +16,9 @@ class OpeningStockItemFactory extends Factory
      */
     public function definition()
     {
-        $buying_price = $this->faker->randomFloat(2, 0, 2000);
         return [
             'stock_item_id' => \App\Models\StockItem::factory(),
-            'buying_price' => $buying_price,
-            'selling_price' => $buying_price + $this->faker->randomFloat(2, 0, 100)
+            'buying_price' => $this->faker->randomFloat(2, 0, 2000),
         ];
     }
 }

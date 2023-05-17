@@ -12,7 +12,6 @@ class OpeningStockItem extends Model
     protected $fillable = [
         'stock_item_id',
         'buying_price',
-        'selling_price',
     ];
 
     public function stockItem()

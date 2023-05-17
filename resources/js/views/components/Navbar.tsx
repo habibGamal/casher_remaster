@@ -9,6 +9,10 @@ import { Inertia } from "@inertiajs/inertia";
 import ProductGroupServices from "../../services/ProductGroupServices";
 import StockServices from "../../services/StockServices";
 import OpeningStockServices from "../../services/OpeningStockServices";
+import BuyingInvoiceServices from "../../services/BuyingInvoiceServices";
+import TrackingStockServices from "../../services/TrackingStocksServices";
+import ReturnBuyingInvoiceServices from "../../services/ReturnBuyingInvoiceServices";
+import SellingInvoiceServices from "../../services/SellingInvoiceServices";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -72,8 +76,11 @@ const items: MenuProps["items"] = [
         getItem("Item 2", "g2"),
     ]),
     getItem("الفواتير", "invoices", <IconSax icon="receipt-item" />, [
-        getItem("Item 1", "g1"),
-        getItem("Item 2", "g2"),
+        getItem("عرض الفواتير", "display_invoices"),
+        getItem("فاتورة شراء", "create_buying_invoice"),
+        getItem("فاتورة بيع", "create_selling_invoice"),
+        getItem("مرتجع فاتورة شراء", "create_return_buying_invoice"),
+        getItem("مرتجع فاتورة بيع", "create_return_selling_invoice"),
     ]),
     getItem("الحسابات", "accounting", <IconSax icon="calculator" />, [
         getItem("Item 1", "g1"),
@@ -96,6 +103,7 @@ const items: MenuProps["items"] = [
             <IconSax icon="notification" className="text-red-400" />
         </Badge>
     ),
+    getItem("الاعدادات", "settings", <IconSax icon="settings" />),
     getItem(
         "تسجيل خروج",
         "logout",
@@ -112,6 +120,12 @@ const Navbar = () => {
         if (e.key === "product_groups") ProductGroupServices.index();
         if (e.key === "add_stock") StockServices.index();
         if (e.key === "openning_stock") OpeningStockServices.index();
+        if (e.key === "create_buying_invoice") BuyingInvoiceServices.create();
+        if (e.key === "create_return_buying_invoice") ReturnBuyingInvoiceServices.create();
+        if (e.key === "display_invoices") BuyingInvoiceServices.index();
+        if (e.key === "settings") Inertia.get("/settings");
+        if (e.key === "tracking_stocks") TrackingStockServices.index();
+        if (e.key === "create_selling_invoice") SellingInvoiceServices.create();
     };
     const [collapsed, setCollapsed] = useState(false);
     const menu = useRef<HTMLDivElement>(null);
@@ -120,20 +134,24 @@ const Navbar = () => {
     };
     return (
         <div
-          ref={menu}
-          className="min-h-screen border-l sticky top-0 border-[#e5e7eb] bg-white"
+            ref={menu}
+            className="min-h-screen border-l sticky top-0 border-[#e5e7eb] dark:border-dark-700 bg-white dark:bg-dark-900"
         >
-          <div className="grid place-items-center cursor-pointer" onClick={()=>Inertia.get('/')}>
-            <div className="aspect-square my-16 w-[50px] rounded-full border-0 border-gray-300 grid place-items-center">
-              <img src={logo} />
+            <div
+                className="grid place-items-center cursor-pointer"
+                onClick={() => Inertia.get("/")}
+            >
+                <div className="aspect-square my-16 w-[50px] rounded-full border-0 border-gray-300 grid place-items-center">
+                    <img className="w-full object-contain" src={logo} />
+                </div>
             </div>
-          </div>
             <Menu
                 onClick={onClick}
                 defaultSelectedKeys={DEFALUT_SELECTED_KEY}
                 defaultOpenKeys={["products_section"]}
                 mode="inline"
                 items={items}
+                style={{ borderInlineEnd: "none" }}
                 inlineCollapsed={collapsed}
             />
             <Button
