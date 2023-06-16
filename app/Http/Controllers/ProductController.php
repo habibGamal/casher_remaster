@@ -70,7 +70,7 @@ class ProductController extends Controller
         try {
             $product->deleteOrFail();
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withErrors(['message' => 'لا يمكن حذف هذا المنتج لوجود حركات عليه']);
+            return redirect()->back()->with('error', 'لا يمكن حذف هذا المنتج لوجود حركات عليه');
         }
         return redirect()->back()->with('success', 'تم حذف المنتج بنجاح');
     }

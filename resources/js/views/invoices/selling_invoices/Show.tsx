@@ -1,29 +1,32 @@
 import React, { useState } from "react";
 import { Button, Col, Descriptions, Modal, Row, Space, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import PageTitle from "../../components/PageTitle";
-interface BuyingInvoiceData {
+import PageTitle from "../../../components/PageTitle";
+interface SellingInvoiceItem {
+  id: number;
+  selling_invoice_id: number;
+  product_id: number;
+  quantity: number;
+  buying_price: number;
+  selling_price: number;
+  created_at: string;
+  updated_at: string;
+  product: {
     id: number;
-    total_cost: number;
-    created_at: string;
-    buying_invoice_items: BuyingInvoiceItemData[];
+    name: string;
+    barcode: string;
+  };
 }
-interface BuyingInvoiceItemData {
-    id: number;
-    buying_invoice_id: number;
-    stock_item_id: number;
-    quantity: number;
-    stock_item: {
-        id: number;
-        product_id: number;
-        buying_price: number;
-        product: {
-            id: number;
-            name: string;
-            barcode: string;
-        };
-    };
+
+interface SellingInvoice {
+  id: number;
+  total_cost: number;
+  total_cash: number;
+  created_at: string;
+  updated_at: string;
+  selling_invoice_items: SellingInvoiceItem[];
 }
+
 
 const columns = [
     {
@@ -48,22 +51,24 @@ const columns = [
     },
     {
         title: "الاجمالي",
-        dataIndex: "total_cost",
-        key: "total_cost",
+        dataIndex: "total_cash",
+        key: "total_cash",
     },
 ];
-const remapInvoiceData = (data: BuyingInvoiceData) =>
-    data.buying_invoice_items.map((invoice) => ({
-        name: invoice.stock_item.product.name,
-        barcode: invoice.stock_item.product.barcode,
-        buying_price: invoice.stock_item.buying_price,
+const remapInvoiceData = (data: SellingInvoice) =>
+    data.selling_invoice_items.map((invoice) => ({
+        name: invoice.product.name,
+        barcode: invoice.product.barcode,
+        selling_price: invoice.selling_price,
+        buying_price: invoice.buying_price,
         quantity: invoice.quantity,
-        total_cost: invoice.quantity * invoice.stock_item.buying_price,
+        total_cash: invoice.quantity * invoice.selling_price,
     }));
-export default function BuyingInvoice({ data }: { data: BuyingInvoiceData }) {
+export default function BuyingInvoice({ data }: { data: SellingInvoice }) {
+    console.log(data);
     return (
         <Row gutter={[0, 25]} className="m-8">
-            <PageTitle name={`عرض فاتورة مشتريات`} />
+            <PageTitle name={`عرض فاتورة مبيعات`} />
             <Col span="24" className="isolate-2">
                 <Descriptions className="w-full" bordered>
                     <Descriptions.Item label="رقم الفاتورة">

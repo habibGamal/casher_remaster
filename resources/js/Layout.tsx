@@ -1,18 +1,25 @@
-import React, { createContext, useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, {
+    createContext,
+    useEffect,
+    useLayoutEffect,
+    useState,
+} from "react";
 import { Col, ConfigProvider, Row, message, theme } from "antd";
-import Navbar from "./views/components/Navbar";
+import Navbar from "./components/Navbar";
 import { usePage } from "@inertiajs/inertia-react";
 interface Flash {
     error?: string;
     success?: string;
 }
+type Theme = "dark" | "light";
 export const themeToggler = createContext<{
-    currentTheme: "light" | "dark";
-    setCurrentTheme: React.Dispatch<React.SetStateAction<"light" | "dark">>;
+    currentTheme: Theme;
+    toggleTheme: (currentTheme: Theme) => void;
 } | null>(null);
+
 function Layout(props: { children: JSX.Element }) {
     const { flash } = usePage().props;
-    const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
+    const [currentTheme, setCurrentTheme] = useState<Theme>("light");
     // check if flash has error or success message display it
     useEffect(() => {
         const { error, success } = flash as Flash;
@@ -27,13 +34,31 @@ function Layout(props: { children: JSX.Element }) {
     // switch to dark theme by add `dark` class to html tag
     // to trigger dark mode in tailwindcss
     useLayoutEffect(() => {
-        const html = document.querySelector("html") as HTMLElement;
-        if (currentTheme === "dark") html.classList.add("dark");
-        else html.classList.remove("dark");
+        const theme = themeFromStorage();
+        updateHtmlElementTheme(theme);
     }, [currentTheme]);
 
+    const themeFromStorage = () => {
+        const theme = (localStorage.getItem("theme") ?? "light") as Theme;
+        // set the current theme to the theme from storage
+        if (theme !== currentTheme) setCurrentTheme(theme);
+        return theme;
+    };
+
+    const updateHtmlElementTheme = (theme: Theme) => {
+        const htmlElement = document.querySelector("html") as HTMLElement;
+        const isDark = theme === "dark";
+        if (isDark) htmlElement.classList.add("dark");
+        else htmlElement.classList.remove("dark");
+    };
+
+    const toggleTheme = (currentTheme: Theme) => {
+        localStorage.setItem("theme", currentTheme);
+        setCurrentTheme(currentTheme);
+    };
+
     return (
-        <themeToggler.Provider value={{ currentTheme, setCurrentTheme }}>
+        <themeToggler.Provider value={{ currentTheme, toggleTheme }}>
             <ConfigProvider
                 direction="rtl"
                 theme={{

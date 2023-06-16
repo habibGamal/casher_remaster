@@ -2,22 +2,17 @@ import { Checkbox, DatePicker, Radio, Select, Space, message } from "antd";
 import { Button, Col, Form, Input, InputNumber, Row } from "antd";
 import React, { useState } from "react";
 import useFormError from "../../../hooks/useFormError";
-import SelectSearch, { SetOptions } from "../../components/SelectSearch";
-import FormComponent from "../../components/FormComponent";
-import OpeningStockServices from "../../../services/OpeningStockServices";
+import SelectSearch, { SetOptions } from "../../../components/SelectSearch";
+import FormComponent from "../../../components/FormComponent";
+import OpeningStockServices from "../../../services/products/OpeningStockServices";
 import getFieldsNames from "../../../helpers/getFieldsNames";
 import OpeningStockItem from "../../../interfaces/OpeningStockItem";
+import FormProps from "../../../interfaces/FormProps";
 
 type Model = OpeningStockItem;
 
-interface FormProps {
-    modelToEdit?: Model;
-    closeModal: () => void;
-}
 const OpeningStockForm = ({ modelToEdit, closeModal }: FormProps) => {
-    const onSearch = async (value: string, setOptions: SetOptions) => {
-
-    };
+    const onSearch = async (value: string, setOptions: SetOptions) => {};
 
     const [searchWith, setSearchWith] = useState<"name" | "barcode">("barcode");
     const formItems: any[] = [
@@ -64,14 +59,12 @@ const OpeningStockForm = ({ modelToEdit, closeModal }: FormProps) => {
         : {
               name_or_code: searchWith,
           };
-    const fields = getFieldsNames(formItems);
     return (
         <FormComponent
             baseRoute={OpeningStockServices.BASE_ROUTE}
             formName="opening_stock_form"
             formItems={formItems}
             initValues={initValues}
-            fields={fields}
             modelToEdit={modelToEdit}
             closeModal={closeModal}
         />

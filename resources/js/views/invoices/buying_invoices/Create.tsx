@@ -1,10 +1,10 @@
 import React from "react";
-import BuyingInvoiceServices from "../../../services/BuyingInvoiceServices";
-import DisplayInvoiceCreation from "../../components/DisplayInvoiceCreation";
-import DeleteButton from "../../components/DeleteButton";
+import BuyInvServices from "../../../services/invoices/BuyInvServices";
+import DisplayInvoiceCreation from "../../../components/DisplayInvoiceCreation";
+import DeleteButton from "../../../components/DeleteButton";
 import EditableColumns from "../../../types/EditableColumns";
 import { Descriptions } from "antd";
-import SelectSearch from "../../components/SelectSearch";
+import SelectSearch from "../../../components/SelectSearch";
 import SelectSearchUtils from "../../../services/SelectSearchUtils";
 
 export default function CreateBuyingInvoice() {
@@ -56,7 +56,7 @@ export default function CreateBuyingInvoice() {
         <DisplayInvoiceCreation
             title="فاتورة شراء"
             defaultColumns={defaultColumns}
-            getHandler={BuyingInvoiceServices.getHandler}
+            getHandler={BuyInvServices.getHandler}
             extendDesicriptionItems={
                 <>
                     <Descriptions.Item label="المخزن">

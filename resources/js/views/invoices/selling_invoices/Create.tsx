@@ -1,14 +1,14 @@
 import React from "react";
-import BuyingInvoiceServices from "../../../services/BuyingInvoiceServices";
-import DisplayInvoiceCreation from "../../components/DisplayInvoiceCreation";
-import DeleteButton from "../../components/DeleteButton";
+import BuyInvServices from "../../../services/invoices/BuyInvServices";
+import DisplayInvoiceCreation from "../../../components/DisplayInvoiceCreation";
+import DeleteButton from "../../../components/DeleteButton";
 import EditableColumns from "../../../types/EditableColumns";
 import { Descriptions } from "antd";
-import SelectSearch from "../../components/SelectSearch";
+import SelectSearch from "../../../components/SelectSearch";
 import SelectSearchUtils from "../../../services/SelectSearchUtils";
-import SellingInvoiceServices from "../../../services/SellingInvoiceServices";
+import SellInvServices from "../../../services/invoices/SellInvServices";
 
-export default function CreateSellingInvoice() {
+export default function Create() {
     const defaultColumns: EditableColumns = [
         {
             title: "أسم الصنف",
@@ -57,7 +57,7 @@ export default function CreateSellingInvoice() {
         <DisplayInvoiceCreation
             title="فاتورة بيع"
             defaultColumns={defaultColumns}
-            getHandler={SellingInvoiceServices.getHandler}
+            getHandler={SellInvServices.getHandler}
             extendDesicriptionItems={
                 <>
                     <Descriptions.Item label="المخزن">

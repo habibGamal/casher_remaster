@@ -1,12 +1,12 @@
 import { Col, Row, Switch, Typography } from "antd";
 import React, { useContext } from "react";
-import PageTitle from "./components/PageTitle";
+import PageTitle from "../components/PageTitle";
 import { themeToggler } from "../Layout";
 
 export default function Settings() {
     const theme = useContext(themeToggler);
     const darkTheme = (checked: boolean) => {
-        theme?.setCurrentTheme(checked ? "dark" : "light");
+        theme?.toggleTheme(checked ? "dark" : "light");
     };
     return (
         <Row gutter={[0, 25]} className="m-8">

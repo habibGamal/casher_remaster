@@ -1,5 +1,5 @@
 import { Inertia, RequestPayload } from "@inertiajs/inertia";
-import { SetOptions } from "../views/components/SelectSearch";
+import { SetOptions } from "../components/SelectSearch";
 type Options = {
     id: number;
     name: string;

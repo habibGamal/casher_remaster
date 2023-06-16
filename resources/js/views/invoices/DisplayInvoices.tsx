@@ -1,16 +1,25 @@
 import { Row, Tabs, TabsProps } from "antd";
 import React from "react";
-import PageTitle from "../components/PageTitle";
-import BuyingInvoices from "./buying_invoices/BuyingInvoices";
-import BuyingInvoiceServices from "../../services/BuyingInvoiceServices";
-import ReturnBuyingInvoices from "./return_buying_invoices/ReturnBuyingInvoices";
-import ReturnBuyingInvoiceServices from "../../services/ReturnBuyingInvoiceServices";
+import PageTitle from "../../components/PageTitle";
+import BuyingInvoices from "./buying_invoices/Index";
+import BuyInvServices from "../../services/invoices/BuyInvServices";
+import ReturnBuyingInvoices from "./return_buying_invoices/Index";
+import ReturnBuyInvServices from "../../services/invoices/ReturnBuyInvServices";
+import SellingInvoices from "./selling_invoices/Index";
+import SellInvServices from "../../services/invoices/SellInvServices";
 const onChange = (key: string) => {
-    if (key === "buying_invoices") {
-        BuyingInvoiceServices.index();
-    }
-    if (key === "return_buying_invoices") {
-        ReturnBuyingInvoiceServices.index();
+    switch (key) {
+        case "buying_invoices":
+            BuyInvServices.index();
+            break;
+        case "return_buying_invoices":
+            ReturnBuyInvServices.index();
+            break;
+        case "selling_invoices":
+            SellInvServices.index();
+            break;
+        default:
+            break;
     }
 };
 
@@ -21,9 +30,9 @@ const items: TabsProps["items"] = [
         children: <BuyingInvoices />,
     },
     {
-        key: "2",
+        key: "selling_invoices",
         label: `فواتير البيع`,
-        children: `Content of Tab Pane 2`,
+        children: <SellingInvoices />,
     },
     {
         key: "return_buying_invoices",
@@ -33,7 +42,7 @@ const items: TabsProps["items"] = [
     {
         key: "4",
         label: `مرتجع فواتير البيع`,
-        children: `Content of Tab Pane 3`,
+        children: "<SellingInvoices />",
     },
 ];
 export default function DisplayInvoices({ tab }: { tab: string }) {

@@ -9,14 +9,14 @@ import {
     Table,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import PageTitle from "../components/PageTitle";
-import EditableCell from "../components/EditableCell";
-import EditableRow from "../components/EditableRow";
-import useSearch from "../../hooks/useSearch";
-import mapEditableColumns from "../../helpers/mapEditableColumns";
-import { GetInvoiceHandler } from "../../types/InvoiceGetHandler";
-import EditableColumns from "../../types/EditableColumns";
-import ColumnTypes from "../../types/ColumnTypes";
+import PageTitle from "./PageTitle";
+import EditableCell from "./EditableCell";
+import EditableRow from "./EditableRow";
+import useSearch from "../hooks/useSearch";
+import mapEditableColumns from "../helpers/mapEditableColumns";
+import { GetInvoiceHandler } from "../types/InvoiceGetHandler";
+import EditableColumns from "../types/EditableColumns";
+import ColumnTypes from "../types/ColumnTypes";
 import { usePage } from "@inertiajs/inertia-react";
 
 interface Item {

@@ -16,4 +16,14 @@ class SellingInvoiceItem extends Model
         'buying_price',
         'selling_price',
     ];
+
+    public function sellingInvoice()
+    {
+        return $this->belongsTo(SellingInvoice::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

@@ -14,7 +14,7 @@ import { usePage } from "@inertiajs/inertia-react";
 import useLoading from "../../../hooks/useLoading";
 import ModelGeneralServices from "../../../services/ModelGeneralServices";
 import StockForm from "../forms/StockForm";
-import StockServices from "../../../services/StockServices";
+import StockServices from "../../../services/stocks/StockServices";
 type Model = ProductWithProductGroup;
 interface TableProps {
     searchMode: boolean;

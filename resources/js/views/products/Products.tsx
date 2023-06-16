@@ -1,15 +1,15 @@
 import React from "react";
 import { Button, Descriptions, Space } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import DisplayModel from "../components/DisplayModel";
+import DisplayModel from "../../components/DisplayModel";
 import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
 import ModelGeneralServices from "../../services/ModelGeneralServices";
-import ProductServices from "../../services/ProductServices";
+import ProductServices from "../../services/products/ProductServices";
 import ModelContext from "../../interfaces/ModelContext";
 import { ProductWithProductGroup } from "../../interfaces/Product";
 import ProductForm from "../common/forms/ProductForm";
-import DeleteButton from "../components/DeleteButton";
-import EditButton from "../components/EditButton";
+import DeleteButton from "../../components/DeleteButton";
+import EditButton from "../../components/EditButton";
 type ModelType = ProductWithProductGroup;
 const modelColumns: ModelColumns[] = [
     {

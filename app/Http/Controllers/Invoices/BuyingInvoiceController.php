@@ -23,7 +23,7 @@ class BuyingInvoiceController extends Controller
 
     public function create(Request $request)
     {
-        return inertia()->render('invoices/buying_invoices/CreateBuyingInvoice', [
+        return inertia()->render('invoices/buying_invoices/Create', [
             'stocks' => Inertia::Lazy(
                 function () use ($request) {
                     return  Stock::select(['id', 'name'])
@@ -86,7 +86,7 @@ class BuyingInvoiceController extends Controller
 
     public function show(BuyingInvoice $invoice)
     {
-        return inertia()->render('invoices/buying_invoices/BuyingInvoice', [
+        return inertia()->render('invoices/buying_invoices/Show', [
             'data' => $invoice->load(['buyingInvoiceItems.stockItem:id,product_id,buying_price', 'buyingInvoiceItems.stockItem.product:id,name,barcode']),
         ]);
     }

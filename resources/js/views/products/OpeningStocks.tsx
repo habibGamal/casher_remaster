@@ -3,13 +3,13 @@ import React from "react";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import OpeningStockForm from "../common/forms/OpeningStockForm";
 import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
-import DisplayModel from "../components/DisplayModel";
+import DisplayModel from "../../components/DisplayModel";
 import ModelContext from "../../interfaces/ModelContext";
 import ModelGeneralServices from "../../services/ModelGeneralServices";
-import OpeningStockServices from "../../services/OpeningStockServices";
+import OpeningStockServices from "../../services/products/OpeningStockServices";
 import OpeningStockItem from "../../interfaces/OpeningStockItem";
-import EditButton from "../components/EditButton";
-import DeleteButton from "../components/DeleteButton";
+import EditButton from "../../components/EditButton";
+import DeleteButton from "../../components/DeleteButton";
 type Model = OpeningStockItem;
 const modelColumns: ModelColumns[] = [
     {

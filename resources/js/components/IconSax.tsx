@@ -13,7 +13,7 @@ export default function IconSax({
     useEffect(() => {
         const loadIcon = async () => {
             const svg = await import(
-                `../../../assets/icons/${dir}/${icon}.svg`
+                `../../assets/icons/${dir}/${icon}.svg`
             );
             imgRef.current!.src = svg.default;
         };

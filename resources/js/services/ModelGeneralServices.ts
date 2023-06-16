@@ -118,9 +118,6 @@ export default class ModelGeneralServices<T> {
     // returning success or error message
     static delete(id: number, baseRoute: string) {
         Inertia.delete(`${baseRoute}/${id}`, {
-            onSuccess: () => {
-                message.success("تم الحذف بنجاح");
-            },
             onError: (errors) => {
                 message.error("حدث خطأ ما");
                 if (errors.message) message.error(errors.message);

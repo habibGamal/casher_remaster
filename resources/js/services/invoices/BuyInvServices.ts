@@ -1,8 +1,8 @@
-import { Inertia, Method } from "@inertiajs/inertia";
+import { Inertia } from "@inertiajs/inertia";
 import { message } from "antd";
-import Product from "../interfaces/Product";
-import InvoiceHandler from "../interfaces/InvoiceHandler";
-import InvoiceHandlerProps from "../interfaces/InvoiceHandlerProps";
+import Product from "../../interfaces/Product";
+import InvoiceHandler from "../../interfaces/InvoiceHandler";
+import InvoiceHandlerProps from "../../interfaces/InvoiceHandlerProps";
 
 interface InvoiceItem {
     product_id: number;
@@ -13,7 +13,7 @@ interface InvoiceItem {
     total: number;
 }
 
-class BuyingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
+class BuyInvHandler implements InvoiceHandler<InvoiceItem> {
     protected props: InvoiceHandlerProps<InvoiceItem>;
     constructor(props: InvoiceHandlerProps<InvoiceItem>) {
         this.props = props;
@@ -95,7 +95,6 @@ class BuyingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
                 this.props.search.changeSearchValue("");
             },
         });
-        // Inertia.
     }
 
     onEditInvoiceItem(model: any) {
@@ -140,7 +139,7 @@ class BuyingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
     onSubmit() {
         this.props.setLoading(true);
         Inertia.post(
-            BuyingInvoiceServices.storeURL(),
+            BuyInvServices.storeURL(),
             {
                 invoiceItems: this.remapItemsToSubmit() as any,
                 total_cost: this.props.invoiceItems.reduce(
@@ -161,7 +160,7 @@ class BuyingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
     }
 }
 
-export default class BuyingInvoiceServices {
+export default class BuyInvServices {
     static BASE_ROUTE = "/buying-invoice";
     // routing
     static index() {
@@ -183,6 +182,6 @@ export default class BuyingInvoiceServices {
     static getHandler(
         props: InvoiceHandlerProps<InvoiceItem>
     ): InvoiceHandler<InvoiceItem> {
-        return new BuyingInvoiceHandler(props);
+        return new BuyInvHandler(props);
     }
 }

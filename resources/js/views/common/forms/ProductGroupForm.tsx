@@ -1,9 +1,9 @@
 import { Input } from "antd";
 import React, { useState } from "react";
 import ProductGroup from "../../../interfaces/ProductGroup";
-import ProductGroupServices from "../../../services/ProductGroupServices";
+import ProductGroupServices from "../../../services/products/ProductGroupServices";
 import getFieldsNames from "../../../helpers/getFieldsNames";
-import FormComponent from "../../components/FormComponent";
+import FormComponent from "../../../components/FormComponent";
 
 type Model = ProductGroup;
 
@@ -22,13 +22,11 @@ const ProductGroupForm = ({ modelToEdit, closeModal }: FormProps) => {
         },
     ];
 
-    const formFieldsNames = getFieldsNames(formItems);
     return (
         <FormComponent
             baseRoute={ProductGroupServices.BASE_ROUTE}
             formName="product_group_form"
             formItems={formItems}
-            fields={formFieldsNames}
             initValues={modelToEdit}
             modelToEdit={modelToEdit}
             closeModal={closeModal}

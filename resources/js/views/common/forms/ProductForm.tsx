@@ -1,19 +1,13 @@
 import { Checkbox, Radio, Select } from "antd";
 import { Input, InputNumber } from "antd";
 import React, { useState } from "react";
-import ProductServices from "../../../services/ProductServices";
+import ProductServices from "../../../services/products/ProductServices";
 import { ProductWithProductGroup } from "../../../interfaces/Product";
-import SelectSearch, { SetOptions } from "../../components/SelectSearch";
-import FormComponent from "../../components/FormComponent";
+import SelectSearch, { SetOptions } from "../../../components/SelectSearch";
+import FormComponent from "../../../components/FormComponent";
 import getFieldsNames from "../../../helpers/getFieldsNames";
 import SelectSearchUtils from "../../../services/SelectSearchUtils";
-
-type Model = ProductWithProductGroup;
-
-interface FormProps {
-    modelToEdit?: Model;
-    closeModal: () => void;
-}
+import FormProps from "../../../interfaces/FormProps";
 
 const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
 
@@ -111,7 +105,6 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
               unit_or_weight: unitOrWeight,
           };
 
-    const fields = getFieldsNames(formItems);
 
     return (
         <FormComponent
@@ -119,7 +112,6 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
             formName="products_form"
             formItems={formItems}
             initValues={initValues}
-            fields={fields}
             modelToEdit={modelToEdit}
             closeModal={closeModal}
         />

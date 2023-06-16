@@ -23,7 +23,7 @@ class SellingInvoiceController extends Controller
     function create(Request $request)
     {
 
-        return inertia()->render('invoices/selling_invoices/CreateSellingInvoice', [
+        return inertia()->render('invoices/selling_invoices/Create', [
             'invoice_number' => fn () => SellingInvoice::max('id') + 1,
             'stocks' => inertia()->lazy(
                 function () use ($request) {
@@ -118,7 +118,7 @@ class SellingInvoiceController extends Controller
 
     function show(SellingInvoice $invoice)
     {
-        return inertia()->render('invoices/selling_invoices/SellingInvoice', [
+        return inertia()->render('invoices/selling_invoices/Show', [
             'data' => $invoice->load(['sellingInvoiceItems.product:id,name,barcode']),
         ]);
     }

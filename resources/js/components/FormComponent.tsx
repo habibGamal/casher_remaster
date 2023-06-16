@@ -1,21 +1,17 @@
-import { Checkbox, Radio, Select, Space, message } from "antd";
-import { Button, Col, Form, Input, InputNumber, Row } from "antd";
-import React, { useEffect, useState } from "react";
-import { ProductWithProductGroup } from "../../interfaces/Product";
-import ModelGeneralServices from "../../services/ModelGeneralServices";
-import ProductServices from "../../services/ProductServices";
-import SelectSearch, { SetOptions } from "./SelectSearch";
-import { FORM_COLUMNS_LAYOUT, FORM_LAYOUT_1 } from "../../config/layouts";
-import formFieldsReshape from "../../helpers/formFieldsReshape";
-import useLoading from "../../hooks/useLoading";
-import useFormError from "../../hooks/useFormError";
-
+import { Space } from "antd";
+import { Button, Form, Row } from "antd";
+import React, { useEffect } from "react";
+import ModelGeneralServices from "../services/ModelGeneralServices";
+import { FORM_LAYOUT_1 } from "../config/layouts";
+import formFieldsReshape from "../helpers/formFieldsReshape";
+import useLoading from "../hooks/useLoading";
+import useFormError from "../hooks/useFormError";
+import getFieldsNames from "../helpers/getFieldsNames";
 
 interface FormProps {
     baseRoute: string;
     formName: string;
     formItems: any[];
-    fields: string[];
     initValues: any;
     modelToEdit?: any;
     closeModal: () => void;
@@ -25,7 +21,6 @@ const FormComponent = ({
     baseRoute,
     formName,
     formItems,
-    fields,
     initValues,
     modelToEdit,
     closeModal,
@@ -51,6 +46,7 @@ const FormComponent = ({
 
     useEffect(() => {
         if (errors) {
+            const fields = getFieldsNames(formItems);
             form.setFields(
                 fields.map((field) => ({ name: field, errors: [] }))
             );
@@ -74,7 +70,9 @@ const FormComponent = ({
             layout="vertical"
             scrollToFirstError
         >
-            <Row gutter={24} justify='center'>{formFieldsReshape(formItems)}</Row>
+            <Row gutter={24} justify="center">
+                {formFieldsReshape(formItems)}
+            </Row>
             <Form.Item className="grid place-items-center mt-8">
                 <Space>
                     <Button

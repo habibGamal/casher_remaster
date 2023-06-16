@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Space, Tag } from "antd";
-import DisplayModel from "../../components/DisplayModel";
+import DisplayModel from "../../../components/DisplayModel";
 import ModelConfig, { ModelColumns } from "../../../interfaces/ModelConfig";
 import ModelContext from "../../../interfaces/ModelContext";
-import BuyingInvoiceServices from "../../../services/BuyingInvoiceServices";
+import BuyInvServices from "../../../services/invoices/BuyInvServices";
 
 type ModelType = any;
 const modelColumns: ModelColumns[] = [
@@ -33,7 +33,7 @@ const modelColumns: ModelColumns[] = [
                 <Space size="middle">
                     <Button
                         onClick={() => {
-                            BuyingInvoiceServices.show(record.id);
+                            BuyInvServices.show(record.id);
                         }}
                     >
                         عرض الفاتورة
@@ -56,13 +56,13 @@ const config = {
     },
     exitSearchMode: (ctx: ModelContext<any>) => {
         ctx.search?.exitSearchMode();
-        BuyingInvoiceServices.index();
+        BuyInvServices.index();
     },
     addButton: null,
     slug: "invoices",
     pagination: true,
 };
 
-export default function BuyingInvoices() {
+export default function Index() {
     return <DisplayModel className="mx-0" config={config as ModelConfig} />;
 }

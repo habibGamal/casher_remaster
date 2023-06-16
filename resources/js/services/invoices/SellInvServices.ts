@@ -1,8 +1,8 @@
 import { Inertia } from "@inertiajs/inertia";
-import InvoiceHandler from "../interfaces/InvoiceHandler";
-import InvoiceHandlerProps from "../interfaces/InvoiceHandlerProps";
+import InvoiceHandler from "../../interfaces/InvoiceHandler";
+import InvoiceHandlerProps from "../../interfaces/InvoiceHandlerProps";
 import { message } from "antd";
-import detectERR from "../helpers/detectERR";
+import detectERR from "../../helpers/detectERR";
 
 interface InvoiceItem {
     id: number;
@@ -25,7 +25,7 @@ interface Product {
     available_quantity: number;
 }
 
-class SellingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
+class SellInvHandler implements InvoiceHandler<InvoiceItem> {
     private props: InvoiceHandlerProps<InvoiceItem>;
     constructor(props: InvoiceHandlerProps<InvoiceItem>) {
         this.props = props;
@@ -152,7 +152,7 @@ class SellingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
     onSubmit() {
         this.props.setLoading(true);
         Inertia.post(
-            SellingInvoiceServices.storeURL(),
+            SellInvServices.storeURL(),
             {
                 stock_id: this.props.extraData?.stock_id,
                 invoiceItems: this.remapItemsToSubmit() as any,
@@ -169,7 +169,7 @@ class SellingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
     }
 }
 
-export default class SellingInvoiceServices {
+export default class SellInvServices {
     static BASE_ROUTE = "/selling-invoice";
     // routing
     static index() {
@@ -191,6 +191,6 @@ export default class SellingInvoiceServices {
     static getHandler(
         props: InvoiceHandlerProps<InvoiceItem>
     ): InvoiceHandler<InvoiceItem> {
-        return new SellingInvoiceHandler(props);
+        return new SellInvHandler(props);
     }
 }

@@ -1,6 +1,6 @@
 import { Inertia } from "@inertiajs/inertia";
-import InvoiceHandler from "../interfaces/InvoiceHandler";
-import InvoiceHandlerProps from "../interfaces/InvoiceHandlerProps";
+import InvoiceHandler from "../../interfaces/InvoiceHandler";
+import InvoiceHandlerProps from "../../interfaces/InvoiceHandlerProps";
 import { message } from "antd";
 
 interface InvoiceItem {
@@ -41,7 +41,7 @@ interface BuyingInvoiceItem {
     };
 }
 
-class ReturnBuyingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
+class ReturnBuyInvHandler implements InvoiceHandler<InvoiceItem> {
     private props: InvoiceHandlerProps<InvoiceItem>;
     constructor(props: InvoiceHandlerProps<InvoiceItem>) {
         this.props = props;
@@ -150,7 +150,7 @@ class ReturnBuyingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
     onSubmit() {
         this.props.setLoading(true);
         Inertia.post(
-            ReturnBuyingInvoiceServices.storeURL(),
+            ReturnBuyInvServices.storeURL(),
             {
                 buying_invoice_id: this.props.invoiceData.buying_invoice_id,
                 invoiceItems: this.remapItemsToSubmit() as any,
@@ -171,7 +171,7 @@ class ReturnBuyingInvoiceHandler implements InvoiceHandler<InvoiceItem> {
     }
 }
 
-export default class ReturnBuyingInvoiceServices {
+export default class ReturnBuyInvServices {
     static BASE_ROUTE = "/return-buying-invoice";
     // routing
     static index() {
@@ -193,6 +193,6 @@ export default class ReturnBuyingInvoiceServices {
     static getHandler(
         props: InvoiceHandlerProps<InvoiceItem>
     ): InvoiceHandler<InvoiceItem> {
-        return new ReturnBuyingInvoiceHandler(props);
+        return new ReturnBuyInvHandler(props);
     }
 }

@@ -3,10 +3,10 @@ import { Button, Col, Modal, Row, Space } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import ModelContext from "../../../interfaces/ModelContext";
 import ModelConfig from "../../../interfaces/ModelConfig";
-import DisplayModelAsModal from "../../components/DisplayModelAsModal";
+import DisplayModelAsModal from "../../../components/DisplayModelAsModal";
 import Product from "../../../interfaces/Product";
-import ProductGroupServices from "../../../services/ProductGroupServices";
-import ProductServices from "../../../services/ProductServices";
+import ProductGroupServices from "../../../services/products/ProductGroupServices";
+import ProductServices from "../../../services/products/ProductServices";
 const modelColumns = [
     {
         title: "أسم الصنف",

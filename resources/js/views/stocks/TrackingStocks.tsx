@@ -1,6 +1,6 @@
 import { Col, Input, Select, Row, Table} from "antd";
 import React, { useState } from "react";
-import PageTitle from "../components/PageTitle";
+import PageTitle from "../../components/PageTitle";
 import { ModelColumns } from "../../interfaces/ModelConfig";
 import useSearch from "../../hooks/useSearch";
 import { Inertia } from "@inertiajs/inertia";
@@ -38,7 +38,6 @@ export default function TrackingStocks({ data }: { data: any }) {
             onSuccess: () => setLoading(false),
         });
     };
-    console.log(data);
     const stockItems = data?.stock_items.map((item: any) => ({
         ...item,
         key: item.id,

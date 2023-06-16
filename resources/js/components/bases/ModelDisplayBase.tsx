@@ -1,23 +1,23 @@
 import React, { createContext, useContext, useState } from "react";
 import { Modal, Table } from "antd";
 import TableController from "../TableController";
-import useTableSearch from "../../../hooks/useTableSearch";
-import useModal from "../../../hooks/useModal";
+import useTableSearch from "../../hooks/useTableSearch";
+import useModal from "../../hooks/useModal";
 import IconSax from "../IconSax";
 import { ColumnsType } from "antd/es/table";
-import useSortTable from "../../../hooks/useSortTable";
-import useLoading from "../../../hooks/useLoading";
-import useTablePagination from "../../../hooks/useTablePagination";
+import useSortTable from "../../hooks/useSortTable";
+import useLoading from "../../hooks/useLoading";
+import useTablePagination from "../../hooks/useTablePagination";
 import { TablePaginationConfig } from "antd/lib/table/InternalTable";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
-import sortInfoMapping from "../../../helpers/sortInfoMapping";
-import ModelGeneralServices from "../../../services/ModelGeneralServices";
-import useWhileTyping from "../../../hooks/useWhileTyping";
-import Pagination from "../../../interfaces/Pagination";
+import sortInfoMapping from "../../helpers/sortInfoMapping";
+import ModelGeneralServices from "../../services/ModelGeneralServices";
+import useWhileTyping from "../../hooks/useWhileTyping";
+import Pagination from "../../interfaces/Pagination";
 import { usePage } from "@inertiajs/inertia-react";
-import ModelConfig from "../../../interfaces/ModelConfig";
-import ModelContext, { FreeModelSettings } from "../../../interfaces/ModelContext";
-import ModelForm from "../../../interfaces/ModelForm";
+import ModelConfig from "../../interfaces/ModelConfig";
+import ModelContext, { FreeModelSettings } from "../../interfaces/ModelContext";
+import ModelForm from "../../interfaces/ModelForm";
 
 type ModelType = any;
 export class ModelDisplayBase {
