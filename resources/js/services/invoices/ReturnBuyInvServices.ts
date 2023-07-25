@@ -5,6 +5,7 @@ import { message } from "antd";
 
 interface InvoiceItem {
     id: number;
+    key: number;
     product_id: number;
     available_quantity: number;
     return_quantity: number;
@@ -12,6 +13,14 @@ interface InvoiceItem {
     barcode: string;
     buying_price: number;
     return_price: number;
+    stock: string;
+    children: {
+        id: number;
+        key: number;
+        stock: string;
+        available_quantity: number;
+        return_quantity: number;
+    }[];
     total: number;
 }
 
@@ -25,14 +34,24 @@ interface BuyingInvoice {
 interface BuyingInvoiceItem {
     id: number;
     buying_invoice_id: number;
-    stock_item_id: number;
+    box_id: number;
     quantity: number;
-    stock_item: {
+    created_at: string;
+    updated_at: string;
+    box: {
         id: number;
-        quantity: number;
-        buying_price: number;
-        stock_id: number;
         product_id: number;
+        buying_price: number;
+        stock_items: {
+            id: number;
+            quantity: number;
+            stock_id: number;
+            box_id: number;
+            stock: {
+                id: number;
+                name: string;
+            };
+        }[];
         product: {
             id: number;
             name: string;
@@ -52,7 +71,6 @@ class ReturnBuyInvHandler implements InvoiceHandler<InvoiceItem> {
         this.onDeleteInvoiceItem = this.onDeleteInvoiceItem.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.getInvoiceItems = this.getInvoiceItems.bind(this);
-        this.getRowKey = this.getRowKey.bind(this);
     }
 
     getInvoiceItems() {
@@ -61,14 +79,23 @@ class ReturnBuyInvHandler implements InvoiceHandler<InvoiceItem> {
 
     private factory(item: BuyingInvoiceItem): InvoiceItem {
         return {
-            id: item.stock_item.id,
-            product_id: item.stock_item.product_id,
-            available_quantity: item.stock_item.quantity,
+            id: item.id,
+            key: item.id,
+            product_id: item.box.product.id,
+            available_quantity: item.quantity,
             return_quantity: 0,
-            name: item.stock_item.product.name,
-            barcode: item.stock_item.product.barcode,
-            buying_price: item.stock_item.buying_price,
-            return_price: item.stock_item.buying_price,
+            name: item.box.product.name,
+            barcode: item.box.product.barcode,
+            buying_price: item.box.buying_price,
+            return_price: item.box.buying_price,
+            stock: "-",
+            children: item.box.stock_items.map((stock_item) => ({
+                id: item.id,
+                key: stock_item.id + item.id,
+                available_quantity: stock_item.quantity,
+                return_quantity: 0,
+                stock: stock_item.stock.name,
+            })),
             total: 0,
         };
     }
@@ -101,7 +128,11 @@ class ReturnBuyInvHandler implements InvoiceHandler<InvoiceItem> {
     }
 
     private correctTotal(item: InvoiceItem) {
-        item.total = item.return_quantity * item.return_price;
+        item.return_quantity = item.children.reduce(
+            (total, child) => total + parseFloat(child.return_quantity.toString()),
+            0
+        );
+        item.total = parseFloat((item.return_quantity * item.return_price).toFixed(2));
         return item;
     }
 
@@ -111,16 +142,18 @@ class ReturnBuyInvHandler implements InvoiceHandler<InvoiceItem> {
         return item.return_quantity <= item.available_quantity;
     }
 
-    getRowKey(item: InvoiceItem) {
-        return item.id;
-    }
-
     onEditInvoiceItem(model: any) {
         this.props.setInvoiceItems(
             this.props.invoiceItems.map((item) => {
                 if (item.id !== model.id) return item;
                 if (!this.validReturnedQuantity(model)) return item;
-                return this.correctTotal(model);
+                item.children = item.children.map((child) => {
+                    if (child.key != model.key) return child;
+                    return model;
+                });
+                this.correctTotal(item);
+                console.log(item);
+                return item;
             })
         );
     }
@@ -139,11 +172,14 @@ class ReturnBuyInvHandler implements InvoiceHandler<InvoiceItem> {
 
     private remapItemsToSubmit() {
         return this.props.invoiceItems.map((item) => ({
-            stock_item_id: item.id,
+            box_id: item.id,
             product_id: item.product_id,
             quantity: item.return_quantity,
             return_price: item.return_price,
-            total: item.total,
+            stock_items: item.children.map((child) => ({
+                stock_item_id: child.id,
+                quantity: child.return_quantity,
+            })),
         }));
     }
 

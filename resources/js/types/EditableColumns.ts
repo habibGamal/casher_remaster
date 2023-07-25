@@ -5,7 +5,7 @@ type EditableColumns = (ColumnTypes[number] & {
     editable?: boolean;
     dataIndex: string;
     renderWithHandler?: (
-        handler: InvoiceHandler
+        handler: InvoiceHandler<any>
     ) => (_: any, record: any) => JSX.Element;
 })[]
 

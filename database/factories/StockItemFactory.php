@@ -20,7 +20,7 @@ class StockItemFactory extends Factory
         return [
             'quantity' => $this->faker->randomFloat(2, 0, 1000),
             'buying_price' => $this->faker->randomFloat(2, $product->selling_price - 10, $product->selling_price - 50),
-            'stock_id' => \App\Models\Stock::factory(),
+            'stock_id' => $this->faker->randomElement(\App\Models\Stock::all()->pluck('id')),
             'product_id' => $product,
         ];
     }

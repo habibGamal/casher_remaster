@@ -15,6 +15,7 @@ interface SelectSearchProps {
     onSearch: (value: string, setOptions: SetOptions) => void;
     style?: React.CSSProperties;
     defaultValue?: string | null | undefined;
+    disabled?: boolean;
 }
 
 export default function SelectSearch({
@@ -24,6 +25,7 @@ export default function SelectSearch({
     placeholder,
     style,
     defaultValue,
+    disabled,
 }: SelectSearchProps) {
     const [options, setOptions] = useState<
         {
@@ -47,6 +49,7 @@ export default function SelectSearch({
             options={options}
             style={style}
             defaultValue={defaultValue}
+            disabled={disabled}
         />
     );
 }

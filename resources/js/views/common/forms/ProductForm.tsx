@@ -2,7 +2,6 @@ import { Checkbox, Radio, Select } from "antd";
 import { Input, InputNumber } from "antd";
 import React, { useState } from "react";
 import ProductServices from "../../../services/products/ProductServices";
-import { ProductWithProductGroup } from "../../../interfaces/Product";
 import SelectSearch, { SetOptions } from "../../../components/SelectSearch";
 import FormComponent from "../../../components/FormComponent";
 import getFieldsNames from "../../../helpers/getFieldsNames";

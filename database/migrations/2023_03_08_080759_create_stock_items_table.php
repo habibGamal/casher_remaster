@@ -16,10 +16,8 @@ return new class extends Migration
         Schema::create('stock_items', function (Blueprint $table) {
             $table->id();
             $table->double('quantity');
-            $table->double('buying_price');
             $table->foreignId('stock_id')->constrained('stocks');
-            $table->foreignId('product_id')->constrained('products');
-            $table->timestamps();
+            $table->foreignId('box_id')->constrained('boxes');
         });
     }
 

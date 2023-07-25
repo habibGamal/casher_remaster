@@ -10,13 +10,16 @@ class OpeningStockItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'stock_item_id',
+        'box_id',
         'buying_price',
     ];
 
     public function stockItem()
     {
-        return $this->belongsTo(StockItem::class);
+        return $this->hasOneThrough(
+            StockItem::class,
+            Box::class,
+        );
     }
 
 

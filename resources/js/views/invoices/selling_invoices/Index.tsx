@@ -15,8 +15,8 @@ const modelColumns: ModelColumns[] = [
     },
     {
         title: "قيمة الفاتورة",
-        dataIndex: "total_cost",
-        key: "total_cost",
+        dataIndex: "total_cash",
+        key: "total_cash",
         render: (value: any) => <Tag color="green" className="text-lg font-bold font-tajawal"> {value} جنيه</Tag>,
     },
     {

@@ -6,8 +6,11 @@ use App\Http\Controllers\ProductGroupController;
 use App\Http\Controllers\Invoices\BuyingInvoiceController;
 use App\Http\Controllers\Invoices\ReturnBuyingInvoiceController;
 use App\Http\Controllers\Invoices\SellingInvoiceController;
+use App\Http\Controllers\Invoices\ReturnSellingInvoiceController;
+use App\Http\Controllers\ProductDetailsController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\TrackingStockController;
+use App\Http\Controllers\TransferBetweenStocks;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,8 +66,18 @@ Route::get('/selling-invoice', [SellingInvoiceController::class, 'index'])->name
 Route::get('/selling-invoice/create', [SellingInvoiceController::class, 'create'])->name('selling-invoice.create');
 Route::post('/selling-invoice/store', [SellingInvoiceController::class, 'store']);
 Route::get('/selling-invoice/{invoice}', [SellingInvoiceController::class, 'show']);
+// return-selling-invoice
+Route::get('/return-selling-invoice', [ReturnSellingInvoiceController::class, 'index'])->name('return-selling-invoice.index');
+Route::get('/return-selling-invoice/create', [ReturnSellingInvoiceController::class, 'create'])->name('return-selling-invoice.create');
+Route::post('/return-selling-invoice/store', [ReturnSellingInvoiceController::class, 'store']);
+Route::get('/return-selling-invoice/{invoice}', [ReturnSellingInvoiceController::class, 'show']);
 // tracking stocks
 Route::get('/tracking-stocks', [TrackingStockController::class, 'index']);
+// tracking stocks
+Route::get('/transfer-between-stocks', [TransferBetweenStocks::class, 'index']);
+Route::post('/transfer-between-stocks', [TransferBetweenStocks::class, 'store']);
+// product details
+Route::get('/product-details', [ProductDetailsController::class, 'show']);
 // settings
 Route::get('/settings', function () {
     return inertia()->render('Settings');

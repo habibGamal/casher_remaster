@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Invoices;
 
 use App\Http\Controllers\Controller;
+use App\Models\Box;
 use App\Models\BuyingInvoice;
 use App\Models\Product;
 use App\Models\Stock;
+use App\Models\StockItem;
 use App\Services\TableSettingsServices;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -24,7 +26,7 @@ class BuyingInvoiceController extends Controller
     public function create(Request $request)
     {
         return inertia()->render('invoices/buying_invoices/Create', [
-            'stocks' => Inertia::Lazy(
+            'stocks' => inertia()->lazy(
                 function () use ($request) {
                     return  Stock::select(['id', 'name'])
                         ->where('name', 'like', '%' . $request->stock_name . '%')
@@ -47,8 +49,9 @@ class BuyingInvoiceController extends Controller
             'total_cost' => 'required|numeric',
         ]);
 
-        $validatedInvoiceItems = $request->validate([
+        $validated_invoice_items = $request->validate([
             /// check product in database will consume time
+            'stock_id' => 'required|exists:stocks,id',
             'invoiceItems.*.product_id' => 'required|exists:products,id',
             'invoiceItems.*.quantity' => 'required|numeric',
             'invoiceItems.*.buying_price' => 'required|numeric',
@@ -57,29 +60,29 @@ class BuyingInvoiceController extends Controller
         // create invoice
         $invoice = BuyingInvoice::create($validatedInvoice);
 
-        // get stock
-        $stock = Stock::find($request->stock_id);
+        // create boxes and stock items
+        $invoice_items = collect($validated_invoice_items['invoiceItems']);
+        $buying_invoice_items_data = collect();
+        $invoice_items->each(function ($item) use ($buying_invoice_items_data) {
+            $box = Box::create($item);
+            $box->stockItems()->create([
+                'stock_id' => request()->stock_id,
+                'quantity' => $item['quantity'],
+            ]);
 
-        // create stock items
-        $stockItems = $stock->stockItems()->createMany($validatedInvoiceItems['invoiceItems']);
+            // update last_buying_price in product table
+            $box->product()->update([
+                'last_buying_price' => $box->buying_price,
+            ]);
 
-        // update last_buying_price in product table
-        $stockItems->each(function ($stockItem) {
-            $stockItem->product()->update([
-                'last_buying_price' => $stockItem->buying_price,
+            $buying_invoice_items_data->push([
+                'box_id' => $box->id,
+                'quantity' => $item['quantity'],
             ]);
         });
 
-        // extact invoice items data
-        $invoiceItemsData = $stockItems->map(function ($stockItem) {
-            return [
-                'stock_item_id' => $stockItem->id,
-                'quantity' => $stockItem->quantity,
-            ];
-        });
-
         // create invoice items
-        $invoice->buyingInvoiceItems()->createMany($invoiceItemsData);
+        $invoice->buyingInvoiceItems()->createMany($buying_invoice_items_data);
 
         return redirect()->back()->with('success', 'تمت العملية بنجاح');
     }
@@ -87,7 +90,9 @@ class BuyingInvoiceController extends Controller
     public function show(BuyingInvoice $invoice)
     {
         return inertia()->render('invoices/buying_invoices/Show', [
-            'data' => $invoice->load(['buyingInvoiceItems.stockItem:id,product_id,buying_price', 'buyingInvoiceItems.stockItem.product:id,name,barcode']),
+            'data' => $invoice->load(['buyingInvoiceItems.box' => [
+                'product:id,name,barcode',
+            ]]),
         ]);
     }
 }

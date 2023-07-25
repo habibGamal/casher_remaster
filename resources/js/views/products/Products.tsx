@@ -6,11 +6,22 @@ import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
 import ModelGeneralServices from "../../services/ModelGeneralServices";
 import ProductServices from "../../services/products/ProductServices";
 import ModelContext from "../../interfaces/ModelContext";
-import { ProductWithProductGroup } from "../../interfaces/Product";
 import ProductForm from "../common/forms/ProductForm";
 import DeleteButton from "../../components/DeleteButton";
 import EditButton from "../../components/EditButton";
-type ModelType = ProductWithProductGroup;
+type ModelType = {
+    id?: number;
+    name: string;
+    barcode: string;
+    last_buying_price: number;
+    selling_price: number;
+    minimum_stock: number;
+    has_expire_date: boolean;
+    unit: string;
+    product_group: {
+        name: string;
+    }
+};
 const modelColumns: ModelColumns[] = [
     {
         title: "أسم الصنف",

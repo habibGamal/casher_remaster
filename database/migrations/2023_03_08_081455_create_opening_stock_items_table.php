@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('opening_stock_items', function (Blueprint $table) {
             $table->id();
             $table->double('buying_price');
-            $table->foreignId('stock_item_id')->constrained('stock_items');
+            $table->foreignId('box_id')->constrained('boxes')->cascadeOnDelete();
             $table->timestamps();
         });
     }

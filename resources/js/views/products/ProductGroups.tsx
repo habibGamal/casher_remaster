@@ -4,14 +4,17 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import ProductGroupForm from "../common/forms/ProductGroupForm";
 import ProductGroupServices from "../../services/products/ProductGroupServices";
 import ModelContext from "../../interfaces/ModelContext";
-import { ProductGroupWithProductsCount } from "../../interfaces/ProductGroup";
 import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
 import ModelGeneralServices from "../../services/ModelGeneralServices";
 import DisplayModel from "../../components/DisplayModel";
 import ProductsInGroup from "./modals/ProductsInGroup";
 import { Inertia } from "@inertiajs/inertia";
 
-type ModelType = ProductGroupWithProductsCount;
+interface ModelType {
+    id: number;
+    name: string;
+    products_count: number;
+}
 const modelColumns: ModelColumns[] = [
     {
         title: "أسم المجموعة",

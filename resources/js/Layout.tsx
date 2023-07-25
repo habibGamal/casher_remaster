@@ -7,10 +7,10 @@ import React, {
 import { Col, ConfigProvider, Row, message, theme } from "antd";
 import Navbar from "./components/Navbar";
 import { usePage } from "@inertiajs/inertia-react";
-interface Flash {
-    error?: string;
-    success?: string;
-}
+import Flash from "./interfaces/Flash";
+import moment, { locale } from "moment";
+import { configMomentLocaleAr } from "./config/dates";
+
 type Theme = "dark" | "light";
 export const themeToggler = createContext<{
     currentTheme: Theme;
@@ -56,6 +56,11 @@ function Layout(props: { children: JSX.Element }) {
         localStorage.setItem("theme", currentTheme);
         setCurrentTheme(currentTheme);
     };
+
+    useEffect(() => {
+        configMomentLocaleAr();
+        moment.locale('ar');
+    }, []);
 
     return (
         <themeToggler.Provider value={{ currentTheme, toggleTheme }}>

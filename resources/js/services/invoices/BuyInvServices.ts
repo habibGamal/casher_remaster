@@ -1,6 +1,5 @@
 import { Inertia } from "@inertiajs/inertia";
 import { message } from "antd";
-import Product from "../../interfaces/Product";
 import InvoiceHandler from "../../interfaces/InvoiceHandler";
 import InvoiceHandlerProps from "../../interfaces/InvoiceHandlerProps";
 
@@ -11,6 +10,13 @@ interface InvoiceItem {
     barcode: string;
     price: number;
     total: number;
+}
+
+interface Product {
+    id: number;
+    name: string;
+    barcode: string;
+    last_buying_price: number;
 }
 
 class BuyInvHandler implements InvoiceHandler<InvoiceItem> {

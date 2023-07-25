@@ -1,16 +1,8 @@
 import { Input } from "antd";
 import React, { useState } from "react";
-import ProductGroup from "../../../interfaces/ProductGroup";
 import ProductGroupServices from "../../../services/products/ProductGroupServices";
-import getFieldsNames from "../../../helpers/getFieldsNames";
 import FormComponent from "../../../components/FormComponent";
-
-type Model = ProductGroup;
-
-interface FormProps {
-    modelToEdit?: Model;
-    closeModal: () => void;
-}
+import FormProps from "../../../interfaces/FormProps";
 
 const ProductGroupForm = ({ modelToEdit, closeModal }: FormProps) => {
     const formItems = [

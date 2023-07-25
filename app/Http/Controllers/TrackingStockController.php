@@ -15,7 +15,7 @@ class TrackingStockController extends Controller
             'data' => Inertia::lazy(function () use ($request) {
                 if (!$request->attribute || !$request->value)
                     return [];
-                $product = Product::select(['id','name'])->where([$request->attribute => $request->value])->with(['stockItems.stock'])->first();
+                $product = Product::select(['id','name'])->where([$request->attribute => $request->value])->with(['box.stockItems.stock'])->first();
                 return $product;
             })
         ]);

@@ -5,7 +5,6 @@ import TableController from "../../components/TableController";
 import useTableSearch from "../../hooks/useTableSearch";
 import useModal from "../../hooks/useModal";
 import StockForm from "../common/forms/StockForm";
-import StocksTable from "../common/tables/StocksTable";
 import DisplayModel from "../../components/DisplayModel";
 import ModelContext from "../../interfaces/ModelContext";
 import EditButton from "../../components/EditButton";

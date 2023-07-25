@@ -28,6 +28,11 @@ export default function CreateReturnBuyingInvoice() {
             editable: true,
         },
         {
+            title: "المخزن",
+            dataIndex: "stock",
+            key: "stock",
+        },
+        {
             title: "عدد الوحدات المتاحة",
             dataIndex: "available_quantity",
             key: "available_quantity",

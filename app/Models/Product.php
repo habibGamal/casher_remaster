@@ -37,8 +37,8 @@ class Product extends Model
         return $this->belongsTo(ProductGroup::class);
     }
 
-    public function stockItems()
+    public function boxes()
     {
-        return $this->hasMany(StockItem::class);
+        return $this->hasMany(Box::class);
     }
 }

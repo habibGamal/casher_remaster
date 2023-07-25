@@ -86,7 +86,7 @@ class SellInvHandler implements InvoiceHandler<InvoiceItem> {
                 ...this.props.search.data,
                 stock_id: this.props.extraData?.stock_id,
             },
-            only: ["product", "flash"],
+            only: ["product"],
             preserveState: true,
             onSuccess: (page) => {
                 let product = page.props.product as Product;

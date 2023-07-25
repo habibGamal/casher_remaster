@@ -13,6 +13,9 @@ import BuyInvServices from "../services/invoices/BuyInvServices";
 import TrackingStockServices from "../services/stocks/TrackingStocksServices";
 import ReturnBuyInvServices from "../services/invoices/ReturnBuyInvServices";
 import SellInvServices from "../services/invoices/SellInvServices";
+import ReturnSellInvServices from "../services/invoices/ReturnSellInvServices";
+import { Link } from "@inertiajs/inertia-react";
+import TransferBetweenStocksServices from "../services/stocks/TransferBetweenStocksServices";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -53,11 +56,26 @@ export type MenuKeys =
 
 const items: MenuProps["items"] = [
     getItem("الاصناف", "products_section", <IconSax icon="shopping-bag" />, [
-        getItem("اضافة الاصناف", "add_products"),
-        getItem("مجموعات الاصناف", "product_groups"),
-        getItem("تفاصيل الصنف", "product_details"),
-        getItem("الاصناف منتهية الصلاحية", "expired_products"),
-        getItem("الارصدة الافتتاحية", "openning_stock"),
+        getItem(
+            <Link href={ProductServices.BASE_ROUTE}> اضافة الاصناف </Link>,
+            "add_products"
+        ),
+        getItem(
+            <Link href={ProductGroupServices.BASE_ROUTE}>مجموعات الاصناف</Link>,
+            "product_groups"
+        ),
+        getItem(<Link href="/product-details"> تفاصيل الصنف </Link>, "product_details"),
+        getItem(
+            <Link href="/"> الاصناف منتهية الصلاحية </Link>,
+            "expired_products"
+        ),
+        getItem(
+            <Link href={OpeningStockServices.BASE_ROUTE}>
+                {" "}
+                الارصدة الافتتاحية{" "}
+            </Link>,
+            "openning_stock"
+        ),
     ]),
 
     getItem(
@@ -65,27 +83,63 @@ const items: MenuProps["items"] = [
         "stock_section",
         <IconSax icon="stock" dir="custom" className="w-[24px]" />,
         [
-            getItem("اضافة مخزن", "add_stock"),
-            getItem("جرد المخازن", "tracking_stocks"),
-            getItem("الهالك", "stock_waste"),
-            getItem("التحويل بين المخازن", "stock_transfer"),
+            getItem(
+                <Link href={StockServices.BASE_ROUTE}>اضافة مخزن</Link>,
+                "add_stock"
+            ),
+            getItem(
+                <Link href={TrackingStockServices.BASE_ROUTE}>
+                    جرد المخازن
+                </Link>,
+                "tracking_stocks"
+            ),
+            getItem(<Link href="/"> الهالك </Link>, "stock_waste"),
+            getItem(
+                <Link href={TransferBetweenStocksServices.BASE_ROUTE}>
+                    التحويل بين المخازن
+                </Link>,
+                "transfer_between_stocks"
+            ),
         ]
     ),
-    getItem("الموردين والعملاء", "supporters", <IconSax icon="people" />, [
-        getItem("Item 1", "g1"),
-        getItem("Item 2", "g2"),
-    ]),
+    // getItem("الموردين والعملاء", "supporters", <IconSax icon="people" />, [
+    //     getItem("Item 1", "g1"),
+    //     getItem("Item 2", "g2"),
+    // ]),
     getItem("الفواتير", "invoices", <IconSax icon="receipt-item" />, [
-        getItem("عرض الفواتير", "display_invoices"),
-        getItem("فاتورة شراء", "create_buying_invoice"),
-        getItem("فاتورة بيع", "create_selling_invoice"),
-        getItem("مرتجع فاتورة شراء", "create_return_buying_invoice"),
-        getItem("مرتجع فاتورة بيع", "create_return_selling_invoice"),
+        getItem(
+            <Link href={BuyInvServices.BASE_ROUTE}>عرض الفواتير</Link>,
+            "display_invoices"
+        ),
+        getItem(
+            <Link href={BuyInvServices.BASE_ROUTE + "/create"}>
+                فاتورة شراء
+            </Link>,
+            "create_buying_invoice"
+        ),
+        getItem(
+            <Link href={SellInvServices.BASE_ROUTE + "/create"}>
+                فاتورة بيع
+            </Link>,
+            "create_selling_invoice"
+        ),
+        getItem(
+            <Link href={ReturnBuyInvServices.BASE_ROUTE + "/create"}>
+                مرتجع فاتورة شراء
+            </Link>,
+            "create_return_buying_invoice"
+        ),
+        getItem(
+            <Link href={ReturnSellInvServices.BASE_ROUTE + "/create"}>
+                مرتجع فاتورة بيع
+            </Link>,
+            "create_return_selling_invoice"
+        ),
     ]),
-    getItem("الحسابات", "accounting", <IconSax icon="calculator" />, [
-        getItem("Item 1", "g1"),
-        getItem("Item 2", "g2"),
-    ]),
+    // getItem("الحسابات", "accounting", <IconSax icon="calculator" />, [
+    //     getItem("Item 1", "g1"),
+    //     getItem("Item 2", "g2"),
+    // ]),
     getItem(
         "التقارير",
         "repoting",
@@ -116,16 +170,17 @@ const DEFALUT_SELECTED_KEY = ["products"];
 const Navbar = () => {
     const onClick: MenuProps["onClick"] = (e) => {
         // inertia routing
-        if (e.key === "add_products") ProductServices.index();
-        if (e.key === "product_groups") ProductGroupServices.index();
-        if (e.key === "add_stock") StockServices.index();
-        if (e.key === "openning_stock") OpeningStockServices.index();
-        if (e.key === "create_buying_invoice") BuyInvServices.create();
-        if (e.key === "create_return_buying_invoice") ReturnBuyInvServices.create();
-        if (e.key === "display_invoices") BuyInvServices.index();
+        // if (e.key === "add_products") ProductServices.index();
+        // if (e.key === "product_groups") ProductGroupServices.index();
+        // if (e.key === "add_stock") StockServices.index();
+        // if (e.key === "openning_stock") OpeningStockServices.index();
+        // if (e.key === "create_buying_invoice") BuyInvServices.create();
+        // if (e.key === "create_return_buying_invoice") ReturnBuyInvServices.create();
+        // if (e.key === "create_selling_invoice") SellInvServices.create();
+        // if (e.key === "create_return_selling_invoice") ReturnSellInvServices.create();
+        // if (e.key === "display_invoices") BuyInvServices.index();
         if (e.key === "settings") Inertia.get("/settings");
-        if (e.key === "tracking_stocks") TrackingStockServices.index();
-        if (e.key === "create_selling_invoice") SellInvServices.create();
+        // if (e.key === "tracking_stocks") TrackingStockServices.index();
     };
     const [collapsed, setCollapsed] = useState(false);
     const menu = useRef<HTMLDivElement>(null);

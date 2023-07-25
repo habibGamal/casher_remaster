@@ -9,31 +9,6 @@ import { ConfigProvider, theme } from "antd";
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
-
-// const MainApp = ({ App, props }: any) => {
-//     const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
-//     return (
-//         <themeToggler.Provider value={{ currentTheme, setCurrentTheme }}>
-//             <ConfigProvider
-//                 direction="rtl"
-//                 theme={{
-//                     algorithm:
-//                         currentTheme === "light"
-//                             ? theme.defaultAlgorithm
-//                             : theme.darkAlgorithm,
-//                     token: {
-//                         colorPrimary:
-//                             currentTheme === "light" ? "#7E57C2" : "9575CD",
-//                         colorError: "#cf6679",
-//                         fontSize: 18,
-//                     },
-//                 }}
-//             >
-//                 <App {...props} />
-//             </ConfigProvider>
-//         </themeToggler.Provider>
-//     );
-// };
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async (name) => {

@@ -10,9 +10,11 @@ interface BuyingInvoiceData {
 interface BuyingInvoiceItemData {
     id: number;
     buying_invoice_id: number;
-    stock_item_id: number;
+    box_id: number;
     quantity: number;
-    stock_item: {
+    created_at: string;
+    updated_at: string;
+    box: {
         id: number;
         product_id: number;
         buying_price: number;
@@ -52,14 +54,16 @@ const columns = [
     },
 ];
 const remapInvoiceData = (data: BuyingInvoiceData) =>
-    data.buying_invoice_items.map((invoice) => ({
-        name: invoice.stock_item.product.name,
-        barcode: invoice.stock_item.product.barcode,
-        buying_price: invoice.stock_item.buying_price,
-        quantity: invoice.quantity,
-        total_cost: invoice.quantity * invoice.stock_item.buying_price,
+    data.buying_invoice_items.map((invoice_item) => ({
+        name: invoice_item.box.product.name,
+        barcode: invoice_item.box.product.barcode,
+        buying_price: invoice_item.box.buying_price,
+        quantity: invoice_item.quantity,
+        total_cost: invoice_item.quantity * invoice_item.box.buying_price,
     }));
 export default function BuyingInvoice({ data }: { data: BuyingInvoiceData }) {
+    console.log(data);
+
     return (
         <Row gutter={[0, 25]} className="m-8">
             <PageTitle name={`عرض فاتورة مشتريات`} />

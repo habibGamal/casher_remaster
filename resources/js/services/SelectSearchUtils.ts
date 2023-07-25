@@ -38,6 +38,13 @@ export default class SelectSearchUtils {
         });
     }
 
+    static getProductByBarcode(value: string, setOptions: SetOptions) {
+        SelectSearchUtils.reload({
+            slug: "products",
+            data: { barcode: value },
+            setOptions,
+        });
+    }
     static getStocks(value: string, setOptions: SetOptions) {
         SelectSearchUtils.reload({
             slug: "stocks",

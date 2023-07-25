@@ -10,14 +10,23 @@ class SellingInvoice extends Model
     use HasFactory;
 
     public $fillable = [
-        'total_cost',
+        'stock_id',
         'total_cash'
     ];
 
+    public function stock()
+    {
+        return $this->belongsTo(Stock::class);
+    }
 
     public function sellingInvoiceItems()
     {
         return $this->hasMany(SellingInvoiceItem::class);
+    }
+
+    public function returnSellingInvoices()
+    {
+        return $this->hasMany(ReturnSellingInvoice::class);
     }
 
 }

@@ -6,13 +6,10 @@ import SelectSearch, { SetOptions } from "../../../components/SelectSearch";
 import FormComponent from "../../../components/FormComponent";
 import OpeningStockServices from "../../../services/products/OpeningStockServices";
 import getFieldsNames from "../../../helpers/getFieldsNames";
-import OpeningStockItem from "../../../interfaces/OpeningStockItem";
 import FormProps from "../../../interfaces/FormProps";
-
-type Model = OpeningStockItem;
+import SelectSearchUtils from "../../../services/SelectSearchUtils";
 
 const OpeningStockForm = ({ modelToEdit, closeModal }: FormProps) => {
-    const onSearch = async (value: string, setOptions: SetOptions) => {};
 
     const [searchWith, setSearchWith] = useState<"name" | "barcode">("barcode");
     const formItems: any[] = [
@@ -31,14 +28,14 @@ const OpeningStockForm = ({ modelToEdit, closeModal }: FormProps) => {
             name: "product_id",
             label: "المنتج",
             component: (
-                <SelectSearch onSearch={onSearch} placeholder="ابحث عن منتج" />
+                <SelectSearch onSearch={SelectSearchUtils.getProductByBarcode} placeholder="ابحث عن منتج" />
             ),
         },
         {
             name: "stock_id",
             label: "المخزن",
             component: (
-                <SelectSearch onSearch={onSearch} placeholder="المخزن" />
+                <SelectSearch onSearch={SelectSearchUtils.getStocks} placeholder="المخزن" />
             ),
         },
         { col: true },

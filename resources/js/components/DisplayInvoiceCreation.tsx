@@ -154,7 +154,7 @@ export default function DisplayInvoiceCreation({
                     rowClassName={() => "editable-row"}
                     columns={columns as ColumnTypes}
                     rowKey={(record: any) =>
-                        handler.getRowKey(record).toString()
+                        handler.getRowKey? handler.getRowKey(record).toString(): record.key.toString()
                     }
                     dataSource={handler.getInvoiceItems()}
                     pagination={false}

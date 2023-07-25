@@ -11,23 +11,19 @@ class StockItem extends Model
 
     protected $fillable = [
         'quantity',
-        'buying_price',
         'stock_id',
-        'product_id',
+        'box_id',
     ];
+
+    public $timestamps = false;
 
     public function stock()
     {
         return $this->belongsTo(Stock::class);
     }
 
-    public function product()
+    public function box()
     {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function openingStockItem()
-    {
-        return $this->hasOne(OpeningStockItem::class);
+        return $this->belongsTo(Box::class);
     }
 }

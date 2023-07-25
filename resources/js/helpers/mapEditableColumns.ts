@@ -1,14 +1,13 @@
 import InvoiceHandler from "../interfaces/InvoiceHandler";
-import ColumnTypes from "../types/ColumnTypes";
 import EditableColumns from "../types/EditableColumns";
 
 export default function mapEditableColumns<T>(
     columns: EditableColumns,
     onSave: (record: T) => void,
-    handler: InvoiceHandler
+    handler?: InvoiceHandler<any>
 ) {
     return columns.map((col) => {
-        if (col.renderWithHandler)
+        if (col.renderWithHandler && handler)
             col = { ...col, render: col.renderWithHandler(handler) };
         if (!col.editable) {
             return col;

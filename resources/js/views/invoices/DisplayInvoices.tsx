@@ -2,11 +2,13 @@ import { Row, Tabs, TabsProps } from "antd";
 import React from "react";
 import PageTitle from "../../components/PageTitle";
 import BuyingInvoices from "./buying_invoices/Index";
-import BuyInvServices from "../../services/invoices/BuyInvServices";
-import ReturnBuyingInvoices from "./return_buying_invoices/Index";
-import ReturnBuyInvServices from "../../services/invoices/ReturnBuyInvServices";
 import SellingInvoices from "./selling_invoices/Index";
+import ReturnBuyingInvoices from "./return_buying_invoices/Index";
+import ReturnSellingInvoices from "./return_selling_invoices/Index";
+import BuyInvServices from "../../services/invoices/BuyInvServices";
 import SellInvServices from "../../services/invoices/SellInvServices";
+import ReturnBuyInvServices from "../../services/invoices/ReturnBuyInvServices";
+import ReturnSellInvServices from "../../services/invoices/ReturnSellInvServices";
 const onChange = (key: string) => {
     switch (key) {
         case "buying_invoices":
@@ -17,6 +19,9 @@ const onChange = (key: string) => {
             break;
         case "selling_invoices":
             SellInvServices.index();
+            break;
+        case "return_selling_invoices":
+            ReturnSellInvServices.index();
             break;
         default:
             break;
@@ -40,9 +45,9 @@ const items: TabsProps["items"] = [
         children: <ReturnBuyingInvoices />,
     },
     {
-        key: "4",
+        key: "return_selling_invoices",
         label: `مرتجع فواتير البيع`,
-        children: "<SellingInvoices />",
+        children: <ReturnSellingInvoices />,
     },
 ];
 export default function DisplayInvoices({ tab }: { tab: string }) {

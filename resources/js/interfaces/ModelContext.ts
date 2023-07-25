@@ -43,7 +43,7 @@ export type FreeModelSettings = {
     title:string;
 };
 export default interface ModelContext<T> {
-    pagination?: Pagination<T>;
+    paginatedData?: Pagination<T>;
     config: ConfigType;
     modelToEdit?: T;
     setModelToEdit?: React.Dispatch<React.SetStateAction<T | undefined>>;
@@ -55,7 +55,7 @@ export default interface ModelContext<T> {
         React.SetStateAction<FreeModelSettings>
     >;
     onCloseFreeModal?: () => void;
-    sorting?: SortingStateType;
+    sortingArrows?: SortingStateType;
     tableParams?: TableParams;
     resetPagination?: () => void;
     handleTableChange?: (

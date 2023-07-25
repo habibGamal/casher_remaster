@@ -11,7 +11,7 @@ class BuyingInvoiceItem extends Model
 
     protected $fillable = [
         'buying_invoice_id',
-        'stock_item_id',
+        'box_id',
         'quantity',
     ];
 
@@ -21,9 +21,9 @@ class BuyingInvoiceItem extends Model
     }
 
 
-    public function stockItem()
+    public function box()
     {
-        return $this->belongsTo(StockItem::class);
+        return $this->belongsTo(Box::class);
     }
 
 }

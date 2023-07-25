@@ -16,18 +16,4 @@ export default class ProductServices {
             }
         );
     }
-
-    // fetching custom data with reloads
-    static selectSearchProductGroup(
-        value: string,
-        onSuccess: (page: any) => void
-    ) {
-        Inertia.reload({
-            only: ["productGroups"],
-            data: {
-                product_group_name: value,
-            },
-            onSuccess: (page: any) => onSuccess(page),
-        });
-    }
 }

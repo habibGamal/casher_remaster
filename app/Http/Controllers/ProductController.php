@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\ProductGroup;
 use App\Services\TableSettingsServices;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -16,7 +16,7 @@ class ProductController extends Controller
     {
         return inertia()->render($this->index, [
             'products' =>  fn () => TableSettingsServices::pagination(Product::with('productGroup:id,name'), $request, 'products'),
-            'productGroups' => Inertia::lazy(function () use ($request) {
+            'productGroups' => inertia()->lazy(function () use ($request) {
                 return ProductGroup::select(['id', 'name'])
                     ->where('name', 'like', '%' . $request->product_group_name . '%')
                     ->get();;
@@ -45,7 +45,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'barcode' => 'required|string|min:1|unique:products,barcode',
+            'barcode' => ['required', 'string', 'min:1', Rule::unique('products')->ignore($product->id)],
             'last_buying_price' => 'required|numeric',
             'selling_price' => 'required|numeric',
             'minimum_stock' => 'nullable|numeric',

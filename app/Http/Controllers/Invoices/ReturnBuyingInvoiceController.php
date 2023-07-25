@@ -24,7 +24,7 @@ class ReturnBuyingInvoiceController extends Controller
         return inertia()->render('invoices/return_buying_invoices/Create', [
             'invoice_number' => ReturnBuyingInvoice::max('id') + 1,
             'buying_invoice' => inertia()->lazy(function () use ($request) {
-                return BuyingInvoice::where('id', '=', $request->value)->with(['buyingInvoiceItems.stockItem.product:id,name,barcode'])->first();
+                return BuyingInvoice::where('id', '=', $request->value)->with(['buyingInvoiceItems.box.stockItems.stock', 'buyingInvoiceItems.box.product:id,name,barcode'])->first();
             }),
         ]);
     }
@@ -33,17 +33,27 @@ class ReturnBuyingInvoiceController extends Controller
     {
         $validated = $request->validate([
             'buying_invoice_id' => 'required|exists:buying_invoices,id',
-            'total_cash' => 'required|numeric',
             'invoiceItems.*.product_id' => 'required|exists:products,id',
             'invoiceItems.*.quantity' => 'required|numeric',
             'invoiceItems.*.return_price' => 'required|numeric',
-            'invoiceItems.*.stock_item_id' => 'required|exists:stock_items,id',
+            'invoiceItems.*.stock_items.*.stock_item_id' => 'required|exists:stock_items,id',
+            'invoiceItems.*.stock_items.*.quantity' => 'required|numeric',
         ]);
-        $returnBuyingInvoice = ReturnBuyingInvoice::create($validated);
+
+        $total_cash = collect($validated['invoiceItems'])->sum(function ($item) {
+            return $item['quantity'] * $item['return_price'];
+        });
+
+        $returnBuyingInvoice = ReturnBuyingInvoice::create([
+            'buying_invoice_id' => $validated['buying_invoice_id'],
+            'total_cash' => $total_cash,
+        ]);
 
         $returnBuyingInvoice->returnBuyingInvoiceItems()->createMany($validated['invoiceItems']);
 
-        foreach ($validated['invoiceItems'] as $item) {
+        $stockItems = collect($validated['invoiceItems'])->pluck('stock_items')->flatten(1);
+
+        foreach ($stockItems as $item) {
             $stockItem = StockItem::find($item['stock_item_id']);
             $stockItem->update([
                 'quantity' => $stockItem->quantity - $item['quantity'],

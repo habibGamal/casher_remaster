@@ -1,9 +1,38 @@
-import { Col, Input, Select, Row, Table} from "antd";
+import { Col, Input, Select, Row, Table } from "antd";
 import React, { useState } from "react";
 import PageTitle from "../../components/PageTitle";
 import { ModelColumns } from "../../interfaces/ModelConfig";
 import useSearch from "../../hooks/useSearch";
 import { Inertia } from "@inertiajs/inertia";
+
+interface ProductInfo {
+    id: number;
+    name: string;
+    box: Box[];
+}
+
+interface Box {
+    id: number;
+    product_id: number;
+    buying_price: number;
+    stock_items: StockItem[];
+}
+
+interface StockItem {
+    id: number;
+    quantity: number;
+    stock_id: number;
+    box_id: number;
+    stock: {
+        id: number;
+        name: string;
+        created_at: string;
+        updated_at: string;
+    };
+}
+
+type Data = ProductInfo;
+
 const modelColumns: ModelColumns[] = [
     {
         title: "أسم الصنف",
@@ -27,7 +56,8 @@ const modelColumns: ModelColumns[] = [
     },
 ];
 
-export default function TrackingStocks({ data }: { data: any }) {
+export default function TrackingStocks({ data }: { data: Data }) {
+    console.log(data);
     const search = useSearch("barcode");
     const [loading, setLoading] = useState(false);
     const searchHandler = () => {
@@ -38,12 +68,23 @@ export default function TrackingStocks({ data }: { data: any }) {
             onSuccess: () => setLoading(false),
         });
     };
-    const stockItems = data?.stock_items.map((item: any) => ({
-        ...item,
-        key: item.id,
-        name: data.name,
-        stock: item.stock.name,
-    }));
+    const stockItems = data
+        ? data.box.flatMap((box) =>
+              box.stock_items.map((stockItem) => ({
+                  ...stockItem,
+                  buying_price: box.buying_price,
+              }))
+          )
+        : [];
+    const tableData = stockItems.map((stockItem) => {
+        return {
+            id: stockItem.id,
+            name: data.name,
+            quantity: stockItem.quantity,
+            buying_price: stockItem.buying_price,
+            stock: stockItem.stock.name,
+        };
+    });
 
     return (
         <Row gutter={[0, 25]} className="m-8">
@@ -75,7 +116,7 @@ export default function TrackingStocks({ data }: { data: any }) {
                 <Table
                     columns={modelColumns}
                     rowKey={(record: any) => record.id}
-                    dataSource={stockItems}
+                    dataSource={tableData}
                     pagination={false}
                     loading={loading}
                     bordered
