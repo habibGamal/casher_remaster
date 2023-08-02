@@ -8,9 +8,9 @@ Cypress.Commands.add("submitAndWait", () => {
     cy.wait(2000);
 });
 
-Cypress.Commands.add('closeModal', () => {
-    cy.get('.ant-modal-close-x').click();
-})
+Cypress.Commands.add("closeModal", () => {
+    cy.get(".ant-modal-close-x").click();
+});
 
 /** product commands */
 Cypress.Commands.add("fillProductForm", (product) => {
@@ -148,6 +148,16 @@ Cypress.Commands.add("navigateToCreateStock", () => {
     cy.wait(500);
 });
 
+Cypress.Commands.add("addStock", (stock) => {
+    cy.navigateToCreateStock();
+    cy.get("button").contains("أضافة مخزن").click();
+    cy.get("#stock_form_name").type(stock.name);
+    cy.submitAndWait();
+    cy.closeModal();
+    cy.get(".ant-input[placeholder='بحث']").type(stock.name);
+    cy.wait(500);
+    cy.get(".ant-table-row > :nth-child(1)").should("contain", stock.name);
+});
 
 // invoices commands
 
@@ -155,4 +165,39 @@ Cypress.Commands.add("navigateToBuyingInvoices", () => {
     cy.get(".ant-menu-title-content").contains("الفواتير").click();
     cy.get(".ant-menu-title-content").contains("فاتورة شراء").click();
     cy.wait(500);
+});
+
+Cypress.Commands.add("chooseStock", (stock) => {
+    cy.get("#stock_id").type(stock.name, { force: true });
+    cy.wait(1000);
+    cy.get(".ant-select-item-option-content")
+        .contains(stock.name)
+        .click({ force: true });
+});
+
+Cypress.Commands.add(
+    "addProductToInvoice",
+    (product, quantity, lastBuyingPrice) => {
+        cy.get("#search_product").clear();
+        cy.get("#search_product").type(`${product.barcode}{enter}`, {
+            force: true,
+        });
+        cy.wait(500);
+        if (quantity) {
+            cy.realPress("NumpadMultiply");
+            cy.realType(quantity);
+            cy.realPress("Enter");
+        }
+        if (lastBuyingPrice) {
+            cy.get(".editable-price").first().click();
+            cy.get("#price").clear();
+            cy.get("#price").type(lastBuyingPrice);
+            product.lastBuyingPrice = lastBuyingPrice;
+        }
+        cy.realPress("Enter");
+    }
+);
+
+Cypress.Commands.add("checkInvoiceTotal", (total) => {
+    cy.get(".ant-descriptions-row > :nth-child(4)").should("contain", total);
 });

@@ -54,7 +54,7 @@ const modelColumns: ModelColumns[] = [
 
 const config = {
     modelColumns,
-    pageTitle: "أضافة الاصناف",
+    pageTitle: "أضافة مخزن",
     search: {
         defaultValue: "name",
         options: [
@@ -65,7 +65,7 @@ const config = {
         ctx.search?.exitSearchMode();
         StockServices.index();
     },
-    addButton: "أضافة صنف",
+    addButton: "أضافة مخزن",
     slug: "stocks",
 };
 export default function Stocks() {
