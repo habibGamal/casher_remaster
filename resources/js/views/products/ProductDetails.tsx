@@ -1,19 +1,15 @@
 import {
-    Button,
-    Descriptions,
     Empty,
     Input,
     Row,
     Select,
-    Table,
-    Tag,
 } from "antd";
 import React from "react";
 import PageTitle from "../../components/PageTitle";
 import useSearch from "../../hooks/useSearch";
 import { Inertia, PageProps } from "@inertiajs/inertia";
 import detectERR from "../../helpers/detectERR";
-import { Area, Line } from "@ant-design/charts";
+import { Area } from "@ant-design/charts";
 import ProductInfo from "../../components/product_details/ProductInfo";
 import Section from "../../components/Section";
 import ProductData from "../../interfaces/ProductData";

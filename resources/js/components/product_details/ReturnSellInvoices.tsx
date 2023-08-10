@@ -3,7 +3,6 @@ import React from "react";
 import Section from "../Section";
 import ProductData from "../../interfaces/ProductData";
 import { CheckOutlined, CopyOutlined } from "@ant-design/icons";
-import SellInvServices from "../../services/invoices/SellInvServices";
 import ReturnSellInvServices from "../../services/invoices/ReturnSellInvServices";
 const { Text, Link } = Typography;
 type Props = {
@@ -64,9 +63,9 @@ export default function ReturnSellInvoices({ productData }: Props) {
             ),
         },
     ];
-    const data = productData?.returnBuyingInvoicesItems.map((item) => ({
+    const data = productData?.returnSellingInvoicesItems.map((item) => ({
         key: item.id,
-        invoice_id: item.return_buying_invoice_id,
+        invoice_id: item.return_selling_invoice_id,
         quantity: item.quantity,
         price: item.return_price,
     }));

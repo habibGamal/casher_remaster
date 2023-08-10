@@ -1,8 +1,8 @@
 import React from "react";
-import BuyInvServices from "../../../services/invoices/BuyInvServices";
-import DisplayInvoiceCreation from "../../../components/DisplayInvoiceCreation";
 import EditableColumns from "../../../types/EditableColumns";
 import ReturnBuyInvServices from "../../../services/invoices/ReturnBuyInvServices";
+import DisplayReturnInvoiceCreation from "../../../components/DisplayReturnInvoiceCreation";
+import CreateReturnBuyingInvoiceManager from "../../../management/invoices/CreateReturnBuyingInvoiceManager";
 
 export default function CreateReturnBuyingInvoice() {
     const defaultColumns: EditableColumns = [
@@ -51,21 +51,10 @@ export default function CreateReturnBuyingInvoice() {
     ];
 
     return (
-        <DisplayInvoiceCreation
+        <DisplayReturnInvoiceCreation
             title="فاتورة مرتجع شراء"
             defaultColumns={defaultColumns}
-            getHandler={ReturnBuyInvServices.getHandler}
-            searchSettings={{
-                id: "invoice_id",
-                defaultAttribute: "invoice_id",
-                placeholder: "رقم الفاتورة",
-                options: [
-                    {
-                        label: "رقم فاتورة الشراء",
-                        value: "invoice_id",
-                    },
-                ],
-            }}
+            getManager={CreateReturnBuyingInvoiceManager}
         />
     );
 }

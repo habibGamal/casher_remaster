@@ -33,14 +33,15 @@ class ReturnBuyingInvoiceController extends Controller
     {
         $validated = $request->validate([
             'buying_invoice_id' => 'required|exists:buying_invoices,id',
-            'invoiceItems.*.product_id' => 'required|exists:products,id',
+            'invoiceItems.*.product_id' => 'required|numeric|exists:products,id',
             'invoiceItems.*.quantity' => 'required|numeric',
             'invoiceItems.*.return_price' => 'required|numeric',
-            'invoiceItems.*.stock_items.*.stock_item_id' => 'required|exists:stock_items,id',
-            'invoiceItems.*.stock_items.*.quantity' => 'required|numeric',
+            'invoiceItems.*.stock_item_id' => 'required|exists:stock_items,id',
         ]);
 
-        $total_cash = collect($validated['invoiceItems'])->sum(function ($item) {
+        $invoiceItems = collect($validated['invoiceItems']);
+
+        $total_cash = $invoiceItems->sum(function ($item) {
             return $item['quantity'] * $item['return_price'];
         });
 
@@ -51,14 +52,12 @@ class ReturnBuyingInvoiceController extends Controller
 
         $returnBuyingInvoice->returnBuyingInvoiceItems()->createMany($validated['invoiceItems']);
 
-        $stockItems = collect($validated['invoiceItems'])->pluck('stock_items')->flatten(1);
-
-        foreach ($stockItems as $item) {
+        $invoiceItems->each(function ($item) {
             $stockItem = StockItem::find($item['stock_item_id']);
             $stockItem->update([
                 'quantity' => $stockItem->quantity - $item['quantity'],
             ]);
-        }
+        });
 
         return redirect()->back()->with('success', 'تم اضافة فاتورة مرتجع شراء بنجاح');
     }

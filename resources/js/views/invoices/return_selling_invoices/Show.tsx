@@ -68,7 +68,7 @@ export default function ReturnBuyingInvoice({ data }: { data: any }) {
 
     return (
         <Row gutter={[0, 25]} className="m-8">
-            <PageTitle name={`عرض فاتورة مرتجع مشتريات`} />
+            <PageTitle name={`عرض فاتورة مرتجع مبيعات`} />
             <Col span="24" className="isolate-2">
                 <Descriptions className="w-full" bordered>
                     <Descriptions.Item label="رقم الفاتورة">

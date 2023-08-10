@@ -160,10 +160,31 @@ Cypress.Commands.add("addStock", (stock) => {
 });
 
 // invoices commands
+Cypress.Commands.add("navigateInvoices", () => {
+    cy.get(".ant-menu-title-content").contains("الفواتير").click();
+});
 
 Cypress.Commands.add("navigateToBuyingInvoices", () => {
-    cy.get(".ant-menu-title-content").contains("الفواتير").click();
+    cy.navigateInvoices();
     cy.get(".ant-menu-title-content").contains("فاتورة شراء").click();
+    cy.wait(500);
+});
+
+Cypress.Commands.add("navigateToReturnBuyingInvoices", () => {
+    cy.navigateInvoices();
+    cy.get(".ant-menu-title-content").contains("مرتجع فاتورة شراء").click();
+    cy.wait(500);
+});
+
+Cypress.Commands.add("navigateToSellingInvoices", () => {
+    cy.navigateInvoices();
+    cy.get(".ant-menu-title-content").contains("فاتورة بيع").click();
+    cy.wait(500);
+});
+
+Cypress.Commands.add("navigateToReturnSellingInvoices", () => {
+    cy.navigateInvoices();
+    cy.get(".ant-menu-title-content").contains("مرتجع فاتورة بيع").click();
     cy.wait(500);
 });
 
@@ -177,7 +198,7 @@ Cypress.Commands.add("chooseStock", (stock) => {
 
 Cypress.Commands.add(
     "addProductToInvoice",
-    (product, quantity, lastBuyingPrice) => {
+    (product, { quantity, lastBuyingPrice }) => {
         cy.get("#search_product").clear();
         cy.get("#search_product").type(`${product.barcode}{enter}`, {
             force: true,
@@ -193,8 +214,8 @@ Cypress.Commands.add(
             cy.get("#price").clear();
             cy.get("#price").type(lastBuyingPrice);
             product.lastBuyingPrice = lastBuyingPrice;
+            cy.realPress("Enter");
         }
-        cy.realPress("Enter");
     }
 );
 

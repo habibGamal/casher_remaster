@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductDetailsController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\TrackingStockController;
 use App\Http\Controllers\TransferBetweenStocks;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -80,8 +81,14 @@ Route::post('/transfer-between-stocks', [TransferBetweenStocks::class, 'store'])
 Route::get('/product-details', [ProductDetailsController::class, 'show']);
 // settings
 Route::get('/settings', function () {
-    return inertia()->render('Settings');
+    return inertia()->render('Settings', [
+        'remigrate' => inertia()->lazy(fn () => Artisan::call('migrate:fresh')),
+    ]);
 })->name('settings.index');
+Route::post('/settings/drop-database', function () {
+    Artisan::call('migrate:fresh');
+    return redirect()->back();
+})->name('settings.drop-database');
 // unimplemented
 Route::get('/display-invoices', function () {
     return inertia()->render('invoices/DisplayInvoices');

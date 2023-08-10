@@ -73,7 +73,7 @@ class SellingInvoiceController extends Controller
         ]);
 
 
-        $invoice_items = $service->buildInvoiceItems($request->stock_id, $validated['invoiceItems']);
+        $invoice_items = $service->processSellingInvoice($validated);
 
         $total_cash = 0;
         foreach ($invoice_items as $item) {

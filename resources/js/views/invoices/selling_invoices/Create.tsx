@@ -1,12 +1,9 @@
 import React from "react";
-import BuyInvServices from "../../../services/invoices/BuyInvServices";
 import DisplayInvoiceCreation from "../../../components/DisplayInvoiceCreation";
 import DeleteButton from "../../../components/DeleteButton";
 import EditableColumns from "../../../types/EditableColumns";
-import { Descriptions } from "antd";
-import SelectSearch from "../../../components/SelectSearch";
-import SelectSearchUtils from "../../../services/SelectSearchUtils";
 import SellInvServices from "../../../services/invoices/SellInvServices";
+import CreateSellingInvoiceManager from "../../../management/invoices/CreateSellingInvoiceManager";
 
 export default function Create() {
     const defaultColumns: EditableColumns = [
@@ -37,57 +34,13 @@ export default function Create() {
             dataIndex: "total",
             key: "total",
         },
-        {
-            title: "تحكم",
-            dataIndex: "operation",
-            renderWithHandler: (handler) => (_, record: any) =>
-                (
-                    <DeleteButton
-                        onClick={() => {
-                            handler.onDeleteInvoiceItem(record);
-                        }}
-                    />
-                ),
-        },
     ];
-
-    const [stockId, setStockId] = React.useState<string | null>(null);
 
     return (
         <DisplayInvoiceCreation
             title="فاتورة بيع"
             defaultColumns={defaultColumns}
-            getHandler={SellInvServices.getHandler}
-            extendDesicriptionItems={
-                <>
-                    <Descriptions.Item label="المخزن">
-                        <SelectSearch
-                            name="stock_id"
-                            style={{ width: "12rem" }}
-                            onSearch={SelectSearchUtils.getStocks}
-                            onChange={(value) => setStockId(value)}
-                        />
-                    </Descriptions.Item>
-                </>
-            }
-            searchSettings={{
-                id: "search_product",
-                defaultAttribute: "barcode",
-                placeholder: "المنتج",
-                options: [
-                    {
-                        label: "الاسم",
-                        value: "name",
-                    },
-                    {
-                        label: "الكود",
-                        value: "barcode",
-                    },
-                ],
-            }}
-            extraData={{
-                stock_id: stockId,
-            }}
+            getManager={CreateSellingInvoiceManager}
         />
     );
 }

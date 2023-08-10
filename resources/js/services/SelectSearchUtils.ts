@@ -45,6 +45,7 @@ export default class SelectSearchUtils {
             setOptions,
         });
     }
+
     static getStocks(value: string, setOptions: SetOptions) {
         SelectSearchUtils.reload({
             slug: "stocks",

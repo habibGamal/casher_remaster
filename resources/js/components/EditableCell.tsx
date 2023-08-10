@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Form, Input, InputRef } from "antd";
 import { EditableContext } from "./EditableRow";
 
-
 interface EditableCellProps<T> {
     title: React.ReactNode;
     editable: boolean;
@@ -67,7 +66,11 @@ function EditableCell<T>({
             </Form.Item>
         ) : (
             <div
-                className={`editable-cell-value-wrap editable-${dataIndex as any}`}
+                data-barcode={`${(record as any).barcode}-${dataIndex as any}`}
+                data-key={`${(record as any).key}-${dataIndex as any}`}
+                className={`editable-cell-value-wrap editable-${
+                    dataIndex as any
+                }`}
                 style={{ paddingRight: 24 }}
                 onClick={toggleEdit}
             >
