@@ -40,13 +40,13 @@ class SellingInvoiceController extends Controller
                     $value = $request->value;
                     $stock_id = $request->stock_id;
                     if ($stock_id == null)
-                        return 'ERR:يجب اختيار مخزن';
+                        return partialError('يجب اختيار مخزن');
                     if ($attribute == null || $value == null)
                         return null;
                     // 1 - get the product
                     $product = Product::select(['id', 'name', 'barcode', 'selling_price', 'last_buying_price'])->where([$attribute => $value])->first();
                     if ($product == null)
-                        return 'ERR:هذا المنتج غير موجود';
+                        return partialError('هذا المنتج غير موجود');
                     // 2 - get the sum of oldest stock item quantities in stock that has quantity > 0
                     $available_quantity = Box::where('product_id', $product->id)
                         ->join('stock_items', 'boxes.id', '=', 'stock_items.box_id')
@@ -54,7 +54,7 @@ class SellingInvoiceController extends Controller
                         ->where('stock_items.quantity', '>', 0)
                         ->sum('stock_items.quantity');
                     if ($available_quantity == 0)
-                        return 'ERR:لا يوجد كمية متاحة من هذا المنتج في المخزن المختار';
+                        return partialError('لا يوجد كمية متاحة من هذا المنتج في المخزن المختار');
                     // 3 - append the available quantity to the product
                     $product->available_quantity = $available_quantity;
                     $product->append('available_quantity');

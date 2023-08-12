@@ -209,6 +209,7 @@ return [
         'buying_price'                  => 'سعر الشراء',
         'selling_price'                  => 'سعر البيع',
         'barcode'                  => 'كود الصنف',
+        'invoiceItems'                  => 'عناصر الفاتورة',
         // 'buying price'                  => ' ',
         // 'buying price'                  => ' ',
         // 'buying price'                  => ' ',

@@ -1,14 +1,9 @@
-import {
-    Empty,
-    Input,
-    Row,
-    Select,
-} from "antd";
+import { Empty, Input, Row, Select } from "antd";
 import React from "react";
 import PageTitle from "../../components/PageTitle";
 import useSearch from "../../hooks/useSearch";
 import { Inertia, PageProps } from "@inertiajs/inertia";
-import detectERR from "../../helpers/detectERR";
+import { hasErr } from "../../helpers/errorHandlers";
 import { Area } from "@ant-design/charts";
 import ProductInfo from "../../components/product_details/ProductInfo";
 import Section from "../../components/Section";
@@ -36,7 +31,7 @@ export default function ProductDetails() {
             preserveState: true,
             onSuccess: (page) => {
                 let productData = page.props.productData as ProductData;
-                if (detectERR(productData)) return;
+                if (hasErr(productData)) return;
                 console.log(productData);
                 setProductData(productData);
             },

@@ -82,7 +82,10 @@ export default function DisplayReturnInvoiceCreation({
         setLoading,
     });
 
-    const columns = mapEditableColumns(defaultColumns, manager.edit as any);
+    const columns = mapEditableColumns(
+        defaultColumns,
+        manager.returnInvoiceOperations.edit as any
+    );
 
     return (
         <Row gutter={[0, 25]} className="m-8">
@@ -96,7 +99,11 @@ export default function DisplayReturnInvoiceCreation({
                         {totalInvoice.toFixed(2)}
                     </Descriptions.Item>
                 </Descriptions>
-                <Button onClick={manager.submit.onSubmit} type="primary">
+                <Button
+                    loading={loading}
+                    onClick={manager.submit.onSubmit}
+                    type="primary"
+                >
                     انشاء الفاتورة
                 </Button>
             </div>
@@ -121,7 +128,9 @@ export default function DisplayReturnInvoiceCreation({
                         onPressEnter={manager.search.onSearch}
                     />
                     <Button
-                        onClick={manager.cancelOperation}
+                        onClick={
+                            manager.returnInvoiceOperations.cancelOperation
+                        }
                         className="mx-auto"
                         danger
                         type="primary"
@@ -134,7 +143,7 @@ export default function DisplayReturnInvoiceCreation({
                     rowClassName={() => "editable-row"}
                     columns={columns as ColumnTypes}
                     rowKey={(record: any) => record.key.toString()}
-                    dataSource={manager.getInvoiceItems()}
+                    dataSource={manager.returnInvoiceOperations.getInvoiceItems()}
                     pagination={false}
                     loading={loading}
                     bordered

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('opening_stock_items', function (Blueprint $table) {
             $table->id();
-            $table->double('buying_price');
+            $table->double('quantity');
             $table->foreignId('box_id')->constrained('boxes')->cascadeOnDelete();
             $table->timestamps();
         });

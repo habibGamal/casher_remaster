@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Services\TableSettingsServices;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,9 +14,10 @@ class TrackingStockController extends Controller
             'data' => Inertia::lazy(function () use ($request) {
                 if (!$request->attribute || !$request->value)
                     return [];
-                $product = Product::select(['id','name'])->where([$request->attribute => $request->value])->with(['box.stockItems.stock'])->first();
+                $product = Product::select(['id','name'])->where([$request->attribute => $request->value])->with(['boxes.stockItems.stock'])->first();
                 return $product;
             })
         ]);
     }
 }
+

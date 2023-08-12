@@ -240,6 +240,7 @@ export class ModelDisplayBase {
             }
         ) as ColumnsType<any>;
     }
+
     public ModelTable() {
         const ctx = useContext(this.ctx);
         // run `reshapeData` to transform data to fit the table

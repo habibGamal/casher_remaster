@@ -1,4 +1,4 @@
-import { InputRef } from "antd";
+import { Descriptions, InputRef } from "antd";
 import React from "react";
 export interface BaseInvoiceItem {
     id: number;
@@ -99,6 +99,7 @@ export interface ReturnInvoiceOperationPropsStates<InvoiceItem> {
         changeSearchValue: (value: string) => void;
     };
 }
+
 export interface ReturnInvoiceOperations<InvoiceItem>
     extends ReturnInvoiceOperationStates<InvoiceItem>,
         GetInvoiceItems<InvoiceItem>,
@@ -109,8 +110,23 @@ export default abstract class CreateInvoiceManager<
     SearchParams,
     RawData,
     FactoriedData,
-    SubmitedData
+    SubmitedData,
+    InvoiceItem,
 > {
     public abstract search: Searching<SearchParams, RawData, FactoriedData>;
     public abstract submit: Submiting<SubmitedData>;
+    public abstract invoiceOperations: InvoiceOperations<InvoiceItem>;
+    public abstract returnInvoiceOperations: ReturnInvoiceOperations<InvoiceItem>;
+
+    public displayInvoiceNumber(invoiceNumber?: number): JSX.Element | null {
+        return (
+            <Descriptions.Item label="رقم الفاتورة">
+                {invoiceNumber}
+            </Descriptions.Item>
+        );
+    }
+
+    public actionBtnTitle(): string {
+        return "انشاء الفاتورة";
+    }
 }

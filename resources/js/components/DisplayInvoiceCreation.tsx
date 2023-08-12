@@ -22,8 +22,9 @@ import SelectSearchUtils from "../services/SelectSearchUtils";
 import CreateBuyingInvoiceManager from "../management/invoices/CreateBuyingInvoiceManager";
 import CreateSellingInvoiceManager from "../management/invoices/CreateSellingInvoiceManager";
 import DeleteButton from "./DeleteButton";
-import { BaseInvoiceItem } from "../management/invoices/CreateInvoiceManager";
+import { BaseInvoiceItem } from "../management/invoice_manager/CreateInvoiceManager";
 import useMultiplyKey from "../hooks/useMultiplyKey";
+import CreateOpeningStockManager from "../management/OpeningStockManager";
 
 // you may wonder why this is not the same style as `DisplayModel`
 // `DisplayModel` is quite complicated than this one because it has a lot of features
@@ -34,7 +35,8 @@ type Props = {
     defaultColumns: EditableColumns;
     getManager:
         | typeof CreateBuyingInvoiceManager
-        | typeof CreateSellingInvoiceManager;
+        | typeof CreateSellingInvoiceManager
+        | typeof CreateOpeningStockManager;
 };
 export default function DisplayInvoiceCreation({
     title,
@@ -94,14 +96,17 @@ export default function DisplayInvoiceCreation({
     });
 
     const columns = [
-        ...mapEditableColumns<any>(defaultColumns, manager.edit),
+        ...mapEditableColumns<any>(
+            defaultColumns,
+            manager.invoiceOperations.edit
+        ),
         {
             title: "تحكم",
             dataIndex: "operation",
-            render: (record: any) => (
+            render: (_: any, record: any) => (
                 <DeleteButton
                     onClick={() => {
-                        manager.remove(record);
+                        manager.invoiceOperations.remove(record);
                     }}
                 />
             ),
@@ -113,9 +118,7 @@ export default function DisplayInvoiceCreation({
             <PageTitle name={title} />
             <div className="isolate-2 flex justify-between items-center w-full p-8 gap-8">
                 <Descriptions className="w-full" bordered>
-                    <Descriptions.Item label="رقم الفاتورة">
-                        {invoiceNumber}
-                    </Descriptions.Item>
+                    {manager.displayInvoiceNumber(invoiceNumber)}
                     <Descriptions.Item label="الاجمالي">
                         {totalInvoice.toFixed(2)}
                     </Descriptions.Item>
@@ -128,8 +131,8 @@ export default function DisplayInvoiceCreation({
                         />
                     </Descriptions.Item>
                 </Descriptions>
-                <Button onClick={manager.submit.onSubmit} type="primary">
-                    انشاء الفاتورة
+                <Button loading={loading} onClick={manager.submit.onSubmit} type="primary">
+                    {manager.actionBtnTitle()}
                 </Button>
             </div>
             <Col span="24" className="isolate">
@@ -154,7 +157,7 @@ export default function DisplayInvoiceCreation({
                         onPressEnter={manager.search.onSearch}
                     />
                     <Button
-                        onClick={manager.cancelOperation}
+                        onClick={manager.invoiceOperations.cancelOperation}
                         className="mx-auto"
                         danger
                         type="primary"
@@ -167,7 +170,7 @@ export default function DisplayInvoiceCreation({
                     rowClassName={() => "editable-row"}
                     columns={columns as ColumnTypes}
                     rowKey={(record: any) => record.key.toString()}
-                    dataSource={manager.getInvoiceItems()}
+                    dataSource={manager.invoiceOperations.getInvoiceItems()}
                     pagination={false}
                     loading={loading}
                     bordered

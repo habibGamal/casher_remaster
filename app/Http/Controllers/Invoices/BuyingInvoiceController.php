@@ -7,11 +7,9 @@ use App\Models\Box;
 use App\Models\BuyingInvoice;
 use App\Models\Product;
 use App\Models\Stock;
-use App\Models\StockItem;
 use App\Services\TableSettingsServices;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Validation\ValidationException;
 
 class BuyingInvoiceController extends Controller
 {
@@ -35,7 +33,10 @@ class BuyingInvoiceController extends Controller
             ),
             'invoice_number' => fn () => BuyingInvoice::max('id') + 1,
             'product' => inertia()->lazy(function () use ($request) {
-                return Product::select(['id', 'name', 'barcode', 'last_buying_price'])->where([$request->attribute => $request->value])->first();
+                $product = Product::select(['id', 'name', 'barcode', 'last_buying_price'])->where([$request->attribute => $request->value])->first();
+                if ($product == null)
+                    return partialError(__('messages.product_not_found'));
+                return $product;
             })
         ]);
     }
@@ -45,23 +46,27 @@ class BuyingInvoiceController extends Controller
         if ($request->stock_id == null)
             return redirect()->back()->with('error', 'برجاء اختيار المخزن');
 
-        $validatedInvoice = $request->validate([
-            'total_cost' => 'required|numeric',
-        ]);
-
         $validated_invoice_items = $request->validate([
             /// check product in database will consume time
             'stock_id' => 'required|exists:stocks,id',
+            'invoiceItems' => 'required|array|min:1',
             'invoiceItems.*.product_id' => 'required|exists:products,id',
             'invoiceItems.*.quantity' => 'required|numeric',
             'invoiceItems.*.buying_price' => 'required|numeric',
         ]);
 
+        $invoice_items = collect($validated_invoice_items['invoiceItems']);
+
+        $total_cost = $invoice_items->sum(function ($item) {
+            return $item['quantity'] * $item['buying_price'];
+        });
+
         // create invoice
-        $invoice = BuyingInvoice::create($validatedInvoice);
+        $invoice = BuyingInvoice::create([
+            'total_cost' => $total_cost,
+        ]);
 
         // create boxes and stock items
-        $invoice_items = collect($validated_invoice_items['invoiceItems']);
         $buying_invoice_items_data = collect();
         $invoice_items->each(function ($item) use ($buying_invoice_items_data) {
             $box = Box::create($item);

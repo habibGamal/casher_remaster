@@ -64,15 +64,17 @@ const items: MenuProps["items"] = [
             <Link href={ProductGroupServices.BASE_ROUTE}>مجموعات الاصناف</Link>,
             "product_groups"
         ),
-        getItem(<Link href="/product-details"> تفاصيل الصنف </Link>, "product_details"),
+        getItem(
+            <Link href="/product-details"> تفاصيل الصنف </Link>,
+            "product_details"
+        ),
         getItem(
             <Link href="/"> الاصناف منتهية الصلاحية </Link>,
             "expired_products"
         ),
         getItem(
-            <Link href={OpeningStockServices.BASE_ROUTE}>
-                {" "}
-                الارصدة الافتتاحية{" "}
+            <Link href={OpeningStockServices.BASE_ROUTE + "/create"}>
+                الارصدة الافتتاحية
             </Link>,
             "openning_stock"
         ),

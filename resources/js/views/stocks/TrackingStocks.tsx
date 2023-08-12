@@ -5,19 +5,6 @@ import { ModelColumns } from "../../interfaces/ModelConfig";
 import useSearch from "../../hooks/useSearch";
 import { Inertia } from "@inertiajs/inertia";
 
-interface ProductInfo {
-    id: number;
-    name: string;
-    box: Box[];
-}
-
-interface Box {
-    id: number;
-    product_id: number;
-    buying_price: number;
-    stock_items: StockItem[];
-}
-
 interface StockItem {
     id: number;
     quantity: number;
@@ -31,7 +18,20 @@ interface StockItem {
     };
 }
 
-type Data = ProductInfo;
+interface Box {
+    id: number;
+    product_id: number;
+    buying_price: number;
+    stock_items: StockItem[];
+}
+
+interface Product {
+    id: number;
+    name: string;
+    boxes: Box[];
+}
+
+type Data = Product;
 
 const modelColumns: ModelColumns[] = [
     {
@@ -69,7 +69,7 @@ export default function TrackingStocks({ data }: { data: Data }) {
         });
     };
     const stockItems = data
-        ? data.box.flatMap((box) =>
+        ? data.boxes.flatMap((box) =>
               box.stock_items.map((stockItem) => ({
                   ...stockItem,
                   buying_price: box.buying_price,

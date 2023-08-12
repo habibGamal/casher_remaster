@@ -1,41 +1,37 @@
 import { Inertia } from "@inertiajs/inertia";
 import CreateInvoiceManager, {
+    BaseInvoiceItem,
+    InvoiceOperations,
     Factoring,
     InvoiceOperationPropsStates,
     Searching,
     Submiting,
-} from "../invoice_manager/CreateInvoiceManager";
+    ReturnInvoiceOperations,
+} from "./invoice_manager/CreateInvoiceManager";
 import { message } from "antd";
-import {
-    displayValidationErrors,
-    flashHasError,
-    hasErr,
-} from "../../helpers/errorHandlers";
-import SellInvServices from "../../services/invoices/SellInvServices";
-import SellingInvoiceOperations, {
-    InvoiceItem,
-} from "../invoice_manager/SellingInvoiceOperations";
-import NoReturnOperations from "../invoice_manager/NoReturnOperations";
+import OpeningStockServices from "../services/products/OpeningStockServices";
+import OpeningStockOperations, { InvoiceItem } from "./invoice_manager/OpeningStockOperations";
+import NoReturnOperations from "./invoice_manager/NoReturnOperations";
 
 interface Product {
     id: number;
     name: string;
     barcode: string;
     last_buying_price: number;
-    selling_price: number;
-    available_quantity: number;
 }
 
 type SubmitedData = {}[];
-interface SellingInvoiceItemFactory extends Factoring<Product, InvoiceItem> {}
+interface OpeningStockItemFactory extends Factoring<Product, InvoiceItem> {}
 
-export default class CreateSellingInvoiceManager extends CreateInvoiceManager<
-    SearchParams,
-    Product,
-    InvoiceItem,
-    SubmitedData,
-    InvoiceItem
-> {
+export default class CreateOpeningStockManager
+    extends CreateInvoiceManager<
+        SearchParams,
+        Product,
+        InvoiceItem,
+        SubmitedData,
+        InvoiceItem
+    >
+{
     private afterSearch(invoiceItem: InvoiceItem) {
         this.invoiceOperations.add(invoiceItem);
         this.props.search.changeSearchValue("");
@@ -43,29 +39,37 @@ export default class CreateSellingInvoiceManager extends CreateInvoiceManager<
 
     public search: Search;
     public submit: Submit;
-    public invoiceOperations: SellingInvoiceOperations;
+    public invoiceOperations: OpeningStockOperations;
     public returnInvoiceOperations: NoReturnOperations;
     constructor(public props: InvoiceOperationPropsStates<InvoiceItem>) {
         super();
-        this.invoiceOperations = new SellingInvoiceOperations(props);
+        this.invoiceOperations = new OpeningStockOperations(props);
         this.returnInvoiceOperations = new NoReturnOperations(null);
         this.afterSearch = this.afterSearch.bind(this);
         this.search = new Search(
             {
                 attribute: this.props.search.data.attribute,
                 value: this.props.search.data.value,
-                stock_id: this.props.stockId,
             },
             this.afterSearch
         );
         this.submit = new Submit(this.props);
+    }
+
+    public displayInvoiceNumber(
+        invoiceNumber?: number | undefined
+    ): JSX.Element | null {
+        return null;
+    }
+
+    public actionBtnTitle(): string {
+        return "إضافة الرصيد";
     }
 }
 
 type SearchParams = {
     attribute: string;
     value: string;
-    stock_id: string | null;
 };
 class Search implements Searching<SearchParams, Product, InvoiceItem> {
     constructor(
@@ -75,15 +79,14 @@ class Search implements Searching<SearchParams, Product, InvoiceItem> {
         this.onSearch = this.onSearch.bind(this);
         this.factory = new Factory();
     }
-    public factory: SellingInvoiceItemFactory;
+    public factory: OpeningStockItemFactory;
     public onSearch() {
         Inertia.reload({
             data: this.searchParams,
-            only: ["product"],
+            only: ["product", "flash"],
             preserveState: true,
             onSuccess: (page) => {
                 let product = page.props.product as Product | null;
-                if (hasErr(product)) return;
                 if (product === null) return message.error("المنتج غير موجود");
                 const invoiceItem = this.factory.factory(product);
                 this.afterSearch(invoiceItem);
@@ -92,18 +95,17 @@ class Search implements Searching<SearchParams, Product, InvoiceItem> {
     }
 }
 
-class Factory implements SellingInvoiceItemFactory {
+class Factory implements OpeningStockItemFactory {
     public factory(product: Product): InvoiceItem {
         return {
             key: product.id.toString(),
             id: product.id,
+            product_id: product.id,
+            quantity: 1,
             name: product.name,
             barcode: product.barcode,
-            buying_price: product.last_buying_price,
-            selling_price: product.selling_price,
-            available_quantity: product.available_quantity,
-            quantity: 1,
-            total: product.selling_price,
+            price: product.last_buying_price,
+            total: product.last_buying_price * 1,
         };
     }
 }
@@ -114,29 +116,26 @@ class Submit implements Submiting<SubmitedData> {
     }
     public remapItemsToSubmit() {
         return this.props.invoiceItems.map((item) => ({
-            product_id: item.id,
+            product_id: item.product_id,
             quantity: item.quantity,
+            buying_price: item.price,
         }));
     }
 
     public onSubmit() {
         this.props.setLoading(true);
         Inertia.post(
-            SellInvServices.storeURL(),
+            OpeningStockServices.storeURL(),
             {
-                invoiceItems: this.remapItemsToSubmit() as any,
+                items: this.remapItemsToSubmit() as any,
                 stock_id: this.props.stockId,
             },
             {
                 onSuccess: (page) => {
                     this.props.setLoading(false);
-                    if (!flashHasError(page)) {
+                    if (!(page.props.flash as any).error) {
                         this.props.setInvoiceItems([]);
                     }
-                },
-                onError: (errors) => {
-                    this.props.setLoading(false);
-                    displayValidationErrors(errors);
                 },
             }
         );

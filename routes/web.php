@@ -48,10 +48,8 @@ Route::post('/stocks/store', [StockController::class, 'store']);
 Route::post('/stocks/update/{stock}', [StockController::class, 'update']);
 Route::delete('/stocks/{stock}', [StockController::class, 'delete']);
 // opening-stock
-Route::get('/opening-stocks', [OpeningStockController::class, 'index'])->name('opening-stocks.index');
+Route::get('/opening-stocks/create', [OpeningStockController::class, 'create'])->name('opening-stocks.index');
 Route::post('/opening-stocks/store', [OpeningStockController::class, 'store']);
-Route::post('/opening-stocks/update/{openingStock}', [OpeningStockController::class, 'update']);
-Route::delete('/opening-stocks/{openingStock}', [OpeningStockController::class, 'delete']);
 // buying-invoice
 Route::get('/buying-invoice', [BuyingInvoiceController::class, 'index'])->name('buying-invoice.index');
 Route::get('/buying-invoice/create', [BuyingInvoiceController::class, 'create'])->name('buying-invoice.create');

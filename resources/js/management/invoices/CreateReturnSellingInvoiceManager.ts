@@ -6,22 +6,13 @@ import CreateInvoiceManager, {
     Submiting,
     ReturnInvoiceOperations,
     ReturnInvoiceOperationPropsStates,
-} from "./CreateInvoiceManager";
+} from "../invoice_manager/CreateInvoiceManager";
 import { message } from "antd";
-import detectERR from "../../helpers/detectERR";
+import {displayValidationErrors, flashHasError, hasErr} from "../../helpers/errorHandlers";
 import ReturnSellInvServices from "../../services/invoices/ReturnSellInvServices";
+import ReturnSellingInvoiceOperations, { InvoiceItem } from "../invoice_manager/ReturnSellingInvoiceOperations";
+import NoInvoiceOperations from "../invoice_manager/NoInvoiceOperations";
 
-interface InvoiceItem extends BaseInvoiceItem {
-    id: number;
-    product_id: number;
-    available_quantity: number;
-    return_quantity: number;
-    name: string;
-    barcode: string;
-    selling_price: number;
-    return_price: number;
-    total: number;
-}
 interface SellingInvoice {
     id: number;
     total_cash: number;
@@ -73,38 +64,23 @@ export default class CreateReturnSellingInvoiceManager
         SearchParams,
         SellingInvoice,
         InvoiceItem[],
-        SubmitedData
+        SubmitedData,
+        InvoiceItem
     >
-    implements ReturnInvoiceOperations<InvoiceItem>
 {
     private afterSearch(invoiceItems: InvoiceItem[], sellingInvoiceId: number) {
         this.props.setInvoiceItems(invoiceItems);
         this.props.setAdditionalData({ sellingInvoiceId });
         this.props.search.changeSearchValue("");
     }
-
-    private isReturnQuantityValid(invoiceItem: InvoiceItem) {
-        const isValid =
-            invoiceItem.return_quantity <= invoiceItem.available_quantity;
-        if (!isValid) message.error("الكمية المرتجعة أكبر من الكمية المتاحة");
-        return isValid;
-    }
-
-    private correctTotal(invoiceItem: InvoiceItem) {
-        const total = invoiceItem.return_price * invoiceItem.return_quantity;
-        return {
-            ...invoiceItem,
-            total: parseFloat(total.toFixed(2)),
-        };
-    }
-
     public search: Search;
     public submit: Submit;
+    public invoiceOperations: NoInvoiceOperations;
+    public returnInvoiceOperations: ReturnSellingInvoiceOperations;
     constructor(public props: ReturnInvoiceOperationPropsStates<InvoiceItem>) {
         super();
-        this.edit = this.edit.bind(this);
-        this.cancelOperation = this.cancelOperation.bind(this);
-        this.getInvoiceItems = this.getInvoiceItems.bind(this);
+        this.invoiceOperations = new NoInvoiceOperations(null);
+        this.returnInvoiceOperations = new ReturnSellingInvoiceOperations(props);
         this.afterSearch = this.afterSearch.bind(this);
         this.search = new Search(
             {
@@ -116,23 +92,6 @@ export default class CreateReturnSellingInvoiceManager
         this.submit = new Submit(this.props);
     }
 
-    public getInvoiceItems() {
-        return this.props.invoiceItems;
-    }
-
-    public edit(invoiceItem: InvoiceItem) {
-        const invoiceItems = this.props.invoiceItems.map((item) => {
-            const itemMatch = item.id === invoiceItem.id;
-            if (!itemMatch) return item;
-            if (!this.isReturnQuantityValid(invoiceItem)) return item;
-            return this.correctTotal(invoiceItem);
-        });
-        this.props.setInvoiceItems(invoiceItems);
-    }
-
-    public cancelOperation() {
-        this.props.setInvoiceItems([]);
-    }
 }
 
 type SearchParams = {
@@ -260,16 +219,19 @@ class Submit implements Submiting<SubmitedData> {
             ReturnSellInvServices.storeURL(),
             {
                 invoiceItems: this.remapItemsToSubmit() as any,
-                selling_invoice_id:
-                    this.props.additionalData.sellingInvoiceId,
+                selling_invoice_id: this.props.additionalData.sellingInvoiceId,
             },
             {
                 onSuccess: (page) => {
                     this.props.setLoading(false);
-                    if (!(page.props.flash as any).error) {
+                    if (!flashHasError(page)) {
                         this.props.setInvoiceItems([]);
                     }
                 },
+                onError: (errors)=>{
+                    this.props.setLoading(false);
+                    displayValidationErrors(errors)
+                }
             }
         );
     }

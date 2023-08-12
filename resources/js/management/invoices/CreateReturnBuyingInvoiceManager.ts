@@ -6,33 +6,14 @@ import CreateInvoiceManager, {
     Submiting,
     ReturnInvoiceOperations,
     ReturnInvoiceOperationPropsStates,
-} from "./CreateInvoiceManager";
+} from "../invoice_manager/CreateInvoiceManager";
 import { message } from "antd";
 import ReturnBuyInvServices from "../../services/invoices/ReturnBuyInvServices";
-
-interface InvoiceItem extends BaseInvoiceItem {
-    id: number;
-    key: string;
-    product_id: number;
-    available_quantity: number;
-    return_quantity: number;
-    name: string;
-    barcode: string;
-    buying_price: number;
-    return_price: number;
-    stock: string;
-    stock_item_id: number;
-    children: ChildInvoiceItem[];
-    total: number;
-}
-interface ChildInvoiceItem {
-    id: number;
-    key: string;
-    stock: string;
-    stock_item_id: number;
-    available_quantity: number;
-    return_quantity: number;
-}
+import ReturnBuyingInvoiceOperations, {
+    InvoiceItem,
+} from "../invoice_manager/ReturnBuyingInvoiceOperations";
+import NoInvoiceOperations from "../invoice_manager/NoInvoiceOperations";
+import { displayValidationErrors, flashHasError } from "../../helpers/errorHandlers";
 
 interface BuyingInvoice {
     id: number;
@@ -73,47 +54,27 @@ type SubmitedData = {}[];
 interface ReturnBuyingInvoiceItemFactory
     extends Factoring<BuyingInvoice, InvoiceItem[]> {}
 
-export default class CreateReturnBuyingInvoiceManager
-    extends CreateInvoiceManager<
-        SearchParams,
-        BuyingInvoice,
-        InvoiceItem[],
-        SubmitedData
-    >
-    implements ReturnInvoiceOperations<InvoiceItem>
-{
+export default class CreateReturnBuyingInvoiceManager extends CreateInvoiceManager<
+    SearchParams,
+    BuyingInvoice,
+    InvoiceItem[],
+    SubmitedData,
+    InvoiceItem
+> {
     private afterSearch(invoiceItems: InvoiceItem[], buyingInvoiceId: number) {
         this.props.setInvoiceItems(invoiceItems);
         this.props.setAdditionalData({ buyingInvoiceId });
         this.props.search.changeSearchValue("");
     }
 
-    private isReturnQuantityValid(invoiceItem: InvoiceItem) {
-        const isValid =
-            invoiceItem.return_quantity <= invoiceItem.available_quantity;
-        if (!isValid) message.error("الكمية المرتجعة أكبر من الكمية المتاحة");
-        return isValid;
-    }
-
-    private correctTotal(invoiceItem: InvoiceItem) {
-        invoiceItem.return_quantity = invoiceItem.children.reduce(
-            (total, child) =>
-                total + parseFloat(child.return_quantity.toString()),
-            0
-        );
-        invoiceItem.total = parseFloat(
-            (invoiceItem.return_quantity * invoiceItem.return_price).toFixed(2)
-        );
-        return invoiceItem;
-    }
-
     public search: Search;
     public submit: Submit;
+    public invoiceOperations: NoInvoiceOperations;
+    public returnInvoiceOperations: ReturnBuyingInvoiceOperations;
     constructor(public props: ReturnInvoiceOperationPropsStates<InvoiceItem>) {
         super();
-        this.edit = this.edit.bind(this);
-        this.cancelOperation = this.cancelOperation.bind(this);
-        this.getInvoiceItems = this.getInvoiceItems.bind(this);
+        this.invoiceOperations = new NoInvoiceOperations(null);
+        this.returnInvoiceOperations = new ReturnBuyingInvoiceOperations(props);
         this.afterSearch = this.afterSearch.bind(this);
         this.search = new Search(
             {
@@ -123,28 +84,6 @@ export default class CreateReturnBuyingInvoiceManager
             this.afterSearch
         );
         this.submit = new Submit(this.props);
-    }
-
-    public getInvoiceItems() {
-        return this.props.invoiceItems;
-    }
-
-    public edit(invoiceItem: InvoiceItem) {
-        const invoiceItems = this.props.invoiceItems.map((item) => {
-            const itemMatch = item.id == invoiceItem.id;
-            if (!itemMatch) return item;
-            if (!this.isReturnQuantityValid(invoiceItem)) return item;
-            item.children = item.children.map((childItem) => {
-                if (childItem.key != invoiceItem.key) return childItem;
-                return invoiceItem;
-            });
-            return this.correctTotal(item);
-        });
-        this.props.setInvoiceItems(invoiceItems);
-    }
-
-    public cancelOperation() {
-        this.props.setInvoiceItems([]);
     }
 }
 
@@ -246,10 +185,14 @@ class Submit implements Submiting<SubmitedData> {
             {
                 onSuccess: (page) => {
                     this.props.setLoading(false);
-                    if (!(page.props.flash as any).error) {
+                    if (!flashHasError(page)) {
                         this.props.setInvoiceItems([]);
                     }
                 },
+                onError: (errors)=>{
+                    this.props.setLoading(false);
+                    displayValidationErrors(errors)
+                }
             }
         );
     }

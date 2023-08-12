@@ -158,7 +158,12 @@ Cypress.Commands.add("addStock", (stock) => {
     cy.wait(500);
     cy.get(".ant-table-row > :nth-child(1)").should("contain", stock.name);
 });
-
+// opening stock commands
+Cypress.Commands.add("navigateToOpeningStocks", () => {
+    cy.get(".ant-menu-title-content").contains("الاصناف").click();
+    cy.get(".ant-menu-title-content").contains("الارصدة الافتتاحية").click();
+    cy.wait(500);
+});
 // invoices commands
 Cypress.Commands.add("navigateInvoices", () => {
     cy.get(".ant-menu-title-content").contains("الفواتير").click();

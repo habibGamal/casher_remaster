@@ -34,7 +34,11 @@ const stock1 = { name: "مخزن 1" };
 describe("create one thing of every thing", () => {
     beforeEach(() => {
         cy.visit("http://127.0.0.1:8000/products");
+        cy.window().then((win) => {
+            win.localStorage.setItem("theme", "dark");
+        });
         cy.viewport(1920, 1080);
+        cy.loc;
     });
 
     it("empty DB", () => {
@@ -69,6 +73,22 @@ describe("create one thing of every thing", () => {
 
     it("add stocks", () => {
         cy.addStock(stock1);
+    });
+
+    it("add openining stock", () => {
+        cy.navigateToOpeningStocks();
+        cy.chooseStock(stock1);
+        cy.addProductToInvoice(product1, {
+            quantity: "50",
+            lastBuyingPrice: 45,
+        });
+        cy.addProductToInvoice(product2, {
+            quantity: "60",
+            lastBuyingPrice: 55,
+        });
+        // check total
+        cy.get('td[colspan="1"]').contains(50 * 45 + 60 * 55);
+        cy.get(".ant-btn").contains("إضافة الرصيد").click();
     });
 
     it("add buying invoice", () => {
@@ -123,8 +143,12 @@ describe("create one thing of every thing", () => {
         cy.navigateToReturnBuyingInvoices();
         cy.get("input#invoice_id").type("1{enter}");
         cy.wait(200);
-        cy.get(".ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed").eq(0).click();
-        cy.get(".ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed").eq(0).click();
+        cy.get(".ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed")
+            .eq(0)
+            .click();
+        cy.get(".ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed")
+            .eq(0)
+            .click();
         cy.get(`[data-key="0-${product1.barcode}-return_quantity"]`).click();
         cy.get("#return_quantity").clear();
         cy.get("#return_quantity").type(20);

@@ -1,6 +1,5 @@
 import React from "react";
-import { Button, Descriptions, Space } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Descriptions, Space } from "antd";
 import DisplayModel from "../../components/DisplayModel";
 import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
 import ModelGeneralServices from "../../services/ModelGeneralServices";
@@ -22,6 +21,7 @@ type ModelType = {
         name: string;
     }
 };
+
 const modelColumns: ModelColumns[] = [
     {
         title: "أسم الصنف",

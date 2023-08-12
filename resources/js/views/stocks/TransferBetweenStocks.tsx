@@ -19,10 +19,10 @@ import EditableColumns from "../../types/EditableColumns";
 import ColumnTypes from "../../types/ColumnTypes";
 import useSearch from "../../hooks/useSearch";
 import { Inertia } from "@inertiajs/inertia";
-import detectERR from "../../helpers/detectERR";
+import { hasErr } from "../../helpers/errorHandlers";
 import mapEditableColumns from "../../helpers/mapEditableColumns";
 import DeleteButton from "../../components/DeleteButton";
-import flashHasError from "../../helpers/flashHasError";
+import { flashHasError } from "../../helpers/errorHandlers";
 interface Product {
     id: number;
     name: string;
@@ -119,7 +119,7 @@ export default function TransferBetweenStocks() {
             preserveState: true,
             onSuccess: (page) => {
                 let product = page.props.product as Product;
-                if (detectERR(product)) return;
+                if (hasErr(product)) return;
                 updateTableData(product);
             },
         });

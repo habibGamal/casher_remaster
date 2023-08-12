@@ -2,78 +2,70 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OpeningStockItem;
+use App\Models\Box;
 use App\Models\Product;
 use App\Models\Stock;
-use App\Models\StockItem;
-use App\Services\TableSettingsServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OpeningStockController extends Controller
 {
-    public $index = 'products/OpeningStocks';
-    public function index(Request $request)
+    public function create(Request $request)
     {
-        return inertia()->render($this->index, [
-            'openingStockItems' => fn () => TableSettingsServices::pagination(OpeningStockItem::with(['stockItem.product:id,name,barcode', 'stockItem.stock:id,name']), $request, 'openingStockItems'),
-            'products' => inertia()->lazy(function () use ($request) {
-                return Product::select(['id', 'name'])
-                    ->where('barcode', 'like', '%' . $request->barcode . '%')
-                    ->get();;
-            }),
-            'stocks' => inertia()->lazy(function () use ($request) {
-                return Stock::select(['id', 'name'])
-                    ->where('name', 'like', '%' . $request->stock_name . '%')
-                    ->get();;
-            }),
+        return inertia()->render('products/OpeningStocks', [
+            'stocks' => inertia()->lazy(
+                function () use ($request) {
+                    return  Stock::select(['id', 'name'])
+                        ->where('name', 'like', '%' . $request->stock_name . '%')
+                        ->get();
+                }
+            ),
+            'product' => inertia()->lazy(function () use ($request) {
+                return Product::select(['id', 'name', 'barcode', 'last_buying_price'])->where([$request->attribute => $request->value])->first();
+            })
         ]);
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|numeric',
-            'buying_price' => 'required|numeric',
+
+        if ($request->stock_id == null)
+            return redirect()->back()->with('error', 'برجاء اختيار المخزن');
+
+        $validated_items = $request->validate([
+            /// check product in database will consume time
             'stock_id' => 'required|exists:stocks,id',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|numeric',
+            'items.*.buying_price' => 'required|numeric',
         ]);
-        $stock_item = StockItem::create($validated);
-        OpeningStockItem::create([
-            'stock_item_id' => $stock_item->id,
-            'buying_price' => $request->buying_price,
-        ]);
-        return redirect()->back();
+
+        $invoice_items = collect($validated_items['items']);
+
+        // create boxes and stock items
+        $opening_stock_items_data = collect();
+        $invoice_items->each(function ($item) use ($opening_stock_items_data) {
+            $box = Box::create($item);
+            $box->stockItems()->create([
+                'stock_id' => request()->stock_id,
+                'quantity' => $item['quantity'],
+            ]);
+
+            // update last_buying_price in product table
+            $box->product()->update([
+                'last_buying_price' => $box->buying_price,
+            ]);
+
+            $opening_stock_items_data->push([
+                'box_id' => $box->id,
+                'quantity' => $item['quantity'],
+            ]);
+        });
+
+        // create invoice items
+        DB::table('opening_stock_items')->insert($opening_stock_items_data->toArray());
+
+        return redirect()->back()->with('success', 'تمت العملية بنجاح');
     }
 
-    public function update(Request $request, OpeningStockItem $openingStockItem)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|numeric',
-            'selling_price' => 'required|numeric',
-            'buying_price' => 'required|numeric',
-            'expiration_date' => 'required|date',
-            'stock_id' => 'required|exists:stocks,id',
-        ]);
-        $stock_item = $openingStockItem->stockItem;
-        $stock_item->update([
-            'product_id' => $request->product_id,
-            'quantity' => $request->quantity,
-            'price' => $request->selling_price,
-            'expiration_date' => $request->expiration_date,
-            'stock_id' => $request->stock_id,
-        ]);
-        $openingStockItem->update([
-            'buying_price' => $request->buying_price,
-            'selling_price' => $request->selling_price,
-        ]);
-        return redirect()->route('opening-stock.index');
-    }
-
-    public function delete(OpeningStockItem $openingStockItem)
-    {
-        $openingStockItem->stockItem->delete();
-        $openingStockItem->delete();
-        return redirect()->route('opening-stock.index');
-    }
 }
