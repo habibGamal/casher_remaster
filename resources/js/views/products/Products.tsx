@@ -1,13 +1,13 @@
 import React from "react";
 import { Descriptions, Space } from "antd";
-import DisplayModel from "../../components/DisplayModel";
-import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
-import ModelGeneralServices from "../../services/ModelGeneralServices";
-import ProductServices from "../../services/products/ProductServices";
-import ModelContext from "../../interfaces/ModelContext";
+import DisplayModel from "../../Components/DisplayModel";
+import ModelConfig, { ModelColumns } from "../../Interfaces/ModelConfig";
+import ModelGeneralServices from "../../Services/ModelGeneralServices";
+import ProductServices from "../../Services/Products/ProductServices";
+import ModelContext from "../../Interfaces/ModelContext";
 import ProductForm from "../common/forms/ProductForm";
-import DeleteButton from "../../components/DeleteButton";
-import EditButton from "../../components/EditButton";
+import DeleteButton from "../../Components/DeleteButton";
+import EditButton from "../../Components/EditButton";
 type ModelType = {
     id?: number;
     name: string;

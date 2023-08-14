@@ -1,7 +1,7 @@
 import React from "react";
 import SectionTitle from "../SectionTitle";
 import { Descriptions, Empty, Tag } from "antd";
-import ProductData from "../../interfaces/ProductData";
+import ProductData from "../../Interfaces/ProductData";
 import moment from "moment";
 import Section from "../Section";
 

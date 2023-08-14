@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Space, Tag } from "antd";
-import DisplayModel from "../../../components/DisplayModel";
-import ModelConfig, { ModelColumns } from "../../../interfaces/ModelConfig";
-import ModelContext from "../../../interfaces/ModelContext";
-import SellInvServices from "../../../services/invoices/SellInvServices";
+import DisplayModel from "../../../Components/DisplayModel";
+import ModelConfig, { ModelColumns } from "../../../Interfaces/ModelConfig";
+import ModelContext from "../../../Interfaces/ModelContext";
+import SellInvServices from "../../../Services/Invoices/SellInvServices";
 
 type ModelType = any;
 const modelColumns: ModelColumns[] = [

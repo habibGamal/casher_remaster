@@ -1,14 +1,14 @@
 import { Row, Tabs, TabsProps } from "antd";
 import React from "react";
-import PageTitle from "../../components/PageTitle";
+import PageTitle from "../../Components/PageTitle";
 import BuyingInvoices from "./buying_invoices/Index";
 import SellingInvoices from "./selling_invoices/Index";
 import ReturnBuyingInvoices from "./return_buying_invoices/Index";
 import ReturnSellingInvoices from "./return_selling_invoices/Index";
-import BuyInvServices from "../../services/invoices/BuyInvServices";
-import SellInvServices from "../../services/invoices/SellInvServices";
-import ReturnBuyInvServices from "../../services/invoices/ReturnBuyInvServices";
-import ReturnSellInvServices from "../../services/invoices/ReturnSellInvServices";
+import BuyInvServices from "../../Services/Invoices/BuyInvServices";
+import SellInvServices from "../../Services/Invoices/SellInvServices";
+import ReturnBuyInvServices from "../../Services/Invoices/ReturnBuyInvServices";
+import ReturnSellInvServices from "../../Services/Invoices/ReturnSellInvServices";
 const onChange = (key: string) => {
     switch (key) {
         case "buying_invoices":

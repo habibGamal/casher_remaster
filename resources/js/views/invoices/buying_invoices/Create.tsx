@@ -1,7 +1,7 @@
 import React from "react";
-import DisplayInvoiceCreation from "../../../components/DisplayInvoiceCreation";
+import DisplayInvoiceCreation from "../../../Components/DisplayInvoiceCreation";
 import EditableColumns from "../../../types/EditableColumns";
-import CreateBuyingInvoiceManager from "../../../management/invoices/CreateBuyingInvoiceManager";
+import CreateBuyingInvoiceManager from "../../../Management/invoices/CreateBuyingInvoiceManager";
 
 export default function CreateBuyingInvoice() {
     const defaultColumns: EditableColumns = [

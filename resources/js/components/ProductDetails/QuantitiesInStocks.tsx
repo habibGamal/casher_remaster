@@ -1,7 +1,7 @@
 import { Table, Tag } from "antd";
 import React from "react";
 import Section from "../Section";
-import ProductData from "../../interfaces/ProductData";
+import ProductData from "../../Interfaces/ProductData";
 
 type Props = {
     productData?: ProductData;

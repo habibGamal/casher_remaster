@@ -12,19 +12,19 @@ import React, { useRef, useState } from "react";
 import PageTitle from "./PageTitle";
 import EditableCell from "./EditableCell";
 import EditableRow from "./EditableRow";
-import useSearch from "../hooks/useSearch";
-import mapEditableColumns from "../helpers/mapEditableColumns";
+import useSearch from "../Hooks/useSearch";
+import mapEditableColumns from "../Helpers/mapEditableColumns";
 import EditableColumns from "../types/EditableColumns";
 import ColumnTypes from "../types/ColumnTypes";
 import { usePage } from "@inertiajs/inertia-react";
 import SelectSearch from "./SelectSearch";
-import SelectSearchUtils from "../services/SelectSearchUtils";
-import CreateBuyingInvoiceManager from "../management/invoices/CreateBuyingInvoiceManager";
-import CreateSellingInvoiceManager from "../management/invoices/CreateSellingInvoiceManager";
+import SelectSearchUtils from "../Services/SelectSearchUtils";
+import CreateBuyingInvoiceManager from "../Management/invoices/CreateBuyingInvoiceManager";
+import CreateSellingInvoiceManager from "../Management/invoices/CreateSellingInvoiceManager";
 import DeleteButton from "./DeleteButton";
-import { BaseInvoiceItem } from "../management/invoice_manager/CreateInvoiceManager";
-import useMultiplyKey from "../hooks/useMultiplyKey";
-import CreateOpeningStockManager from "../management/OpeningStockManager";
+import { BaseInvoiceItem } from "../Management/InvoiceManager/CreateInvoiceManager";
+import useMultiplyKey from "../Hooks/useMultiplyKey";
+import CreateOpeningStockManager from "../Management/OpeningStockManager";
 
 // you may wonder why this is not the same style as `DisplayModel`
 // `DisplayModel` is quite complicated than this one because it has a lot of features

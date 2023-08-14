@@ -7,11 +7,11 @@ import CreateInvoiceManager, {
     Searching,
     Submiting,
     ReturnInvoiceOperations,
-} from "./invoice_manager/CreateInvoiceManager";
+} from "./InvoiceManager/CreateInvoiceManager";
 import { message } from "antd";
-import OpeningStockServices from "../services/products/OpeningStockServices";
-import OpeningStockOperations, { InvoiceItem } from "./invoice_manager/OpeningStockOperations";
-import NoReturnOperations from "./invoice_manager/NoReturnOperations";
+import OpeningStockServices from "../Services/Products/OpeningStockServices";
+import OpeningStockOperations, { InvoiceItem } from "./InvoiceManager/OpeningStockOperations";
+import NoReturnOperations from "./InvoiceManager/NoReturnOperations";
 
 interface Product {
     id: number;

@@ -4,14 +4,14 @@ import CreateInvoiceManager, {
     InvoiceOperationPropsStates,
     Searching,
     Submiting,
-} from "../invoice_manager/CreateInvoiceManager";
-import BuyInvServices from "../../services/invoices/BuyInvServices";
+} from "../InvoiceManager/CreateInvoiceManager";
+import BuyInvServices from "../../Services/Invoices/BuyInvServices";
 import BuyingInvoiceOperations, {
     InvoiceItem,
-} from "../invoice_manager/BuyingInvoiceOperations";
-import NoReturnOperations from "../invoice_manager/NoReturnOperations";
-import { displayValidationErrors, hasErr } from "../../helpers/errorHandlers";
-import {flashHasError} from "../../helpers/errorHandlers";
+} from "../InvoiceManager/BuyingInvoiceOperations";
+import NoReturnOperations from "../InvoiceManager/NoReturnOperations";
+import { displayValidationErrors, hasErr } from "../../Helpers/errorHandlers";
+import {flashHasError} from "../../Helpers/errorHandlers";
 
 interface Product {
     id: number;

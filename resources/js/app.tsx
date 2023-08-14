@@ -1,11 +1,10 @@
 // import './bootstrap';
-import React, { useState } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/inertia-react";
 import { InertiaProgress } from "@inertiajs/progress";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-import Layout from "./Layout";
-import { ConfigProvider, theme } from "antd";
+import AuthorizedLayout from "./Layouts/AuthorizedLayout";
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
@@ -17,7 +16,10 @@ createInertiaApp({
             import.meta.glob("./views/**/*.tsx")
         ) as any);
         const page = res.default;
-        page.layout = (page: any) => <Layout children={page} />;
+        const defaultLayout = page.layout;
+        page.layout =
+            defaultLayout ||
+            ((page: any) => <AuthorizedLayout children={page} />);
         return page;
     },
     setup({ el, App, props }) {

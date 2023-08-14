@@ -1,16 +1,16 @@
 import { Button, Table, Tag, Typography } from "antd";
 import React from "react";
 import Section from "../Section";
-import ProductData from "../../interfaces/ProductData";
+import ProductData from "../../Interfaces/ProductData";
 import { CheckOutlined, CopyOutlined } from "@ant-design/icons";
-import SellInvServices from "../../services/invoices/SellInvServices";
-import BuyInvServices from "../../services/invoices/BuyInvServices";
+import SellInvServices from "../../Services/Invoices/SellInvServices";
+import ReturnSellInvServices from "../../Services/Invoices/ReturnSellInvServices";
 const { Text, Link } = Typography;
 type Props = {
     productData?: ProductData;
 };
 
-export default function BuyInvoices({ productData }: Props) {
+export default function ReturnBuyInvoices({ productData }: Props) {
     const columns = [
         {
             title: "رقم الفاتورة",
@@ -58,21 +58,20 @@ export default function BuyInvoices({ productData }: Props) {
             dataIndex: "invoice_id",
             key: "invoice",
             render: (invoice_id: number) => (
-                <Link href={BuyInvServices.BASE_ROUTE + `/${invoice_id}`}>
+                <Link href={ReturnSellInvServices.BASE_ROUTE + `/${invoice_id}`}>
                     <Button>عرض الفاتورة</Button>
                 </Link>
             ),
         },
     ];
-    const data = productData?.buyingInvoicesItems.map((item) => ({
+    const data = productData?.returnBuyingInvoicesItems.map((item) => ({
         key: item.id,
-        invoice_id: item.buying_invoice_id,
+        invoice_id: item.return_buying_invoice_id,
         quantity: item.quantity,
-        price: productData.boxes.find((box) => box.id == item.box_id)
-            ?.buying_price,
+        price: item.return_price,
     }));
     return (
-        <Section className="w-1/2" title="فواتير الشراء">
+        <Section className="w-1/2" title="فواتير مرتجع الشراء">
             <Table columns={columns} dataSource={data} />
         </Section>
     );

@@ -1,9 +1,9 @@
 import React from "react";
-import DisplayInvoiceCreation from "../../../components/DisplayInvoiceCreation";
-import DeleteButton from "../../../components/DeleteButton";
+import DisplayInvoiceCreation from "../../../Components/DisplayInvoiceCreation";
+import DeleteButton from "../../../Components/DeleteButton";
 import EditableColumns from "../../../types/EditableColumns";
-import SellInvServices from "../../../services/invoices/SellInvServices";
-import CreateSellingInvoiceManager from "../../../management/invoices/CreateSellingInvoiceManager";
+import SellInvServices from "../../../Services/Invoices/SellInvServices";
+import CreateSellingInvoiceManager from "../../../Management/invoices/CreateSellingInvoiceManager";
 
 export default function Create() {
     const defaultColumns: EditableColumns = [

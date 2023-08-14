@@ -1,4 +1,4 @@
-import InvoiceHandler from "../interfaces/InvoiceHandler";
+import InvoiceHandler from "../Interfaces/InvoiceHandler";
 import ColumnTypes from "./ColumnTypes";
 
 type EditableColumns = (ColumnTypes[number] & {

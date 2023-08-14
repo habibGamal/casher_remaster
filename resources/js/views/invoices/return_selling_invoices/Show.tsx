@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Descriptions, Row, Table } from "antd";
-import PageTitle from "../../../components/PageTitle";
+import PageTitle from "../../../Components/PageTitle";
 
 interface ReturnSellingInvoice {
     id: number;

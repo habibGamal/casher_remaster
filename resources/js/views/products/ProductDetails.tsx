@@ -1,20 +1,20 @@
 import { Empty, Input, Row, Select } from "antd";
 import React from "react";
-import PageTitle from "../../components/PageTitle";
-import useSearch from "../../hooks/useSearch";
+import PageTitle from "../../Components/PageTitle";
+import useSearch from "../../Hooks/useSearch";
 import { Inertia, PageProps } from "@inertiajs/inertia";
-import { hasErr } from "../../helpers/errorHandlers";
+import { hasErr } from "../../Helpers/errorHandlers";
 import { Area } from "@ant-design/charts";
-import ProductInfo from "../../components/product_details/ProductInfo";
-import Section from "../../components/Section";
-import ProductData from "../../interfaces/ProductData";
-import QuantitiesInStocks from "../../components/product_details/QuantitiesInStocks";
+import ProductInfo from "../../Components/ProductDetails/ProductInfo";
+import Section from "../../Components/Section";
+import ProductData from "../../Interfaces/ProductData";
+import QuantitiesInStocks from "../../Components/ProductDetails/QuantitiesInStocks";
 import moment from "moment";
-import SellInvoices from "../../components/product_details/SellInvoices";
-import ReturnSellInvoices from "../../components/product_details/ReturnSellInvoices";
+import SellInvoices from "../../Components/ProductDetails/SellInvoices";
+import ReturnSellInvoices from "../../Components/ProductDetails/ReturnSellInvoices";
 import { usePage } from "@inertiajs/inertia-react";
-import BuyInvoices from "../../components/product_details/BuyInvoices";
-import ReturnBuyInvoices from "../../components/product_details/ReturnBuyInvoices";
+import BuyInvoices from "../../Components/ProductDetails/BuyInvoices";
+import ReturnBuyInvoices from "../../Components/ProductDetails/ReturnBuyInvoices";
 
 export default function ProductDetails() {
     const search = useSearch();

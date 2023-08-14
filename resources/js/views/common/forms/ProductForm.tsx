@@ -1,12 +1,11 @@
 import { Checkbox, Radio, Select } from "antd";
 import { Input, InputNumber } from "antd";
 import React, { useState } from "react";
-import ProductServices from "../../../services/products/ProductServices";
-import SelectSearch, { SetOptions } from "../../../components/SelectSearch";
-import FormComponent from "../../../components/FormComponent";
-import getFieldsNames from "../../../helpers/getFieldsNames";
-import SelectSearchUtils from "../../../services/SelectSearchUtils";
-import FormProps from "../../../interfaces/FormProps";
+import ProductServices from "../../../Services/Products/ProductServices";
+import SelectSearch from "../../../Components/SelectSearch";
+import FormComponent from "../../../Components/FormComponent";
+import SelectSearchUtils from "../../../Services/SelectSearchUtils";
+import FormProps from "../../../Interfaces/FormProps";
 
 const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
 

@@ -1,8 +1,8 @@
 import React from "react";
 import EditableColumns from "../../../types/EditableColumns";
-import ReturnBuyInvServices from "../../../services/invoices/ReturnBuyInvServices";
-import DisplayReturnInvoiceCreation from "../../../components/DisplayReturnInvoiceCreation";
-import CreateReturnBuyingInvoiceManager from "../../../management/invoices/CreateReturnBuyingInvoiceManager";
+import ReturnBuyInvServices from "../../../Services/Invoices/ReturnBuyInvServices";
+import DisplayReturnInvoiceCreation from "../../../Components/DisplayReturnInvoiceCreation";
+import CreateReturnBuyingInvoiceManager from "../../../Management/invoices/CreateReturnBuyingInvoiceManager";
 
 export default function CreateReturnBuyingInvoice() {
     const defaultColumns: EditableColumns = [

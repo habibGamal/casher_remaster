@@ -8,7 +8,7 @@ export const FORM_LAYOUT_1 = {
             span: 24,
         },
         xl: {
-            span: 20,
+            span: 24,
         },
     },
     wrapperCol: {
@@ -19,7 +19,7 @@ export const FORM_LAYOUT_1 = {
             span: 24,
         },
         xl: {
-            span: 20,
+            span: 24,
         },
     },
 };

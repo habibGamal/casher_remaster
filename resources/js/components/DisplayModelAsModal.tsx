@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
-import { ModelDisplayBase } from "./bases/ModelDisplayBase";
+import { ModelDisplayBase } from "./Bases/ModelDisplayBase";
 import { Col, Row } from "antd";
-import ModelConfig from "../interfaces/ModelConfig";
+import ModelConfig from "../Interfaces/ModelConfig";
 
 export default function DisplayModelAsModal({config}:{config:ModelConfig}) {
     // why using memo here ?

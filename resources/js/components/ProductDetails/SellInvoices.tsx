@@ -1,15 +1,15 @@
 import { Button, Table, Tag, Typography } from "antd";
 import React from "react";
 import Section from "../Section";
-import ProductData from "../../interfaces/ProductData";
+import ProductData from "../../Interfaces/ProductData";
 import { CheckOutlined, CopyOutlined } from "@ant-design/icons";
-import ReturnSellInvServices from "../../services/invoices/ReturnSellInvServices";
+import SellInvServices from "../../Services/Invoices/SellInvServices";
 const { Text, Link } = Typography;
 type Props = {
     productData?: ProductData;
 };
 
-export default function ReturnSellInvoices({ productData }: Props) {
+export default function SellInvoices({ productData }: Props) {
     const columns = [
         {
             title: "رقم الفاتورة",
@@ -43,11 +43,11 @@ export default function ReturnSellInvoices({ productData }: Props) {
             ),
         },
         {
-            title: "سعر المرتجع",
+            title: "سعر البيع",
             dataIndex: "price",
             key: "price",
             render: (price: number) => (
-                <Tag className="text-lg" color="red">
+                <Tag className="text-lg" color="green">
                     {price}
                 </Tag>
             ),
@@ -57,20 +57,20 @@ export default function ReturnSellInvoices({ productData }: Props) {
             dataIndex: "invoice_id",
             key: "invoice",
             render: (invoice_id: number) => (
-                <Link href={ReturnSellInvServices.BASE_ROUTE + `/${invoice_id}`}>
+                <Link href={SellInvServices.BASE_ROUTE + `/${invoice_id}`}>
                     <Button>عرض الفاتورة</Button>
                 </Link>
             ),
         },
     ];
-    const data = productData?.returnSellingInvoicesItems.map((item) => ({
+    const data = productData?.sellingInvoicesItems.map((item) => ({
         key: item.id,
-        invoice_id: item.return_selling_invoice_id,
+        invoice_id: item.selling_invoice_id,
         quantity: item.quantity,
-        price: item.return_price,
+        price: item.selling_price,
     }));
     return (
-        <Section className="w-1/2" title="فواتير مرتجع البيع">
+        <Section className="w-1/2" title="فواتير البيع">
             <Table columns={columns} dataSource={data} />
         </Section>
     );

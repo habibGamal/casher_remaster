@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TablePaginationConfig } from "antd";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
-import { TableParams } from "../interfaces/TableParams";
+import { TableParams } from "../Interfaces/TableParams";
 
 const useTablePagination = <T>(current = 1, pageSize = 10) => {
     const [tableParams, setTableParams] = useState<TableParams>({

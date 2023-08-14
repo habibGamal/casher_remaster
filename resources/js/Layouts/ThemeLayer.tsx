@@ -4,12 +4,11 @@ import React, {
     useLayoutEffect,
     useState,
 } from "react";
-import { Col, ConfigProvider, Row, message, theme } from "antd";
-import Navbar from "./components/Navbar";
+import {  ConfigProvider,  message, theme } from "antd";
 import { usePage } from "@inertiajs/inertia-react";
-import Flash from "./interfaces/Flash";
-import moment, { locale } from "moment";
-import { configMomentLocaleAr } from "./config/dates";
+import Flash from "../Interfaces/Flash";
+import moment from "moment";
+import { configMomentLocaleAr } from "../Config/dates";
 
 type Theme = "dark" | "light";
 export const themeToggler = createContext<{
@@ -17,7 +16,7 @@ export const themeToggler = createContext<{
     toggleTheme: (currentTheme: Theme) => void;
 } | null>(null);
 
-function Layout(props: { children: JSX.Element }) {
+function ThemeLayer(props: { children: JSX.Element }) {
     const { flash } = usePage().props;
     const [currentTheme, setCurrentTheme] = useState<Theme>("light");
     // check if flash has error or success message display it
@@ -80,15 +79,10 @@ function Layout(props: { children: JSX.Element }) {
                     },
                 }}
             >
-                <Row wrap={false}>
-                    <Col>
-                        <Navbar />
-                    </Col>
-                    <Col flex="auto">{props.children}</Col>
-                </Row>
+                {props.children}
             </ConfigProvider>
         </themeToggler.Provider>
     );
 }
 
-export default Layout;
+export default ThemeLayer;

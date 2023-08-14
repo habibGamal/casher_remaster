@@ -4,18 +4,18 @@ import { Badge, Button, MenuProps } from "antd";
 import { Menu } from "antd";
 import IconSax from "./IconSax";
 import logo from "../../assets/images/logo.png";
-import ProductServices from "../services/products/ProductServices";
+import ProductServices from "../Services/Products/ProductServices";
 import { Inertia } from "@inertiajs/inertia";
-import ProductGroupServices from "../services/products/ProductGroupServices";
-import StockServices from "../services/stocks/StockServices";
-import OpeningStockServices from "../services/products/OpeningStockServices";
-import BuyInvServices from "../services/invoices/BuyInvServices";
-import TrackingStockServices from "../services/stocks/TrackingStocksServices";
-import ReturnBuyInvServices from "../services/invoices/ReturnBuyInvServices";
-import SellInvServices from "../services/invoices/SellInvServices";
-import ReturnSellInvServices from "../services/invoices/ReturnSellInvServices";
+import ProductGroupServices from "../Services/Products/ProductGroupServices";
+import StockServices from "../Services/Stocks/StockServices";
+import OpeningStockServices from "../Services/Products/OpeningStockServices";
+import BuyInvServices from "../Services/Invoices/BuyInvServices";
+import TrackingStockServices from "../Services/Stocks/TrackingStocksServices";
+import ReturnBuyInvServices from "../Services/Invoices/ReturnBuyInvServices";
+import SellInvServices from "../Services/Invoices/SellInvServices";
+import ReturnSellInvServices from "../Services/Invoices/ReturnSellInvServices";
 import { Link } from "@inertiajs/inertia-react";
-import TransferBetweenStocksServices from "../services/stocks/TransferBetweenStocksServices";
+import TransferBetweenStocksServices from "../Services/Stocks/TransferBetweenStocksServices";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -161,7 +161,10 @@ const items: MenuProps["items"] = [
     ),
     getItem("الاعدادات", "settings", <IconSax icon="settings" />),
     getItem(
-        "تسجيل خروج",
+        <Link method="post" href={"/logout"}>
+            تسجيل خروج
+        </Link>,
+
         "logout",
         <IconSax icon="login" className="text-red-400" />
     ),

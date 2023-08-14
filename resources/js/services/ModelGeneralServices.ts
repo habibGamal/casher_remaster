@@ -1,5 +1,5 @@
-import TableGlobalSettings from "../interfaces/TableGlobalSettings";
-import FormGlobalSettings from "../interfaces/FormGlobalSettings";
+import TableGlobalSettings from "../Interfaces/TableGlobalSettings";
+import FormGlobalSettings from "../Interfaces/FormGlobalSettings";
 import { ErrorBag, Errors, Inertia } from "@inertiajs/inertia";
 import { message } from "antd";
 
@@ -100,9 +100,10 @@ export default class ModelGeneralServices<T> {
 
     // create the model using base route and form settings
     // returning loading state and success or error message
-    public create(baseRoute: string) {
+    public create(baseRoute: string, absRoute?: string) {
         if (this.formGlobalSettings === undefined) return;
-        Inertia.post(`${baseRoute}/store`, this.formGlobalSettings.formValues, {
+        const route = absRoute ? absRoute : `${baseRoute}/store`;
+        Inertia.post(route, this.formGlobalSettings.formValues, {
             ...this.formGlobalSettings.stateLoading,
             onSuccess: () => {
                 message.success("تمت الاضافة بنجاح");

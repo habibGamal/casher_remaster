@@ -4,18 +4,18 @@ import CreateInvoiceManager, {
     InvoiceOperationPropsStates,
     Searching,
     Submiting,
-} from "../invoice_manager/CreateInvoiceManager";
+} from "../InvoiceManager/CreateInvoiceManager";
 import { message } from "antd";
 import {
     displayValidationErrors,
     flashHasError,
     hasErr,
-} from "../../helpers/errorHandlers";
-import SellInvServices from "../../services/invoices/SellInvServices";
+} from "../../Helpers/errorHandlers";
+import SellInvServices from "../../Services/Invoices/SellInvServices";
 import SellingInvoiceOperations, {
     InvoiceItem,
-} from "../invoice_manager/SellingInvoiceOperations";
-import NoReturnOperations from "../invoice_manager/NoReturnOperations";
+} from "../InvoiceManager/SellingInvoiceOperations";
+import NoReturnOperations from "../InvoiceManager/NoReturnOperations";
 
 interface Product {
     id: number;

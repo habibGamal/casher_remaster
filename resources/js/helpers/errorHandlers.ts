@@ -1,6 +1,6 @@
 import { message } from "antd";
 import { Page, PageProps } from "@inertiajs/inertia";
-import Flash from "../interfaces/Flash";
+import Flash from "../Interfaces/Flash";
 
 export const hasErr = (value: any) => {
     if (typeof value !== "string") return false;

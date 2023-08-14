@@ -1,8 +1,8 @@
 import { Col, Input, Select, Row, Table } from "antd";
 import React, { useState } from "react";
-import PageTitle from "../../components/PageTitle";
-import { ModelColumns } from "../../interfaces/ModelConfig";
-import useSearch from "../../hooks/useSearch";
+import PageTitle from "../../Components/PageTitle";
+import { ModelColumns } from "../../Interfaces/ModelConfig";
+import useSearch from "../../Hooks/useSearch";
 import { Inertia } from "@inertiajs/inertia";
 
 interface StockItem {

@@ -1,13 +1,13 @@
 import { Checkbox, DatePicker, Radio, Select, Space, message } from "antd";
 import { Button, Col, Form, Input, InputNumber, Row } from "antd";
 import React, { useState } from "react";
-import useFormError from "../../../hooks/useFormError";
-import SelectSearch, { SetOptions } from "../../../components/SelectSearch";
-import FormComponent from "../../../components/FormComponent";
-import OpeningStockServices from "../../../services/products/OpeningStockServices";
-import getFieldsNames from "../../../helpers/getFieldsNames";
-import FormProps from "../../../interfaces/FormProps";
-import SelectSearchUtils from "../../../services/SelectSearchUtils";
+import useFormError from "../../../Hooks/useFormError";
+import SelectSearch, { SetOptions } from "../../../Components/SelectSearch";
+import FormComponent from "../../../Components/FormComponent";
+import OpeningStockServices from "../../../Services/Products/OpeningStockServices";
+import getFieldsNames from "../../../Helpers/getFieldsNames";
+import FormProps from "../../../Interfaces/FormProps";
+import SelectSearchUtils from "../../../Services/SelectSearchUtils";
 
 const OpeningStockForm = ({ modelToEdit, closeModal }: FormProps) => {
 

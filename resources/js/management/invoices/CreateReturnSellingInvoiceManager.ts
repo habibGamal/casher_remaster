@@ -6,12 +6,12 @@ import CreateInvoiceManager, {
     Submiting,
     ReturnInvoiceOperations,
     ReturnInvoiceOperationPropsStates,
-} from "../invoice_manager/CreateInvoiceManager";
+} from "../InvoiceManager/CreateInvoiceManager";
 import { message } from "antd";
-import {displayValidationErrors, flashHasError, hasErr} from "../../helpers/errorHandlers";
-import ReturnSellInvServices from "../../services/invoices/ReturnSellInvServices";
-import ReturnSellingInvoiceOperations, { InvoiceItem } from "../invoice_manager/ReturnSellingInvoiceOperations";
-import NoInvoiceOperations from "../invoice_manager/NoInvoiceOperations";
+import {displayValidationErrors, flashHasError, hasErr} from "../../Helpers/errorHandlers";
+import ReturnSellInvServices from "../../Services/Invoices/ReturnSellInvServices";
+import ReturnSellingInvoiceOperations, { InvoiceItem } from "../InvoiceManager/ReturnSellingInvoiceOperations";
+import NoInvoiceOperations from "../InvoiceManager/NoInvoiceOperations";
 
 interface SellingInvoice {
     id: number;

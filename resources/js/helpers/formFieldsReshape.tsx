@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Form } from "antd";
-import { FORM_COLUMNS_LAYOUT } from "../config/layouts";
+import { FORM_COLUMNS_LAYOUT } from "../Config/layouts";
 
 export default function formFieldsReshape(items: any[]) {
     const reshapedItems: any[][] = [];

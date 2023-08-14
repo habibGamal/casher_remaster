@@ -12,13 +12,13 @@ import React, { useEffect, useRef, useState } from "react";
 import PageTitle from "./PageTitle";
 import EditableCell from "./EditableCell";
 import EditableRow from "./EditableRow";
-import useSearch from "../hooks/useSearch";
-import mapEditableColumns from "../helpers/mapEditableColumns";
+import useSearch from "../Hooks/useSearch";
+import mapEditableColumns from "../Helpers/mapEditableColumns";
 import EditableColumns from "../types/EditableColumns";
 import ColumnTypes from "../types/ColumnTypes";
 import { usePage } from "@inertiajs/inertia-react";
-import CreateReturnSellingInvoiceManager from "../management/invoices/CreateReturnSellingInvoiceManager";
-import CreateReturnBuyingInvoiceManager from "../management/invoices/CreateReturnBuyingInvoiceManager";
+import CreateReturnSellingInvoiceManager from "../Management/invoices/CreateReturnSellingInvoiceManager";
+import CreateReturnBuyingInvoiceManager from "../Management/invoices/CreateReturnBuyingInvoiceManager";
 
 interface Item {
     id: number;

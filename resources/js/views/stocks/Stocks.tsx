@@ -1,17 +1,17 @@
 import { Col, Modal, Row, Space, message } from "antd";
 import React, { useState } from "react";
-import PageTitle from "../../components/PageTitle";
-import TableController from "../../components/TableController";
-import useTableSearch from "../../hooks/useTableSearch";
-import useModal from "../../hooks/useModal";
+import PageTitle from "../../Components/PageTitle";
+import TableController from "../../Components/TableController";
+import useTableSearch from "../../Hooks/useTableSearch";
+import useModal from "../../Hooks/useModal";
 import StockForm from "../common/forms/StockForm";
-import DisplayModel from "../../components/DisplayModel";
-import ModelContext from "../../interfaces/ModelContext";
-import EditButton from "../../components/EditButton";
-import DeleteButton from "../../components/DeleteButton";
-import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
-import StockServices from "../../services/stocks/StockServices";
-import ModelGeneralServices from "../../services/ModelGeneralServices";
+import DisplayModel from "../../Components/DisplayModel";
+import ModelContext from "../../Interfaces/ModelContext";
+import EditButton from "../../Components/EditButton";
+import DeleteButton from "../../Components/DeleteButton";
+import ModelConfig, { ModelColumns } from "../../Interfaces/ModelConfig";
+import StockServices from "../../Services/Stocks/StockServices";
+import ModelGeneralServices from "../../Services/ModelGeneralServices";
 
 type ModelType = any;
 const modelColumns: ModelColumns[] = [

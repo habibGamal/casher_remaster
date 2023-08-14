@@ -2,11 +2,11 @@ import React from "react";
 import { Button, Space } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import ProductGroupForm from "../common/forms/ProductGroupForm";
-import ProductGroupServices from "../../services/products/ProductGroupServices";
-import ModelContext from "../../interfaces/ModelContext";
-import ModelConfig, { ModelColumns } from "../../interfaces/ModelConfig";
-import ModelGeneralServices from "../../services/ModelGeneralServices";
-import DisplayModel from "../../components/DisplayModel";
+import ProductGroupServices from "../../Services/Products/ProductGroupServices";
+import ModelContext from "../../Interfaces/ModelContext";
+import ModelConfig, { ModelColumns } from "../../Interfaces/ModelConfig";
+import ModelGeneralServices from "../../Services/ModelGeneralServices";
+import DisplayModel from "../../Components/DisplayModel";
 import ProductsInGroup from "./modals/ProductsInGroup";
 import { Inertia } from "@inertiajs/inertia";
 

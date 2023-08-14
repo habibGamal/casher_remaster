@@ -10,19 +10,19 @@ import {
     Transfer,
     message,
 } from "antd";
-import PageTitle from "../../components/PageTitle";
-import SelectSearch from "../../components/SelectSearch";
-import SelectSearchUtils from "../../services/SelectSearchUtils";
-import EditableRow from "../../components/EditableRow";
-import EditableCell from "../../components/EditableCell";
+import PageTitle from "../../Components/PageTitle";
+import SelectSearch from "../../Components/SelectSearch";
+import SelectSearchUtils from "../../Services/SelectSearchUtils";
+import EditableRow from "../../Components/EditableRow";
+import EditableCell from "../../Components/EditableCell";
 import EditableColumns from "../../types/EditableColumns";
 import ColumnTypes from "../../types/ColumnTypes";
-import useSearch from "../../hooks/useSearch";
+import useSearch from "../../Hooks/useSearch";
 import { Inertia } from "@inertiajs/inertia";
-import { hasErr } from "../../helpers/errorHandlers";
-import mapEditableColumns from "../../helpers/mapEditableColumns";
-import DeleteButton from "../../components/DeleteButton";
-import { flashHasError } from "../../helpers/errorHandlers";
+import { hasErr } from "../../Helpers/errorHandlers";
+import mapEditableColumns from "../../Helpers/mapEditableColumns";
+import DeleteButton from "../../Components/DeleteButton";
+import { flashHasError } from "../../Helpers/errorHandlers";
 interface Product {
     id: number;
     name: string;

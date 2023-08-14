@@ -1,4 +1,4 @@
-import InvoiceHandler from "../interfaces/InvoiceHandler";
+import InvoiceHandler from "../Interfaces/InvoiceHandler";
 import EditableColumns from "../types/EditableColumns";
 
 export default function mapEditableColumns<T>(

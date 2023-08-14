@@ -1,8 +1,8 @@
 import React from "react";
 import { Input } from "antd";
-import StockServices from "../../../services/stocks/StockServices";
-import FormComponent from "../../../components/FormComponent";
-import FormProps from "../../../interfaces/FormProps";
+import StockServices from "../../../Services/Stocks/StockServices";
+import FormComponent from "../../../Components/FormComponent";
+import FormProps from "../../../Interfaces/FormProps";
 
 const StockForm = ({ modelToEdit, closeModal }: FormProps) => {
     const formItems = [

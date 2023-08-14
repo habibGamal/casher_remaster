@@ -1,29 +1,33 @@
 import { Space } from "antd";
 import { Button, Form, Row } from "antd";
 import React, { useEffect } from "react";
-import ModelGeneralServices from "../services/ModelGeneralServices";
-import { FORM_LAYOUT_1 } from "../config/layouts";
-import formFieldsReshape from "../helpers/formFieldsReshape";
-import useLoading from "../hooks/useLoading";
-import useFormError from "../hooks/useFormError";
-import getFieldsNames from "../helpers/getFieldsNames";
+import ModelGeneralServices from "../Services/ModelGeneralServices";
+import { FORM_LAYOUT_1 } from "../Config/layouts";
+import formFieldsReshape from "../Helpers/formFieldsReshape";
+import useLoading from "../Hooks/useLoading";
+import useFormError from "../Hooks/useFormError";
+import getFieldsNames from "../Helpers/getFieldsNames";
 
 interface FormProps {
     baseRoute: string;
+    absRoute?: string;
     formName: string;
     formItems: any[];
     initValues: any;
     modelToEdit?: any;
     closeModal: () => void;
+    submitBtnText?: string;
 }
 
 const FormComponent = ({
     baseRoute,
+    absRoute,
     formName,
     formItems,
     initValues,
     modelToEdit,
     closeModal,
+    submitBtnText = "حفظ",
 }: FormProps) => {
     const [form] = Form.useForm();
 
@@ -41,7 +45,7 @@ const FormComponent = ({
             setErrors,
         });
         if (modelToEdit) services.update(baseRoute);
-        else services.create(baseRoute);
+        else services.create(baseRoute,absRoute);
     };
 
     useEffect(() => {
@@ -80,7 +84,7 @@ const FormComponent = ({
                         htmlType="submit"
                         loading={submitState.loading}
                     >
-                        حفظ
+                        {submitBtnText}
                     </Button>
                     <Button htmlType="button" onClick={() => {}}>
                         اعادة ملئ المدخلات

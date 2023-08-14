@@ -1,7 +1,7 @@
 import React from "react";
 import EditableColumns from "../../types/EditableColumns";
-import DisplayInvoiceCreation from "../../components/DisplayInvoiceCreation";
-import CreateOpeningStockManager from "../../management/OpeningStockManager";
+import DisplayInvoiceCreation from "../../Components/DisplayInvoiceCreation";
+import CreateOpeningStockManager from "../../Management/OpeningStockManager";
 
 
 export default function CreateBuyingInvoice() {

@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
-import { ModelDisplayBase } from "./bases/ModelDisplayBase";
+import { ModelDisplayBase } from "./Bases/ModelDisplayBase";
 import { Col, Row } from "antd";
 import PageTitle from "./PageTitle";
-import ModelConfig from "../interfaces/ModelConfig";
-import ModelForm from "../interfaces/ModelForm";
+import ModelConfig from "../Interfaces/ModelConfig";
+import ModelForm from "../Interfaces/ModelForm";
 
 export default function DisplayModel({
     config,

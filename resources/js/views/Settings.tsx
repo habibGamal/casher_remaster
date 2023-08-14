@@ -1,6 +1,6 @@
 import { Button, Col, Row, Switch, Typography } from "antd";
 import React, { useContext, useState } from "react";
-import PageTitle from "../components/PageTitle";
+import PageTitle from "../Components/PageTitle";
 import { themeToggler } from "../Layout";
 import { Inertia } from "@inertiajs/inertia";
 
