@@ -4,6 +4,7 @@ import Flash from "../Interfaces/Flash";
 
 export const hasErr = (value: any) => {
     if (typeof value !== "string") return false;
+    console.log(value);
     if (value.includes("ERR:")) {
         message.error(value.replace("ERR:", ""));
         return true;

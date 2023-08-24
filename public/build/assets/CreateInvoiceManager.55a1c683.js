@@ -1,0 +1,1 @@
+import{j as e}from"./app.3aad4e87.js";import{D as r}from"./index.d9a9a89c.js";class n{displayInvoiceNumber(u){return e(r.Item,{label:"\u0631\u0642\u0645 \u0627\u0644\u0641\u0627\u062A\u0648\u0631\u0629",children:u})}actionBtnTitle(){return"\u0627\u0646\u0634\u0627\u0621 \u0627\u0644\u0641\u0627\u062A\u0648\u0631\u0629"}}export{n as C};

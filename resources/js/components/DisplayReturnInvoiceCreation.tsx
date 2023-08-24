@@ -47,7 +47,7 @@ export default function DisplayReturnInvoiceCreation({
         placeholder: "رقم الفاتورة",
         options: [
             {
-                label: "رقم فاتورة الشراء",
+                label: "رقم الفاتورة",
                 value: "invoice_id",
             },
         ],

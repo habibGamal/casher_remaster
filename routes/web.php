@@ -8,12 +8,18 @@ use App\Http\Controllers\Invoices\ReturnBuyingInvoiceController;
 use App\Http\Controllers\Invoices\SellingInvoiceController;
 use App\Http\Controllers\Invoices\ReturnSellingInvoiceController;
 use App\Http\Controllers\ProductDetailsController;
+use App\Http\Controllers\SalesReportController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\TrackingStockController;
 use App\Http\Controllers\TransferBetweenStocks;
+use App\Models\AppConfigs;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,13 +31,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // public routing
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', function () {
         return inertia()->render('Home');
     })->name('home');
+    // issuing scanner code
+    Route::get('/get-scanner-code', function () {
+        $code = Hash::make(Str::random(10));
+        AppConfigs::updateOrCreate(
+            ['key' => AppConfigs::SCANNER_CODE],
+            ['value' => $code]
+        );
+        return response()->json([
+            'code' => $code,
+            'ip' => '192.168.1.5',
+        ]);
+    });
     // product
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/remove-product-from-group/{product}', [ProductController::class, 'remove_product_from_group']);
@@ -79,16 +97,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/transfer-between-stocks', [TransferBetweenStocks::class, 'store']);
     // product details
     Route::get('/product-details', [ProductDetailsController::class, 'show']);
+    // reports
+    Route::get('/reports/sales', [SalesReportController::class, 'index']);
     // settings
-    Route::get('/settings', function () {
-        return inertia()->render('Settings', [
-            'remigrate' => inertia()->lazy(fn () => Artisan::call('migrate:fresh')),
-        ]);
-    })->name('settings.index');
-    Route::post('/settings/drop-database', function () {
-        Artisan::call('migrate:fresh');
-        return redirect()->back();
-    })->name('settings.drop-database');
+    Route::get('/settings',[SettingsController::class,'index'])->name('settings.index');
+    Route::get('/settings/{command}',[SettingsController::class,'command'])->name('settings.command');
+    Route::post('/settings/update-dns',[SettingsController::class,'updateDNS'])->name('settings.update-dns');
     // unimplemented
     Route::get('/display-invoices', function () {
         return inertia()->render('invoices/DisplayInvoices');

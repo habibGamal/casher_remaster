@@ -19,6 +19,7 @@ import ReturnBuyInvoices from "../../Components/ProductDetails/ReturnBuyInvoices
 export default function ProductDetails() {
     const search = useSearch();
     const { productData: initProductData } = usePage().props as PageProps;
+    console.log(initProductData)
     const [productData, setProductData] = React.useState<ProductData>(
         initProductData as ProductData
     );

@@ -146,7 +146,16 @@ const items: MenuProps["items"] = [
         "التقارير",
         "repoting",
         <IconSax icon="reports" dir="custom" className="w-[24px]" />,
-        [getItem("Item 1", "g1"), getItem("Item 2", "g2")]
+        [
+            getItem(
+                <Link href={"/reports/sales"}>
+                    تقارير المبيعات
+                </Link>,
+
+                "sales_reports"
+            ),
+            getItem("Item 2", "g2"),
+        ]
     ),
     getItem("الادارة", "managment ", <IconSax icon="key-square" />, [
         getItem("Item 1", "g1"),

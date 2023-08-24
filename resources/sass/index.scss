@@ -93,3 +93,16 @@ object {
 .isolate-2 {
     @apply p-6 bg-white dark:bg-dark-700 border-2 border-gray-200 dark:border-none  rounded-xl;
 }
+
+
+.font-color {
+    color: #000;
+}
+
+.dark .font-color {
+    color: #fff;
+}
+
+.ltr * {
+    direction: ltr;
+}
