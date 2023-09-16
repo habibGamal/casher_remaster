@@ -1,13 +1,32 @@
 type Query {
     testConnection: String!
-    greet(name: String!): String!
     me: User! @guard @auth
+    autocomplete(model: String!,modelName: String!): [AutocompleteResult!]! @guard
+}
+
+type Mutation {
+    login(
+        email: String! @rules(apply: ["email", "required"]),
+        password: String! @rules(apply: ["required"]),
+        deviceInfo: String @rules(apply: ["required"])
+    ): String!
+    logout: Boolean! @guard
+}
+
+type AutocompleteResult {
+    id: ID!
+    name: String!
 }
 
 type User {
     id: ID!
     name: String!
+    email: String!
 }
+
+# mutation Login($email: String!, $password: String!, $deviceInfo: String!) {
+#   login(email: $email, password: $password, deviceInfo: $deviceInfo)
+# }
 
 # "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 # scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
