@@ -12,7 +12,7 @@ import QuantitiesInStocks from "../../Components/ProductDetails/QuantitiesInStoc
 import moment from "moment";
 import SellInvoices from "../../Components/ProductDetails/SellInvoices";
 import ReturnSellInvoices from "../../Components/ProductDetails/ReturnSellInvoices";
-import { usePage } from "@inertiajs/inertia-react";
+import { usePage } from '@inertiajs/react'
 import BuyInvoices from "../../Components/ProductDetails/BuyInvoices";
 import ReturnBuyInvoices from "../../Components/ProductDetails/ReturnBuyInvoices";
 
@@ -24,7 +24,7 @@ export default function ProductDetails() {
         initProductData as ProductData
     );
     const onSearch = () => {
-        Inertia.reload({
+        router.reload({
             data: {
                 ...search.data,
             },

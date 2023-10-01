@@ -50,6 +50,10 @@ Route::group(['middleware' => ['auth']], function () {
             'ip' => '192.168.1.5',
         ]);
     });
+    // test
+    Route::get('/test',function(){
+        return inertia()->render('Test');
+    });
     // product
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/remove-product-from-group/{product}', [ProductController::class, 'remove_product_from_group']);

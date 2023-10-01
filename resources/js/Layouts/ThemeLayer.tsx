@@ -5,7 +5,7 @@ import React, {
     useState,
 } from "react";
 import {  ConfigProvider,  message, theme } from "antd";
-import { usePage } from "@inertiajs/inertia-react";
+import { usePage } from '@inertiajs/react'
 import Flash from "../Interfaces/Flash";
 import moment from "moment";
 import { configMomentLocaleAr } from "../Config/dates";

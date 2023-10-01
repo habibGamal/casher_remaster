@@ -7,8 +7,8 @@ import ModelContext from "../../Interfaces/ModelContext";
 import ModelConfig, { ModelColumns } from "../../Interfaces/ModelConfig";
 import ModelGeneralServices from "../../Services/ModelGeneralServices";
 import DisplayModel from "../../Components/DisplayModel";
-import ProductsInGroup from "./modals/ProductsInGroup";
-import { Inertia } from "@inertiajs/inertia";
+import ProductsInGroup from "./Modals/ProductsInGroup";
+import { router } from '@inertiajs/react';
 
 interface ModelType {
     id: number;
@@ -44,7 +44,7 @@ const modelColumns: ModelColumns[] = [
                             ctx.freeModal?.showModal();
                             ctx.setFreeModalSettings!({
                                 children: <ProductsInGroup />,
-                                onClose: () => Inertia.get(currentUrl),
+                                onClose: () => router.get(currentUrl),
                                 title: "اصناف المجموعة",
                             });
                         }}

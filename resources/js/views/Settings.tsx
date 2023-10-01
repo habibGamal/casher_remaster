@@ -10,7 +10,7 @@ import {
 } from "antd";
 import React, { useContext, useState } from "react";
 import PageTitle from "../Components/PageTitle";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/react';
 import { themeToggler } from "../Layouts/ThemeLayer";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import useModal from "../Hooks/useModal";
@@ -29,7 +29,7 @@ const SettingAction = ({
     const [loading, setLoading] = useState(false);
     const action = () => {
         setLoading(true);
-        Inertia.get(
+        router.get(
             "/settings/" + actionName,
             {},
             {
@@ -64,7 +64,7 @@ const SettingInput = ({
     const [loading, setLoading] = useState(false);
     const update = () => {
         setLoading(true);
-        Inertia.post(
+        router.post(
             "/settings/" + route,
             {
                 value,

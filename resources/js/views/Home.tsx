@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/react';
 import { Skeleton, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 export default function Home() {
     useEffect(() => {
-        Inertia.get("/products");
+        router.get("/products");
     }, []);
     return (
         <div className="w-full min-h-screen grid place-items-center">

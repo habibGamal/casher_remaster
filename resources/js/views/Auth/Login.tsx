@@ -3,7 +3,7 @@ import { Input } from "antd";
 import React from "react";
 import FormComponent from "../../Components/FormComponent";
 import GuestLayout from "../../Layouts/GuestLayout";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/react';
 
 const Login = () => {
     const formItems = [
@@ -35,7 +35,7 @@ const Login = () => {
             <Button
                 className="mx-auto block"
                 onClick={() => {
-                    Inertia.get("/forgot-password");
+                    router.get("/forgot-password");
                 }}
             >
                 نسيت كلمة المرور؟
