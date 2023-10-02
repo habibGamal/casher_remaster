@@ -9,7 +9,7 @@ class SalesReportController extends Controller
 {
     function index(Request $request)
     {
-        return inertia()->render('reports/SalesReport', [
+        return inertia()->render('Reports/SalesReport', [
             // 'data' => inertia()->lazy(function () use ($request) {
             //     // if($request->preiod == null) return partialError('Please select a period');
             //     return (new BuildSalesReportProcess('2023-8-1 - 2023-8-24'))->process();

@@ -14,7 +14,7 @@ class ReturnSellingInvoiceController extends Controller
 
     public function index(Request $request)
     {
-        return inertia()->render('invoices/DisplayInvoices', [
+        return inertia()->render('Invoices/DisplayInvoices', [
             'invoices' => TableSettingsServices::pagination(ReturnSellingInvoice::select('*'), $request, 'invoices'),
             'tab' => 'return_selling_invoices'
         ]);
@@ -22,7 +22,7 @@ class ReturnSellingInvoiceController extends Controller
 
     public function create(Request $request)
     {
-        return inertia()->render('invoices/return_selling_invoices/Create', [
+        return inertia()->render('Invoices/ReturnSellingInvoices/Create', [
             'invoice_number' => ReturnSellingInvoice::max('id') + 1,
             'selling_invoice' => inertia()->lazy(function () use ($request) {
                 return SellingInvoice::where('id', '=', $request->value)
@@ -59,7 +59,7 @@ class ReturnSellingInvoiceController extends Controller
     {
         // dd($invoice->load(['items.product:id,name,barcode'])->toArray());
         // exit;
-        return inertia()->render('invoices/return_selling_invoices/Show', [
+        return inertia()->render('Invoices/ReturnSellingInvoices/Show', [
             'data' => $invoice->load(['items.product:id,name,barcode']),
         ]);
     }

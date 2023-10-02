@@ -14,7 +14,7 @@ class ProductDetailsController extends Controller
 {
     public function show(Request $request)
     {
-        return inertia()->render('products/ProductDetails', [
+        return inertia()->render('Products/ProductDetails', [
             'productData' => function () use ($request) {
                 $attribute = $request->attribute;
                 $value = $request->value;

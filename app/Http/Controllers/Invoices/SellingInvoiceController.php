@@ -16,7 +16,7 @@ class SellingInvoiceController extends Controller
 
     function index(Request $request)
     {
-        return inertia()->render('invoices/DisplayInvoices', [
+        return inertia()->render('Invoices/DisplayInvoices', [
             'invoices' =>  TableSettingsServices::pagination(SellingInvoice::select(['*']), $request, 'invoices'),
             'tab' => 'selling_invoices'
         ]);
@@ -25,7 +25,7 @@ class SellingInvoiceController extends Controller
     function create(Request $request)
     {
 
-        return inertia()->render('invoices/selling_invoices/Create', [
+        return inertia()->render('Invoices/SellingInvoices/Create', [
             'invoice_number' => fn () => SellingInvoice::max('id') + 1,
             'stocks' => inertia()->lazy(
                 function () use ($request) {
@@ -92,7 +92,7 @@ class SellingInvoiceController extends Controller
 
     function show(SellingInvoice $invoice)
     {
-        return inertia()->render('invoices/selling_invoices/Show', [
+        return inertia()->render('Invoices/SellingInvoices/Show', [
             'data' => $invoice->load(['sellingInvoiceItems.stockItem.box.product:id,name,barcode']),
         ]);
     }

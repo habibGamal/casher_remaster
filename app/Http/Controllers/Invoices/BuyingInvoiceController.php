@@ -15,7 +15,7 @@ class BuyingInvoiceController extends Controller
 {
     public function index(Request $request)
     {
-        return inertia()->render('invoices/DisplayInvoices', [
+        return inertia()->render('Invoices/DisplayInvoices', [
             'invoices' =>  TableSettingsServices::pagination(BuyingInvoice::select(['*']), $request, 'invoices'),
             'tab' => 'buying_invoices'
         ]);
@@ -23,7 +23,7 @@ class BuyingInvoiceController extends Controller
 
     public function create(Request $request)
     {
-        return inertia()->render('invoices/buying_invoices/Create', [
+        return inertia()->render('Invoices/BuyingInvoices/Create', [
             'stocks' => inertia()->lazy(
                 function () use ($request) {
                     return  Stock::select(['id', 'name'])
@@ -94,7 +94,7 @@ class BuyingInvoiceController extends Controller
 
     public function show(BuyingInvoice $invoice)
     {
-        return inertia()->render('invoices/buying_invoices/Show', [
+        return inertia()->render('Invoices/BuyingInvoices/Show', [
             'data' => $invoice->load(['buyingInvoiceItems.box' => [
                 'product:id,name,barcode',
             ]]),

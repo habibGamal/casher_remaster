@@ -10,7 +10,7 @@ class TrackingStockController extends Controller
 {
     public function index(Request $request)
     {
-        return inertia()->render('stocks/TrackingStocks', [
+        return inertia()->render('Stocks/TrackingStocks', [
             'data' => Inertia::lazy(function () use ($request) {
                 if (!$request->attribute || !$request->value)
                     return [];

@@ -13,7 +13,7 @@ class ReturnBuyingInvoiceController extends Controller
 {
     public function index(Request $request)
     {
-        return inertia()->render('invoices/DisplayInvoices', [
+        return inertia()->render('Invoices/DisplayInvoices', [
             'invoices' => TableSettingsServices::pagination(ReturnBuyingInvoice::select('*'), $request, 'invoices'),
             'tab' => 'return_buying_invoices'
         ]);
@@ -21,7 +21,7 @@ class ReturnBuyingInvoiceController extends Controller
 
     public function create(Request $request)
     {
-        return inertia()->render('invoices/return_buying_invoices/Create', [
+        return inertia()->render('Invoices/ReturnBuyingInvoices/Create', [
             'invoice_number' => ReturnBuyingInvoice::max('id') + 1,
             'buying_invoice' => inertia()->lazy(function () use ($request) {
                 return BuyingInvoice::where('id', '=', $request->value)->with(['buyingInvoiceItems.box.stockItems.stock', 'buyingInvoiceItems.box.product:id,name,barcode'])->first();
@@ -64,7 +64,7 @@ class ReturnBuyingInvoiceController extends Controller
 
     public function show(ReturnBuyingInvoice $invoice)
     {
-        return inertia()->render('invoices/return_buying_invoices/Show', [
+        return inertia()->render('Invoices/ReturnBuyingInvoices/Show', [
             'data' => $invoice->load(['returnBuyingInvoiceItems.product:id,name,barcode']),
         ]);
     }

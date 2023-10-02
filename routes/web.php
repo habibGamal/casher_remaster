@@ -109,6 +109,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/settings/update-dns',[SettingsController::class,'updateDNS'])->name('settings.update-dns');
     // unimplemented
     Route::get('/display-invoices', function () {
-        return inertia()->render('invoices/DisplayInvoices');
+        return inertia()->render('Invoices/DisplayInvoices');
     });
 });

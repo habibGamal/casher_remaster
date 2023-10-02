@@ -12,7 +12,7 @@ class OpeningStockController extends Controller
 {
     public function create(Request $request)
     {
-        return inertia()->render('products/OpeningStocks', [
+        return inertia()->render('Products/OpeningStocks', [
             'stocks' => inertia()->lazy(
                 function () use ($request) {
                     return  Stock::select(['id', 'name'])

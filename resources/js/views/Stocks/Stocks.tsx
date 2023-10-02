@@ -4,7 +4,7 @@ import PageTitle from "../../Components/PageTitle";
 import TableController from "../../Components/TableController";
 import useTableSearch from "../../Hooks/useTableSearch";
 import useModal from "../../Hooks/useModal";
-import StockForm from "../common/forms/StockForm";
+import StockForm from "../Common/forms/StockForm";
 import DisplayModel from "../../Components/DisplayModel";
 import ModelContext from "../../Interfaces/ModelContext";
 import EditButton from "../../Components/EditButton";

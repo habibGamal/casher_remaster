@@ -12,7 +12,7 @@ class TransferBetweenStocks extends Controller
 {
     public function index(Request $request)
     {
-        return inertia()->render('stocks/TransferBetweenStocks', [
+        return inertia()->render('Stocks/TransferBetweenStocks', [
             'stocks' => inertia()->lazy(
                 function () use ($request) {
                     return  Stock::select(['id', 'name'])

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-    private $index = 'stocks/Stocks';
+    private $index = 'Stocks/Stocks';
 
     public function index(Request $request)
     {

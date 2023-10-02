@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ProductGroupController extends Controller
 {
-    private $index = 'products/ProductGroups';
+    private $index = 'Products/ProductGroups';
 
     public function index(Request $request)
     {

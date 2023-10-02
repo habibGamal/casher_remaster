@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
-    private $index = 'products/Products';
+    private $index = 'Products/Products';
 
     public function index(Request $request)
     {
