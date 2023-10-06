@@ -126,7 +126,7 @@ export default function DisplayModel({
     const closeModal = () => {
         // so we can perform action before close from outside
         if (freeModalSettings?.onClose) freeModalSettings.onClose();
-        freeModal!.handleCancel();
+        freeModal!.onCancel();
     };
     const originalData: any[] | undefined = paginatedData?.data;
     const reshapeData = config.reshapeData;
@@ -151,7 +151,7 @@ export default function DisplayModel({
             <Modal
                 title={freeModalSettings?.title}
                 open={freeModal!.open}
-                onOk={freeModal!.handleOk}
+                onOk={freeModal!.onOK}
                 footer={null}
                 confirmLoading={freeModal!.confirmLoading}
                 onCancel={closeModal}
@@ -164,10 +164,10 @@ export default function DisplayModel({
             <Modal
                 title={config.addButton}
                 open={modalForm!.open}
-                onOk={modalForm!.handleOk}
+                onOk={modalForm!.onOK}
                 footer={null}
                 confirmLoading={modalForm!.confirmLoading}
-                onCancel={modalForm!.handleCancel}
+                onCancel={modalForm!.onCancel}
                 destroyOnClose={true}
                 width="90%"
                 closeIcon={<IconSax icon="add" className="rotate-45" />}

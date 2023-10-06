@@ -248,7 +248,7 @@ export default function TransferBetweenStocks() {
                 <Descriptions className="w-full" bordered>
                     <Descriptions.Item label="من المخزن">
                         <SelectSearch
-                            name="from_stock_id"
+                            id="from_stock_id"
                             style={{ width: "12rem" }}
                             onSearch={SelectSearchUtils.getStocks}
                             onChange={(value) => setFromStockId(value)}
@@ -257,7 +257,7 @@ export default function TransferBetweenStocks() {
                     </Descriptions.Item>
                     <Descriptions.Item label="الى المخزن">
                         <SelectSearch
-                            name="to_stock_id"
+                            id="to_stock_id"
                             style={{ width: "12rem" }}
                             onSearch={SelectSearchUtils.getStocks}
                             onChange={(value) => setToStockId(value)}

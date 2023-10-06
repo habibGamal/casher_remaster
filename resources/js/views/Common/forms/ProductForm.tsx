@@ -28,7 +28,7 @@ const ProductForm = ({ modelToEdit, closeModal }: FormProps) => {
             label: "مجموعة الصنف",
             component: (
                 <SelectSearch
-                    name="product_group_id"
+                    id="product_group_id"
                     onSearch={SelectSearchUtils.getProductGroups}
                     placeholder="أختر مجموعة الصنف"
                     defaultValue={

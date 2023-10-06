@@ -125,7 +125,7 @@ export default function Settings({ dns }: { dns: string }) {
                     <Modal
                         title="QR Code Scanner"
                         open={qrLinkToPhone.open}
-                        onOk={qrLinkToPhone.handleOk}
+                        onOk={qrLinkToPhone.onOK}
                         onCancel={qrLinkToPhone.closeModal}
                     >
                         <QRCode

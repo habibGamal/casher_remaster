@@ -1,68 +1,61 @@
-import { Space } from "antd";
+import { FormInstance, Input, Select, Space, Typography } from "antd";
 import { Button, Form, Row } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import ModelGeneralServices from "../Services/ModelGeneralServices";
 import { FORM_LAYOUT_1 } from "../Config/layouts";
 import formFieldsReshape from "../Helpers/formFieldsReshape";
 import useLoading from "../Hooks/useLoading";
 import useFormError from "../Hooks/useFormError";
 import getFieldsNames from "../Helpers/getFieldsNames";
+import { router, usePage } from "@inertiajs/react";
+import fromGenerator, { FormSchema } from "../Helpers/formGenerator";
+import FormErrorMapping from "../Helpers/ErrorMapping";
 
 interface FormProps {
-    baseRoute: string;
-    absRoute?: string;
+    submitRoute: string;
     formName: string;
-    formItems: any[];
     initValues: any;
     modelToEdit?: any;
     closeModal: () => void;
     submitBtnText?: string;
 }
 
-const FormComponent = ({
-    baseRoute,
-    absRoute,
+const FormComponentEnhanced = ({
+    submitRoute,
     formName,
-    formItems,
     initValues,
     modelToEdit,
     closeModal,
     submitBtnText = "حفظ",
 }: FormProps) => {
+    const { form: formSchema } = usePage().props;
+
     const [form] = Form.useForm();
+
+    const formItems = useMemo(
+        () => formFieldsReshape(fromGenerator(formSchema as FormSchema, form)),
+        []
+    );
 
     const submitState = useLoading();
 
-    const { setErrors, errors } = useFormError();
+    const { errors } = usePage().props;
 
     const onFinish = (values: any) => {
-        const services = ModelGeneralServices.setFormGlobalSettings({
-            modelId: modelToEdit?.id,
-            form,
-            formValues: values,
-            stateLoading: submitState.stateLoading,
-            closeFormModal: closeModal,
-            setErrors,
+        console.log(submitRoute)
+        router.post(submitRoute, values, {
+            onStart: () => submitState.stateLoading.onStart(),
+            onFinish: () => submitState.stateLoading.onFinish(),
         });
-        if (modelToEdit) services.update(baseRoute);
-        else services.create(baseRoute, absRoute);
     };
 
     useEffect(() => {
-        if (errors) {
-            const fields = getFieldsNames(formItems);
-            form.setFields(
-                fields.map((field) => ({ name: field, errors: [] }))
-            );
-            form.setFields(
-                Object.keys(errors).map((key) => ({
-                    name: key,
-                    errors: [errors[key]],
-                }))
-            );
-        }
+        const formErrorMapping = new FormErrorMapping(form);
+        formErrorMapping.clearFormErrors();
+        const isErrors = Object.keys(errors).length > 0;
+        if (isErrors) return formErrorMapping.updateErrors(errors);
     }, [errors]);
-    console.log(form);
+
     return (
         <Form
             {...FORM_LAYOUT_1}
@@ -75,18 +68,19 @@ const FormComponent = ({
             scrollToFirstError
         >
             <Row gutter={24} justify="center">
-                {formFieldsReshape(formItems)}
+                {formItems}
             </Row>
-            <Form.Item className="grid place-items-center mt-8">
+            <Form.Item key="buttons" className="grid place-items-center mt-8">
                 <Space>
                     <Button
+                        key="submit"
                         type="primary"
                         htmlType="submit"
                         loading={submitState.loading}
                     >
                         {submitBtnText}
                     </Button>
-                    <Button htmlType="button" onClick={() => {}}>
+                    <Button key="reset" htmlType="button" onClick={() => {}}>
                         اعادة ملئ المدخلات
                     </Button>
                 </Space>
@@ -95,4 +89,4 @@ const FormComponent = ({
     );
 };
 
-export default FormComponent;
+export default FormComponentEnhanced;

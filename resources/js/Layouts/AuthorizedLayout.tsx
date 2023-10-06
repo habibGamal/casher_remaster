@@ -27,7 +27,7 @@ export default function AuthorizedLayout(props: { children: JSX.Element }) {
                 <Modal
                     title="QR Code Scanner"
                     open={qrNewScannerModal.open}
-                    onOk={qrNewScannerModal.handleOk}
+                    onOk={qrNewScannerModal.onOK}
                     onCancel={qrNewScannerModal.closeModal}
                 >
                     <QRCode

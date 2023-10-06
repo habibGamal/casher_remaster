@@ -9,7 +9,7 @@ export type SetOptions = React.Dispatch<
     >
 >;
 interface SelectSearchProps {
-    name?: string;
+    id?: string;
     onChange?: (value: string) => void;
     placeholder?: React.ReactNode;
     onSearch: (value: string, setOptions: SetOptions) => void;
@@ -19,7 +19,7 @@ interface SelectSearchProps {
 }
 
 export default function SelectSearch({
-    name,
+    id,
     onChange,
     onSearch,
     placeholder,
@@ -33,14 +33,17 @@ export default function SelectSearch({
             label: string;
         }[]
     >([]);
+    console.log(options);
     return (
         <Select
-            id={name}
+            id={id}
             showSearch
             placeholder={placeholder}
             optionFilterProp="children"
             onChange={onChange}
-            onSearch={(value) => onSearch(value, setOptions)}
+            onSearch={(value) =>
+                value.length > 1 ? onSearch(value, setOptions) : null
+            }
             filterOption={(input, option) =>
                 (option?.label ?? "")
                     .toLowerCase()

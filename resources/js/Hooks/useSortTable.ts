@@ -1,8 +1,8 @@
 import { SortOrder, SorterResult } from "antd/es/table/interface";
 import { useState } from "react";
 
-const useSortTable = <T>(defaultColumnKey?: string) => {
-    const [sortInfo, setSortedInfo] = useState<SorterResult<T>>({
+const useSortTable = (defaultColumnKey?: string) => {
+    const [sortInfo, setSortedInfo] = useState<SorterResult<any>>({
         order: null,
         columnKey: defaultColumnKey,
     });
@@ -37,7 +37,7 @@ const useSortTable = <T>(defaultColumnKey?: string) => {
         };
     };
 
-    return { getSortProps,resetSortState };
+    return { getSortProps, resetSortState };
 };
 
 export default useSortTable;

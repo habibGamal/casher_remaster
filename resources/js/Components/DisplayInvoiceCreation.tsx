@@ -124,7 +124,7 @@ export default function DisplayInvoiceCreation({
                     </Descriptions.Item>
                     <Descriptions.Item label="المخزن">
                         <SelectSearch
-                            name="stock_id"
+                            id="stock_id"
                             style={{ width: "12rem" }}
                             onSearch={SelectSearchUtils.getStocks}
                             onChange={(value) => setStockId(value)}

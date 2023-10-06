@@ -21,6 +21,7 @@ class ProductController extends Controller
                     ->where('name', 'like', '%' . $request->product_group_name . '%')
                     ->get();;
             }),
+
         ]);
     }
     public function store(Request $request)

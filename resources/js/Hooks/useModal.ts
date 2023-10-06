@@ -8,7 +8,7 @@ const useModal = () => {
         setOpen(true);
     };
     const closeModal = () => setOpen(false);
-    const handleOk = () => {
+    const onOK = () => {
         setConfirmLoading(true);
         setTimeout(() => {
             setOpen(false);
@@ -16,11 +16,11 @@ const useModal = () => {
         }, 2000);
     };
 
-    const handleCancel = () => {
+    const onCancel = () => {
         console.log('Clicked cancel button');
         setOpen(false);
     };
-    return { open, closeModal, confirmLoading, setConfirmLoading, showModal, handleOk, handleCancel }
+    return { open, closeModal, confirmLoading, setConfirmLoading, showModal, onOK, onCancel }
 }
 
 export default useModal;

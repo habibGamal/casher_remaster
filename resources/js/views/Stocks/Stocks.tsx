@@ -82,8 +82,8 @@ export default function Stocks() {
         open,
         confirmLoading,
         showModal,
-        handleOk,
-        handleCancel,
+        onOK: handleOk,
+        onCancel: handleCancel,
         closeModal,
     } = useModal();
 

@@ -9,11 +9,14 @@ use App\Http\Controllers\Invoices\SellingInvoiceController;
 use App\Http\Controllers\Invoices\ReturnSellingInvoiceController;
 use App\Http\Controllers\ProductDetailsController;
 use App\Http\Controllers\SalesReportController;
+use App\Http\Controllers\SearchSelectController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\TrackingStockController;
 use App\Http\Controllers\TransferBetweenStocks;
 use App\Models\AppConfigs;
+use Google\Service\CustomSearchAPI\Search;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +36,11 @@ use Illuminate\Support\Str;
 
 require __DIR__ . '/auth.php';
 
+Route::get('/test', [TestController::class, 'index'])->name('test.index');
+Route::post('/test', [TestController::class, 'store'])->name('test.store');
+Route::post('/test/{product}', [TestController::class, 'update'])->name('test.update');
+Route::delete('/test/{product}', [TestController::class, 'delete'])->name('test.delete');
+Route::post('/select-search/{slug}', [SearchSelectController::class, 'search']);
 // public routing
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', function () {
@@ -51,9 +59,6 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
     // test
-    Route::get('/test',function(){
-        return inertia()->render('Test');
-    });
     // product
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/remove-product-from-group/{product}', [ProductController::class, 'remove_product_from_group']);
@@ -104,9 +109,9 @@ Route::group(['middleware' => ['auth']], function () {
     // reports
     Route::get('/reports/sales', [SalesReportController::class, 'index']);
     // settings
-    Route::get('/settings',[SettingsController::class,'index'])->name('settings.index');
-    Route::get('/settings/{command}',[SettingsController::class,'command'])->name('settings.command');
-    Route::post('/settings/update-dns',[SettingsController::class,'updateDNS'])->name('settings.update-dns');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::get('/settings/{command}', [SettingsController::class, 'command'])->name('settings.command');
+    Route::post('/settings/update-dns', [SettingsController::class, 'updateDNS'])->name('settings.update-dns');
     // unimplemented
     Route::get('/display-invoices', function () {
         return inertia()->render('Invoices/DisplayInvoices');
