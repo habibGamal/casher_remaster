@@ -26,6 +26,7 @@ export default function SelectSearch({
     style,
     defaultValue,
     disabled,
+    ...props
 }: SelectSearchProps) {
     const [options, setOptions] = useState<
         {
@@ -33,10 +34,10 @@ export default function SelectSearch({
             label: string;
         }[]
     >([]);
-    console.log(options);
     return (
         <Select
             id={id}
+            {...props}
             showSearch
             placeholder={placeholder}
             optionFilterProp="children"

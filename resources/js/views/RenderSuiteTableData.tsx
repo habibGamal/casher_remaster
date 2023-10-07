@@ -17,7 +17,7 @@ import { router, usePage } from "@inertiajs/react";
 import useLoading from "../Hooks/useLoading";
 import useSortTable from "../Hooks/useSortTable";
 import useTablePagination from "../Hooks/useTablePagination";
-import { FilterValue, SorterResult } from "antd/es/table/interface";
+import { FilterValue, SortOrder, SorterResult } from "antd/es/table/interface";
 import sortInfoMapping from "../Helpers/sortInfoMapping";
 import useTableSearch from "../Hooks/useTableSearch";
 import Pagination from "../Interfaces/Pagination";
@@ -49,6 +49,12 @@ type RowData = {
 
 type TableData = {
     key: string;
+    sorter?: boolean;
+    sortOrder?: SortOrder | undefined;
+    onHeaderCell?: () => {
+        onClick: () => void;
+    };
+    sortDirections?: SortOrder[];
 } & RowData;
 
 type UpdateTableDataArgs = {
@@ -64,13 +70,23 @@ type UpdateTableDataArgs = {
 type Props = {
     title: [string, string];
     slug: string;
-    columns: { [key: string]: [string, string] };
+    columns: {
+        [key: string]: {
+            label: [string, string];
+            sortable: boolean;
+        };
+    };
     expandable: { [key: string]: [string, string] };
     searchable: { [key: string]: [string, string] };
     actions?: {
         edit?: boolean;
         delete?: boolean;
         add?: boolean;
+    };
+    routes?: {
+        delete?: string;
+        update?: string;
+        store?: string;
     };
 };
 
@@ -79,7 +95,7 @@ const addControls = (
     tableColumns: ColumnsType<TableData>,
     setModelToEdit: React.Dispatch<React.SetStateAction<any | undefined>>,
     modalForm: ReturnType<typeof useModal>,
-    deleteRoute: string
+    deleteRoute?: string
 ) => {
     const controls = {
         title: "تحكم",
@@ -98,11 +114,12 @@ const addControls = (
                 {actions?.delete && (
                     <DeleteButton
                         onClick={() => {
-
-                            // ModelGeneralServices.delete(
-                            //     record.id!,
-                            //     ProductServices.BASE_ROUTE
-                            // );
+                            if (!deleteRoute) return;
+                            router.delete(route(deleteRoute), {
+                                data: {
+                                    id: record.id,
+                                },
+                            });
                         }}
                     />
                 )}
@@ -119,24 +136,37 @@ export default function RenderSuiteTableData({
     expandable,
     searchable,
     actions,
+    routes,
 }: Props) {
     const pageProps = usePage().props;
+
     const paginationData = pageProps[slug] as Pagination<RowData>;
+
     const tableData = paginationData.data.map((record) => ({
         key: record.id.toString(),
         ...record,
     })) as TableData[];
+
+    // it just to update the UI arrows up and down or none
+    // it has nothing to do with updating data just for UI
+    const sortingArrows = useSortTable("created_at");
 
     const tableColumns: ColumnsType<TableData> = Object.entries(columns).map(
         ([key, value]) => {
             const dataIndex: string | string[] = key.includes(".")
                 ? key.split(".")
                 : key;
-            return {
+            let column = {
                 key,
-                title: value[1],
+                title: value.label[1],
                 dataIndex: dataIndex,
             };
+            if (value.sortable) column = {
+                ...column,
+                ...sortingArrows.getSortProps(key),
+            }
+
+            return column;
         }
     );
 
@@ -174,10 +204,6 @@ export default function RenderSuiteTableData({
 
     // control loading sign of the table
     const tableLoading = useLoading();
-
-    // it just to update the UI arrows up and down or none
-    // it has nothing to do with updating data just for UI
-    const sortingArrows = useSortTable("created_at");
 
     const [modelToEdit, setModelToEdit] = useState<any | undefined>(undefined);
 
@@ -230,6 +256,7 @@ export default function RenderSuiteTableData({
             </Descriptions>
         );
     };
+
     useWhileTyping(
         () => {
             // reset pagination and sort states
@@ -252,8 +279,18 @@ export default function RenderSuiteTableData({
         tableColumns,
         setModelToEdit,
         modalForm,
-        pageProps["delete_route"] as string
+        routes?.delete
     );
+
+    const submitRoute = (): string | undefined => {
+        return modelToEdit ? routes?.update : routes?.store;
+    };
+
+    const addButtonAction = () => {
+        setModelToEdit(undefined);
+        modalForm.showModal();
+    };
+
     return (
         <Row gutter={[0, 25]} className="m-8">
             <PageTitle name={title[1]} />
@@ -266,24 +303,22 @@ export default function RenderSuiteTableData({
                 closeIcon={<IconSax icon="add" className="rotate-45" />}
             >
                 <FormComponentEnhanced
-                    submitRoute={route(pageProps["store_route"])}
+                    submitRoute={submitRoute() ?? ""}
                     formName="products_form"
                     initValues={modelToEdit}
-                    modelToEdit={modelToEdit}
                     closeModal={modalForm.closeModal}
                 />
             </Modal>
             <Col span="24" className="isolate">
                 <TableController
                     addButtonText="اضافة صنف"
-                    addButtonAction={modalForm.showModal}
+                    addButtonAction={addButtonAction}
                     searchButtonAction={() => search.enterSearchMode()}
                     setSearch={search.setSearch}
                     setAttribute={search.setAttribute}
                     exitSearchMode={() => {
                         // ctx.config.exitSearchMode(ctx);
                     }}
-                    defaultValue="اسم الصنف"
                     options={searchableColumns}
                 />
                 <Table

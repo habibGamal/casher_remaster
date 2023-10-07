@@ -10,6 +10,7 @@ import getFieldsNames from "../Helpers/getFieldsNames";
 import { router, usePage } from "@inertiajs/react";
 import fromGenerator, { FormSchema } from "../Helpers/formGenerator";
 import FormErrorMapping from "../Helpers/ErrorMapping";
+import transformInitValues from "../Helpers/transformInitValues";
 
 interface FormProps {
     submitRoute: string;
@@ -24,7 +25,6 @@ const FormComponentEnhanced = ({
     submitRoute,
     formName,
     initValues,
-    modelToEdit,
     closeModal,
     submitBtnText = "حفظ",
 }: FormProps) => {
@@ -42,9 +42,12 @@ const FormComponentEnhanced = ({
     const { errors } = usePage().props;
 
     const onFinish = (values: any) => {
-        console.log(submitRoute)
-        router.post(submitRoute, values, {
+        console.log(values);
+        router.post(route(submitRoute), values, {
             onStart: () => submitState.stateLoading.onStart(),
+            onSuccess: () => {
+                closeModal();
+            },
             onFinish: () => submitState.stateLoading.onFinish(),
         });
     };
@@ -56,13 +59,18 @@ const FormComponentEnhanced = ({
         if (isErrors) return formErrorMapping.updateErrors(errors);
     }, [errors]);
 
+    const transformedInitValues = transformInitValues(
+        formSchema as FormSchema,
+        initValues
+    );
+    console.log(transformedInitValues);
     return (
         <Form
             {...FORM_LAYOUT_1}
             form={form}
             name={formName}
             onFinish={onFinish}
-            initialValues={initValues}
+            initialValues={transformedInitValues}
             className="p-8 border-2 border-indigo-500 rounded-md bg-indigo-50 dark:bg-transparent dark:border-none"
             layout="vertical"
             scrollToFirstError

@@ -60,11 +60,12 @@ Route::group(['middleware' => ['auth']], function () {
     });
     // test
     // product
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/products/remove-product-from-group/{product}', [ProductController::class, 'remove_product_from_group']);
-    Route::post('/products/store', [ProductController::class, 'store']);
-    Route::post('/products/update/{product}', [ProductController::class, 'update']);
-    Route::delete('/products/{product}', [ProductController::class, 'delete']);
+    Route::resource('products', ProductController::class)->except(['create', 'edit', 'show']);
+    // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    // Route::get('/products/remove-product-from-group/{product}', [ProductController::class, 'remove_product_from_group']);
+    // Route::post('/products/store', [ProductController::class, 'store']);
+    // Route::post('/products/update/{product}', [ProductController::class, 'update']);
+    // Route::delete('/products/{product}', [ProductController::class, 'delete']);
     // product-group
     Route::get('/product-groups', [ProductGroupController::class, 'index'])->name('product-groups.index');
     Route::post('/product-groups/store', [ProductGroupController::class, 'store']);

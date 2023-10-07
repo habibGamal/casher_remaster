@@ -37,7 +37,7 @@ export default function TableController({
                 addonBefore={
                     options && (
                         <Select
-                            defaultValue={defaultValue}
+                            defaultValue={options[0].value}
                             onChange={(value) => setAttribute(value)}
                             options={options}
                         />

@@ -15,7 +15,7 @@ export type FormSchema = {
     [key: string]: FormSchemaField | boolean;
 };
 
-type FormSchemaField = {
+export type FormSchemaField = {
     type: string;
     label: [string, string];
     placeholder?: [string, string];
@@ -62,6 +62,9 @@ class InputConstruction {
                     key={this.name}
                     name={this.name}
                     label={this.field.label[this.lang]}
+                    valuePropName={
+                        this.field.type === "checkbox" ? "checked" : undefined
+                    }
                 >
                     <this.component />
                 </Form.Item>
@@ -73,6 +76,11 @@ class InputConstruction {
                         key={this.name}
                         name={this.name}
                         label={this.field.label[this.lang]}
+                        valuePropName={
+                            this.field.type === "checkbox"
+                                ? "checked"
+                                : undefined
+                        }
                     >
                         <this.component />
                     </Form.Item>
@@ -91,7 +99,6 @@ class InputConstruction {
     }
 
     private component(props?: any) {
-        console.log(this.name, this.form.getFieldValue(this.name));
         if (this.field.type === "text") return <this.text {...props} />;
         if (this.field.type === "number") return <this.number {...props} />;
         if (this.field.type === "checkbox") return <this.checkbox {...props} />;
@@ -142,7 +149,6 @@ class InputConstruction {
     }
 
     private select(props?: any) {
-        console.log(props);
         return (
             <Select
                 {...props}
@@ -171,7 +177,7 @@ class InputConstruction {
     }
 
     private checkbox(props?: any) {
-        return <Checkbox {...props} disabled={this.isDisabled()} />;
+        return <Checkbox disabled={this.isDisabled()} {...props} />;
     }
 
     private selectSearch(props?: any) {
@@ -180,6 +186,7 @@ class InputConstruction {
                 id={this.name}
                 onSearch={selectSearchSlug(this.field.slug ?? "")}
                 placeholder={this.field.placeholder?.[this.lang]}
+                {...props}
                 // defaultValue={
                 //     modelToEdit ? modelToEdit?.product_group?.name : undefined
                 // }
