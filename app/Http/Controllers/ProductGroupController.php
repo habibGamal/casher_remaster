@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductGroup;
+use App\Render\ProductGroupRender;
 use App\Services\TableSettingsServices;
 use Illuminate\Http\Request;
 
@@ -11,11 +12,12 @@ class ProductGroupController extends Controller
 {
     private $index = 'Products/ProductGroups';
 
-    public function index(Request $request)
+    public function index()
     {
-        return inertia()->render($this->index, [
-            'productGroups' =>  TableSettingsServices::pagination(ProductGroup::withCount('products'), $request, 'productGroups'),
-        ]);
+        return inertia()->render(
+            'RenderSuiteTableData',
+            (new ProductGroupRender)->render(),
+        );
     }
 
     public function display_products_in_group(Request $request)
@@ -44,7 +46,7 @@ class ProductGroupController extends Controller
         return redirect()->route('product-groups.index');
     }
 
-    public function delete(ProductGroup $productGroup)
+    public function destroy(ProductGroup $productGroup)
     {
         $productGroup->delete();
         return redirect()->route('product-groups.index');

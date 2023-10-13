@@ -59,6 +59,7 @@ type SearchParams = {
     attribute: string;
     value: string;
 };
+
 class Search implements Searching<SearchParams, Product, InvoiceItem> {
     constructor(
         public readonly searchParams: SearchParams,

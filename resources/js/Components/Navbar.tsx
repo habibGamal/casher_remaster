@@ -5,7 +5,7 @@ import { Menu } from "antd";
 import IconSax from "./IconSax";
 import logo from "../../assets/images/logo.png";
 import ProductServices from "../Services/Products/ProductServices";
-import { router } from '@inertiajs/react';
+import { router } from "@inertiajs/react";
 import ProductGroupServices from "../Services/Products/ProductGroupServices";
 import StockServices from "../Services/Stocks/StockServices";
 import OpeningStockServices from "../Services/Products/OpeningStockServices";
@@ -14,7 +14,7 @@ import TrackingStockServices from "../Services/Stocks/TrackingStocksServices";
 import ReturnBuyInvServices from "../Services/Invoices/ReturnBuyInvServices";
 import SellInvServices from "../Services/Invoices/SellInvServices";
 import ReturnSellInvServices from "../Services/Invoices/ReturnSellInvServices";
-import { Link } from '@inertiajs/react';
+import { Link } from "@inertiajs/react";
 import TransferBetweenStocksServices from "../Services/Stocks/TransferBetweenStocksServices";
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -56,16 +56,9 @@ export type MenuKeys =
 
 const items: MenuProps["items"] = [
     getItem("الاصناف", "products_section", <IconSax icon="shopping-bag" />, [
+        getItem(<Link href="/products"> الاصناف </Link>, "products"),
         getItem(
-            <Link href={'/test'}>Test</Link>,
-            "test"
-        ),
-        getItem(
-            <Link href={ProductServices.BASE_ROUTE}> اضافة الاصناف </Link>,
-            "add_products"
-        ),
-        getItem(
-            <Link href={ProductGroupServices.BASE_ROUTE}>مجموعات الاصناف</Link>,
+            <Link href="/product-groups">مجموعات الاصناف</Link>,
             "product_groups"
         ),
         getItem(
@@ -90,7 +83,7 @@ const items: MenuProps["items"] = [
         <IconSax icon="stock" dir="custom" className="w-[24px]" />,
         [
             getItem(
-                <Link href={StockServices.BASE_ROUTE}>اضافة مخزن</Link>,
+                <Link href="/stocks">اضافة مخزن</Link>,
                 "add_stock"
             ),
             getItem(
@@ -152,9 +145,7 @@ const items: MenuProps["items"] = [
         <IconSax icon="reports" dir="custom" className="w-[24px]" />,
         [
             getItem(
-                <Link href={"/reports/sales"}>
-                    تقارير المبيعات
-                </Link>,
+                <Link href={"/reports/sales"}>تقارير المبيعات</Link>,
 
                 "sales_reports"
             ),

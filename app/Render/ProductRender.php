@@ -25,7 +25,7 @@ class ProductRender
         $renderConfig
             ->title(['Products', 'الاصناف'])
             ->slug('products')
-            ->data(TableFormater::pagination(Product::with('productGroup:id,name'), $renderConfig->request))
+            ->data(TableFormater::pagination(Product::with('productGroup:id,name')))
             ->columns([
                 $renderConfig->column('name', ['Name', 'اسم المنتج'], true),
                 $renderConfig->column('barcode', ['Barcode', 'باركود'], true),
@@ -51,9 +51,9 @@ class ProductRender
                 $renderConfig->searchAttr('product_group.name', ['Product Group', 'مجموعة المنتج']),
             ])
             ->routes([
-                'store' => 'test.store',
-                'update' => 'test.update',
-                'delete' => 'test.delete',
+                'store' => 'products.store',
+                'update' => 'products.update',
+                'delete' => 'products.destroy',
             ])
             ->form([
                 $renderConfig->col(),

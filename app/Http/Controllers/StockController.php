@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Render\StockRender;
 use App\Services\TableSettingsServices;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-    private $index = 'Stocks/Stocks';
 
-    public function index(Request $request)
+    public function index()
     {
-        return inertia()->render($this->index, [
-            'stocks' =>  fn () => TableSettingsServices::pagination(Stock::select(['*']), $request, 'stocks'),
-        ]);
+        return inertia()->render(
+            'RenderSuiteTableData',
+            (new StockRender)->render(),
+        );
     }
 
     public function store(Request $request)
@@ -39,7 +40,7 @@ class StockController extends Controller
         return redirect()->route('stocks.index');
     }
 
-    public function delete(Stock $stock)
+    public function destroy(Stock $stock)
     {
         $stock->delete();
 

@@ -3,26 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\ProductGroup;
-use App\Services\TableSettingsServices;
+use App\Render\ProductRender;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
-    private $index = 'Products/Products';
-
-    public function index(Request $request)
+    public function index()
     {
-        return inertia()->render($this->index, [
-            'products' =>  fn () => TableSettingsServices::pagination(Product::with('productGroup:id,name'), $request, 'products'),
-            'productGroups' => inertia()->lazy(function () use ($request) {
-                return ProductGroup::select(['id', 'name'])
-                    ->where('name', 'like', '%' . $request->product_group_name . '%')
-                    ->get();;
-            }),
-
-        ]);
+        return inertia()->render(
+            'RenderSuiteTableData',
+            (new ProductRender)->render(),
+        );
     }
     public function store(Request $request)
     {
@@ -66,7 +58,7 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function delete(Product $product)
+    public function destroy(Product $product)
     {
         try {
             $product->deleteOrFail();

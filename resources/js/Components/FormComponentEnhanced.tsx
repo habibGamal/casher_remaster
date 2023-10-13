@@ -43,7 +43,15 @@ const FormComponentEnhanced = ({
 
     const onFinish = (values: any) => {
         console.log(values);
-        router.post(route(submitRoute), values, {
+        if (initValues == undefined)
+            return router.post(route(submitRoute), values, {
+                onStart: () => submitState.stateLoading.onStart(),
+                onSuccess: () => {
+                    closeModal();
+                },
+                onFinish: () => submitState.stateLoading.onFinish(),
+            });
+        router.put(route(submitRoute, initValues.id), values, {
             onStart: () => submitState.stateLoading.onStart(),
             onSuccess: () => {
                 closeModal();

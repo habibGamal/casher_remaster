@@ -61,22 +61,24 @@ Route::group(['middleware' => ['auth']], function () {
     // test
     // product
     Route::resource('products', ProductController::class)->except(['create', 'edit', 'show']);
+    Route::resource('product-groups', ProductGroupController::class)->except(['create', 'edit', 'show']);
+    Route::resource('stocks', StockController::class)->except(['create', 'edit', 'show']);
     // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     // Route::get('/products/remove-product-from-group/{product}', [ProductController::class, 'remove_product_from_group']);
     // Route::post('/products/store', [ProductController::class, 'store']);
     // Route::post('/products/update/{product}', [ProductController::class, 'update']);
     // Route::delete('/products/{product}', [ProductController::class, 'delete']);
     // product-group
-    Route::get('/product-groups', [ProductGroupController::class, 'index'])->name('product-groups.index');
-    Route::post('/product-groups/store', [ProductGroupController::class, 'store']);
-    Route::post('/product-groups/update/{productGroup}', [ProductGroupController::class, 'update']);
-    Route::get('/product-groups/display-products-in-group', [ProductGroupController::class, 'display_products_in_group']);
-    Route::delete('/product-groups/{productGroup}', [ProductGroupController::class, 'delete']);
+    // Route::get('/product-groups', [ProductGroupController::class, 'index'])->name('product-groups.index');
+    // Route::post('/product-groups/store', [ProductGroupController::class, 'store']);
+    // Route::post('/product-groups/update/{productGroup}', [ProductGroupController::class, 'update']);
+    // Route::get('/product-groups/display-products-in-group', [ProductGroupController::class, 'display_products_in_group']);
+    // Route::delete('/product-groups/{productGroup}', [ProductGroupController::class, 'delete']);
     // stocks
-    Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
-    Route::post('/stocks/store', [StockController::class, 'store']);
-    Route::post('/stocks/update/{stock}', [StockController::class, 'update']);
-    Route::delete('/stocks/{stock}', [StockController::class, 'delete']);
+    // Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
+    // Route::post('/stocks/store', [StockController::class, 'store']);
+    // Route::post('/stocks/update/{stock}', [StockController::class, 'update']);
+    // Route::delete('/stocks/{stock}', [StockController::class, 'delete']);
     // opening-stock
     Route::get('/opening-stocks/create', [OpeningStockController::class, 'create'])->name('opening-stocks.index');
     Route::post('/opening-stocks/store', [OpeningStockController::class, 'store']);

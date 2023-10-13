@@ -1,15 +1,4 @@
-import {
-    Button,
-    Col,
-    Descriptions,
-    Form,
-    Input,
-    Modal,
-    Row,
-    Space,
-    Table,
-    Tag,
-} from "antd/es";
+import { Col, Descriptions, Modal, Row, Space, Table } from "antd/es";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import React, { useState } from "react";
 import PageTitle from "../Components/PageTitle";
@@ -24,13 +13,8 @@ import Pagination from "../Interfaces/Pagination";
 import TableController from "../Components/TableController";
 import IconSax from "../Components/IconSax";
 import useModal from "../Hooks/useModal";
-import ProductForm from "./Common/forms/ProductForm";
 import useWhileTyping from "../Hooks/useWhileTyping";
-import FormComponent from "../Components/FormComponent";
-import ProductServices from "../Services/Products/ProductServices";
-import { FormSchema } from "../Helpers/formGenerator";
 import FormComponentEnhanced from "../Components/FormComponentEnhanced";
-import axios from "axios";
 import EditButton from "../Components/EditButton";
 import DeleteButton from "../Components/DeleteButton";
 
@@ -115,11 +99,7 @@ const addControls = (
                     <DeleteButton
                         onClick={() => {
                             if (!deleteRoute) return;
-                            router.delete(route(deleteRoute), {
-                                data: {
-                                    id: record.id,
-                                },
-                            });
+                            router.delete(route(deleteRoute, record.id));
                         }}
                     />
                 )}
@@ -161,10 +141,11 @@ export default function RenderSuiteTableData({
                 title: value.label[1],
                 dataIndex: dataIndex,
             };
-            if (value.sortable) column = {
-                ...column,
-                ...sortingArrows.getSortProps(key),
-            }
+            if (value.sortable)
+                column = {
+                    ...column,
+                    ...sortingArrows.getSortProps(key),
+                };
 
             return column;
         }
@@ -290,6 +271,8 @@ export default function RenderSuiteTableData({
         setModelToEdit(undefined);
         modalForm.showModal();
     };
+
+    console.log(pageProps)
 
     return (
         <Row gutter={[0, 25]} className="m-8">

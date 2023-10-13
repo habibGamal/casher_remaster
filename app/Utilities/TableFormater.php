@@ -13,10 +13,10 @@ class TableFormater{
     private $request;
     public $slug;
 
-    function __construct(Request $request,string $defaultOrderColumn = '')
+    function __construct(string $defaultOrderColumn = '')
     {
         // privately set request and slug for more usage in other methods in this class
-        $this->request = $request;
+        $this->request = $request = request();
         $this->slug = $request->query('slug');
         // order holds 'desc' or 'asc'
         $this->order = $request->query($this->slug . '_order') ?? 'desc';
@@ -38,9 +38,9 @@ class TableFormater{
         return $this->request->query($this->slug . '_search');
     }
 
-    static function pagination($elquentBuilder,Request $request, $defaultOrderColumn = "created_at")
+    static function pagination($elquentBuilder, $defaultOrderColumn = "created_at")
     {
-        $settings = new TableFormater($request,$defaultOrderColumn);
+        $settings = new TableFormater($defaultOrderColumn);
         if ($settings->isSearch()) {
             $elquentBuilder->where($settings->attribute, 'like', '%' . $settings->search . '%');
         }
