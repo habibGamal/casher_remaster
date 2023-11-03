@@ -67,7 +67,7 @@ export default abstract class MainInvoiceOperations<
 
     public remove(invoiceItem: InvoiceItem) {
         console.log(invoiceItem);
-        
+
         this.props.setInvoiceItems(
             this.props.invoiceItems.filter(
                 (item) => item.key !== invoiceItem.key

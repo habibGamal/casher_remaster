@@ -106,6 +106,8 @@ export interface ReturnInvoiceOperations<InvoiceItem>
         Edit<InvoiceItem>,
         CancelOperation {}
 
+
+
 export default abstract class CreateInvoiceManager<
     SearchParams,
     RawData,

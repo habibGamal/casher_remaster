@@ -324,7 +324,6 @@ export default function RenderSuiteTableData({
                     scroll={{ x: true }}
                     footer={() => "عدد النتائج : " + paginationData.total}
                 />
-                {/* <model.ModelTable /> */}
             </Col>
         </Row>
     );

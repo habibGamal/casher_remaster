@@ -42,7 +42,9 @@ Route::post('/test/{product}', [TestController::class, 'update'])->name('test.up
 Route::delete('/test/{product}', [TestController::class, 'delete'])->name('test.delete');
 Route::post('/select-search/{slug}', [SearchSelectController::class, 'search']);
 // public routing
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => [
+    // 'auth'
+    ]], function () {
     Route::get('/', function () {
         return inertia()->render('Home');
     })->name('home');
