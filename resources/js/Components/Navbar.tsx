@@ -4,10 +4,7 @@ import { Badge, Button, MenuProps } from "antd";
 import { Menu } from "antd";
 import IconSax from "./IconSax";
 import logo from "../../assets/images/logo.png";
-import ProductServices from "../Services/Products/ProductServices";
 import { router } from "@inertiajs/react";
-import ProductGroupServices from "../Services/Products/ProductGroupServices";
-import StockServices from "../Services/Stocks/StockServices";
 import OpeningStockServices from "../Services/Products/OpeningStockServices";
 import BuyInvServices from "../Services/Invoices/BuyInvServices";
 import TrackingStockServices from "../Services/Stocks/TrackingStocksServices";
@@ -16,7 +13,16 @@ import SellInvServices from "../Services/Invoices/SellInvServices";
 import ReturnSellInvServices from "../Services/Invoices/ReturnSellInvServices";
 import { Link } from "@inertiajs/react";
 import TransferBetweenStocksServices from "../Services/Stocks/TransferBetweenStocksServices";
-
+import {
+    ArchiveBox,
+    Chart,
+    KeySquare,
+    Login,
+    ReceiptItem,
+    Setting,
+    ShoppingBag,
+    Stock,
+} from "iconsax-react";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -55,7 +61,7 @@ export type MenuKeys =
     | "logout";
 
 const items: MenuProps["items"] = [
-    getItem("الاصناف", "products_section", <IconSax icon="shopping-bag" />, [
+    getItem("الاصناف", "products_section", <ShoppingBag />, [
         getItem(<Link href="/products"> الاصناف </Link>, "products"),
         getItem(
             <Link href="/product-groups">مجموعات الاصناف</Link>,
@@ -77,38 +83,32 @@ const items: MenuProps["items"] = [
         ),
     ]),
 
-    getItem(
-        "ادارة المخازن",
-        "stock_section",
-        <IconSax icon="stock" dir="custom" className="w-[24px]" />,
-        [
-            getItem(
-                <Link href="/stocks">اضافة مخزن</Link>,
-                "add_stock"
-            ),
-            getItem(
-                <Link href={TrackingStockServices.BASE_ROUTE}>
-                    جرد المخازن
-                </Link>,
-                "tracking_stocks"
-            ),
-            getItem(<Link href="/"> الهالك </Link>, "stock_waste"),
-            getItem(
-                <Link href={TransferBetweenStocksServices.BASE_ROUTE}>
-                    التحويل بين المخازن
-                </Link>,
-                "transfer_between_stocks"
-            ),
-        ]
-    ),
+    getItem("ادارة المخازن", "stock_section", <ArchiveBox />, [
+        getItem(<Link href="/stocks">اضافة مخزن</Link>, "add_stock"),
+        getItem(
+            <Link href={TrackingStockServices.BASE_ROUTE}>جرد المخازن</Link>,
+            "tracking_stocks"
+        ),
+        getItem(<Link href="/"> الهالك </Link>, "stock_waste"),
+        getItem(
+            <Link href={TransferBetweenStocksServices.BASE_ROUTE}>
+                التحويل بين المخازن
+            </Link>,
+            "transfer_between_stocks"
+        ),
+    ]),
     // getItem("الموردين والعملاء", "supporters", <IconSax icon="people" />, [
     //     getItem("Item 1", "g1"),
     //     getItem("Item 2", "g2"),
     // ]),
-    getItem("الفواتير", "invoices", <IconSax icon="receipt-item" />, [
+    getItem("الفواتير", "invoices", <ReceiptItem />, [
         getItem(
             <Link href={BuyInvServices.BASE_ROUTE}>عرض الفواتير</Link>,
             "display_invoices"
+        ),
+        getItem(
+            <Link href={route("receipt-test.create")}>فاتورة شراء</Link>,
+            "create_buying_invoice_test"
         ),
         getItem(
             <Link href={BuyInvServices.BASE_ROUTE + "/create"}>
@@ -139,22 +139,15 @@ const items: MenuProps["items"] = [
     //     getItem("Item 1", "g1"),
     //     getItem("Item 2", "g2"),
     // ]),
-    getItem(
-        "التقارير",
-        "repoting",
-        <IconSax icon="reports" dir="custom" className="w-[24px]" />,
-        [
-            getItem(
-                <Link href={"/reports/sales"}>تقارير المبيعات</Link>,
+    getItem("التقارير", "repoting", <Chart />, [
+        getItem(
+            <Link href={"/reports/sales"}>تقارير المبيعات</Link>,
 
-                "sales_reports"
-            ),
-            getItem("Item 2", "g2"),
-        ]
-    ),
-    getItem("الادارة", "managment ", <IconSax icon="key-square" />, [
-        getItem("Item 1", "g1"),
+            "sales_reports"
+        ),
+        getItem("Item 2", "g2"),
     ]),
+    getItem("الادارة", "managment ", <KeySquare />, [getItem("Item 1", "g1")]),
     { type: "divider" },
     getItem(
         "تنبيهات",
@@ -163,14 +156,14 @@ const items: MenuProps["items"] = [
             <IconSax icon="notification" className="text-red-400" />
         </Badge>
     ),
-    getItem("الاعدادات", "settings", <IconSax icon="settings" />),
+    getItem("الاعدادات", "settings", <Setting />),
     getItem(
         <Link method="post" href={"/logout"}>
             تسجيل خروج
         </Link>,
 
         "logout",
-        <IconSax icon="login" className="text-red-400" />
+        <Login />
     ),
 ];
 

@@ -294,7 +294,7 @@ export default function RenderSuiteTableData({
             </Modal>
             <Col span="24" className="isolate">
                 <TableController
-                    addButtonText="اضافة صنف"
+                    addButtonText="انشاء"
                     addButtonAction={addButtonAction}
                     searchButtonAction={() => search.enterSearchMode()}
                     setSearch={search.setSearch}

@@ -22,11 +22,11 @@ class StockRender
     {
         $renderConfig = $this->renderConfig;
         $renderConfig
-            ->title(['Stock', 'المخزون'])
+            ->title(['Stock', 'المخزن'])
             ->slug('stock')
             ->data(TableFormater::pagination(Stock::withSum('stockItems','quantity')))
             ->columns([
-                $renderConfig->column('name', ['Name', 'اسم المخزون'], true),
+                $renderConfig->column('name', ['Name', 'اسم المخزن'], true),
                 $renderConfig->column('stock_items_sum_quantity', ['Stock Items Count', 'عدد الاصناف'], true),
             ])
             ->actions([
@@ -34,16 +34,16 @@ class StockRender
                 'delete' => true,
             ])
             ->searchable([
-                $renderConfig->searchAttr('name', ['Name', 'اسم المخزون']),
+                $renderConfig->searchAttr('name', ['Name', 'اسم المخزن']),
             ])
             ->routes([
-                'store' => 'stock.store',
-                'update' => 'stock.update',
-                'delete' => 'stock.destroy',
+                'store' => 'stocks.store',
+                'update' => 'stocks.update',
+                'delete' => 'stocks.destroy',
             ])
             ->form([
                 $renderConfig->col(),
-                $renderConfig->text('name', ['Stock Name', 'اسم المخزون']),
+                $renderConfig->text('name', ['Stock Name', 'اسم المخزن']),
             ]);
     }
 }

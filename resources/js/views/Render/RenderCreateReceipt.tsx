@@ -9,29 +9,22 @@ import {
     Table,
 } from "antd";
 import React, { useReducer, useRef, useState } from "react";
-import useSearch from "../Hooks/useSearch";
-import mapEditableColumns from "../Helpers/mapEditableColumns";
-import EditableColumns from "../types/EditableColumns";
-import ColumnTypes from "../types/ColumnTypes";
+import useSearch from "../../Hooks/useSearch";
+import mapEditableColumns from "../../Helpers/mapEditableColumns";
+import EditableColumns from "../../types/EditableColumns";
+import ColumnTypes from "../../types/ColumnTypes";
 import { usePage } from "@inertiajs/react";
-import SelectSearchUtils from "../Services/SelectSearchUtils";
-import { BaseInvoiceItem } from "../Management/InvoiceManager/CreateInvoiceManager";
-import useMultiplyKey from "../Hooks/useMultiplyKey";
-import EditableRow from "../Components/EditableRow";
-import EditableCell from "../Components/EditableCell";
-import DeleteButton from "../Components/DeleteButton";
-import PageTitle from "../Components/PageTitle";
-import SelectSearch from "../Components/SelectSearch";
-import selectSearchSlug from "../Helpers/selectSearchSlug";
-import Create from "../views/Invoices/SellingInvoices/Create";
-import { CreateReceiptFactory } from "../Core/ReceiptCreator/CreateReceipt";
-import useLoading from "../Hooks/useLoading";
-import useLoading from "../Hooks/useLoading";
-
-// you may wonder why this is not the same style as `DisplayModel`
-// `DisplayModel` is quite complicated than this one because it has a lot of features
-// it has forms , modals , pagination , search , sorting and a lot of other things
-// while this is some how straight forward and simple compered to `DisplayModel`
+import SelectSearchUtils from "../../Services/SelectSearchUtils";
+import { BaseInvoiceItem } from "../../Management/InvoiceManager/CreateInvoiceManager";
+import useMultiplyKey from "../../Hooks/useMultiplyKey";
+import EditableRow from "../../Components/EditableRow";
+import EditableCell from "../../Components/EditableCell";
+import DeleteButton from "../../Components/DeleteButton";
+import PageTitle from "../../Components/PageTitle";
+import SelectSearch from "../../Components/SelectSearch";
+import selectSearchSlug from "../../Helpers/selectSearchSlug";
+import Create from "../Invoices/SellingInvoices/Create";
+import { CreateReceiptFactory } from "../../Core/ReceiptCreator/CreateReceipt";
 
 const searchSettings = {
     id: "search_product",
@@ -128,8 +121,13 @@ export default function RenderCreateReceipt({ config }: Props) {
         }, 0);
     };
 
+    const searchClear = () => {
+        search.changeSearchValue("");
+    };
+
     const createReceipt = CreateReceiptFactory.createReceipt({
         config,
+        searchClear,
         receiptItems,
         setReceiptItems,
         sourceDist,
@@ -149,28 +147,28 @@ export default function RenderCreateReceipt({ config }: Props) {
     );
 
     const columns = [
-        ...mapEditableColumns<any>(
-            defaultColumns,
-            createReceipt.edit
-        ),
+        ...mapEditableColumns<any>(defaultColumns, createReceipt.edit),
         {
             title: "تحكم",
             dataIndex: "operation",
             render: (_: any, record: any) => (
                 <DeleteButton
                     onClick={() => {
-                        manager.invoiceOperations.remove(record);
+                        createReceipt.remove(record);
                     }}
                 />
             ),
         },
     ];
+    console.log(config);
     return (
         <Row gutter={[0, 25]} className="m-8">
             <PageTitle name={config.info.title[lang]} />
             <div className="isolate-2 flex justify-between items-center w-full p-8 gap-8">
                 <Descriptions className="w-full" bordered>
-                    {manager.displayInvoiceNumber(config.info.receipt_number)}
+                    <Descriptions.Item label="رقم الفاتورة">
+                        {config.info.receipt_number}
+                    </Descriptions.Item>
                     <Descriptions.Item label="الاجمالي">
                         {totalInvoice.toFixed(2)}
                     </Descriptions.Item>
@@ -197,10 +195,10 @@ export default function RenderCreateReceipt({ config }: Props) {
                 </Descriptions>
                 <Button
                     loading={loading}
-                    onClick={manager.submit.onSubmit}
+                    onClick={createReceipt.submit}
                     type="primary"
                 >
-                    {manager.actionBtnTitle()}
+                    انشاء
                 </Button>
             </div>
             <Col span="24" className="isolate">
@@ -222,10 +220,10 @@ export default function RenderCreateReceipt({ config }: Props) {
                         onChange={(e) => {
                             search.changeSearchValue(e.target.value);
                         }}
-                        onPressEnter={manager.search.onSearch}
+                        onPressEnter={createReceipt.onSearch}
                     />
                     <Button
-                        onClick={manager.invoiceOperations.cancelOperation}
+                        onClick={createReceipt.cancelOperation}
                         className="mx-auto"
                         danger
                         type="primary"
@@ -237,8 +235,8 @@ export default function RenderCreateReceipt({ config }: Props) {
                     components={components}
                     rowClassName={() => "editable-row"}
                     columns={columns as ColumnTypes}
-                    rowKey={(record: any) => record.key.toString()}
-                    dataSource={manager.invoiceOperations.getInvoiceItems()}
+                    // rowKey={(record: any) => record.key.toString()}
+                    dataSource={receiptItems}
                     pagination={false}
                     loading={loading}
                     bordered

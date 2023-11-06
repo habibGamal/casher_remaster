@@ -8,6 +8,7 @@ use App\Http\Controllers\Invoices\ReturnBuyingInvoiceController;
 use App\Http\Controllers\Invoices\SellingInvoiceController;
 use App\Http\Controllers\Invoices\ReturnSellingInvoiceController;
 use App\Http\Controllers\ProductDetailsController;
+use App\Http\Controllers\Receipts\ReceiptTestController;
 use App\Http\Controllers\SalesReportController;
 use App\Http\Controllers\SearchSelectController;
 use App\Http\Controllers\SettingsController;
@@ -65,6 +66,8 @@ Route::group(['middleware' => [
     Route::resource('products', ProductController::class)->except(['create', 'edit', 'show']);
     Route::resource('product-groups', ProductGroupController::class)->except(['create', 'edit', 'show']);
     Route::resource('stocks', StockController::class)->except(['create', 'edit', 'show']);
+    Route::get('/receipt-test', [ReceiptTestController::class, 'create'])->name('receipt-test.create');
+    Route::post('/receipt-test/search', [ReceiptTestController::class, 'search'])->name('receipt-test.search');
     // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     // Route::get('/products/remove-product-from-group/{product}', [ProductController::class, 'remove_product_from_group']);
     // Route::post('/products/store', [ProductController::class, 'store']);

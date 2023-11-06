@@ -1,18 +1,22 @@
 type ReceiptItem = PurchaseInvoiceItem | SalesInvoiceItem;
-// total field should be in all ReceiptItem
-interface PurchaseInvoiceItem {
+
+interface ReceiptItemBase {
+    key: number;
     id: number;
+    barcode: string;
     name: string;
+}
+
+// total field should be in all ReceiptItem
+interface PurchaseInvoiceItem extends ReceiptItemBase {
     quantity: number;
     cost: number;
     tax: number;
     total: number;
-    expire_date: string;
+    expiry_date: string;
 }
 
-interface SalesInvoiceItem {
-    id: number;
-    name: string;
+interface SalesInvoiceItem extends ReceiptItemBase {
     quantity: number;
     cost: number;
     price: number;
@@ -33,6 +37,7 @@ interface ReceiptConfig {
             title: [string, string];
             type: string;
         };
+        search_route: string;
     };
     columns: {
         [key: string]: {
@@ -40,4 +45,28 @@ interface ReceiptConfig {
             editable?: boolean;
         };
     };
+}
+
+interface CreateReceiptSearch {
+    search(
+        endpoint: string,
+        searchData: {
+            attribute: string;
+            value: string;
+        },
+        sourceId?: string,
+        distId?: string
+    ): Promise<ReceiptItem | null>;
+}
+
+interface CreateReceiptValidation {
+    validation(receiptItem: ReceiptItem): boolean;
+}
+
+interface CreateReceiptUpdateTotal {
+    updateTotal(receiptItem: ReceiptItem): ReceiptItem;
+}
+
+interface CreateReceiptIncreaseQuantity {
+    increaseQuantity(item: ReceiptItem, quantity: number): ReceiptItem;
 }

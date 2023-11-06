@@ -1,4 +1,9 @@
 import axios from "axios";
+import ProductSearch from "./Behaviours/CreateReceipt/ProductSearch";
+import UpdateTotalCost from "./Behaviours/CreateReceipt/UpdateTotalCost";
+import IncreaseQuantityCost from "./Behaviours/CreateReceipt/IncreaseQuantityCost";
+import NoValidation from "./Behaviours/CreateReceipt/NoValidation";
+import { message } from "antd";
 
 interface CreateReceiptProps {
     config: ReceiptConfig;
@@ -13,6 +18,7 @@ interface CreateReceiptProps {
         value: string;
     };
     searchFocus: () => void;
+    searchClear: () => void;
     controlLoading: {
         start: () => void;
         stop: () => void;
@@ -26,29 +32,20 @@ interface CreateReceiptProps {
 export class CreateReceiptFactory {
     public static createReceipt(props: CreateReceiptProps): CreateReceipt {
         switch (props.config.info.type) {
-            case "purchase":
+            case "purchase_invoice":
                 return new CreateReceipt(
                     props as CreateReceiptProps,
-                    new SearchPurchaseInvoice()
+                    new ProductSearch(),
+                    new NoValidation(),
+                    new UpdateTotalCost(),
+                    new IncreaseQuantityCost()
                 );
-            case "sales":
-                return new CreateReceipt(/** ... */);
+            // case "sales":
+            //     return new CreateReceipt(/** ... */);
             default:
                 throw new Error("Receipt type not found");
         }
     }
-}
-
-interface CreateReceiptSearch {
-    search(): Promise<ReceiptItem>;
-}
-
-interface CreateReceiptValidation {
-    validation(receiptItem: ReceiptItem): boolean;
-}
-
-interface CreateReceiptUpdateTotal {
-    updateTotal(receiptItem: ReceiptItem): ReceiptItem;
 }
 
 class CreateReceipt {
@@ -56,16 +53,31 @@ class CreateReceipt {
         public props: CreateReceiptProps,
         public searchStrategy: CreateReceiptSearch,
         public validationStrategy: CreateReceiptValidation,
-        public updateTotalStrategy: CreateReceiptUpdateTotal
-    ) {}
-
-    search(): Promise<ReceiptItem> {
-        return this.searchStrategy.search();
+        public updateTotalStrategy: CreateReceiptUpdateTotal,
+        public increaseItemStrategy: CreateReceiptIncreaseQuantity
+    ) {
+        this.onSearch = this.onSearch.bind(this);
+        this.add = this.add.bind(this);
+        this.edit = this.edit.bind(this);
+        this.remove = this.remove.bind(this);
+        this.submit = this.submit.bind(this);
+        this.cancelOperation = this.cancelOperation.bind(this);
     }
 
     async onSearch() {
-        const receiptItem = await this.searchStrategy.search();
+        const endpoint = this.props.config.info.search_route;
+        const sourceId = this.props.sourceDist.sourceId ?? undefined;
+        const distId = this.props.sourceDist.distId ?? undefined;
+        const { searchData } = this.props;
+        const receiptItem = await this.searchStrategy.search(
+            endpoint,
+            searchData,
+            sourceId,
+            distId
+        );
+        if (!receiptItem) return message.error("هذا المنتج غير موجود");
         this.add(receiptItem);
+        this.props.searchClear();
     }
 
     validation(receiptItem: ReceiptItem): boolean {
@@ -77,8 +89,12 @@ class CreateReceipt {
     }
 
     tryIncreaseItem(receiptItem: ReceiptItem, quantity: number) {
-        const increasedItem =this.increaseItemStrategy.increaseItem(receiptItem, quantity);
+        const increasedItem = this.increaseItemStrategy.increaseQuantity(
+            receiptItem,
+            quantity
+        );
         if (this.validation(increasedItem)) return increasedItem;
+        else return receiptItem;
     }
 
     addToExistingItem(receiptItem: ReceiptItem) {
@@ -119,10 +135,8 @@ class CreateReceipt {
     cancelOperation() {
         this.props.reset();
     }
-}
 
-class SearchPurchaseInvoice implements CreateReceiptSearch {
-    public async search() {
-        axios.get("/api/purchase-invoices");
+    submit() {
+        throw new Error("Not implemented");
     }
 }

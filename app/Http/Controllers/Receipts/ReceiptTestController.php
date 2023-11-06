@@ -22,14 +22,15 @@ class ReceiptTestController extends Controller
                         'type' => SearchSelectSlug::Supplier,
                     ],
                     'to' => ['title' => ['Inventory', 'المخزن'], 'type' => SearchSelectSlug::Inventory],
+                    'search_route' => 'receipt-test.search',
                 ],
                 'columns' => [
-                    'product_code' => ['title' => ['Product Code', 'كود الصنف']],
-                    'product_name' => ['title' => ['Product', 'الصنف']],
+                    'barcode' => ['title' => ['Product Code', 'كود الصنف']],
+                    'name' => ['title' => ['Product', 'الصنف']],
                     'quantity' => ['title' => ['Quantity', 'الكمية'], 'editable' => true],
                     'cost' => ['title' => ['Cost', 'سعر الشراء'], 'editable' => true],
                     'tax' => ['title' => ['Tax', 'الضريبة'], 'editable' => true],
-                    'expiry_date' => ['title' => ['Expiry Date', 'تاريخ الصلاحية']],
+                    'expiry_date' => ['title' => ['Expiry Date', 'تاريخ الصلاحية'], 'editable' => true],
                     'total' => ['title' => ['Total', 'الاجمالي']],
                 ],
             ]
