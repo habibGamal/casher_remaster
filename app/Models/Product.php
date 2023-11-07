@@ -8,37 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    public $fillable = [
+
+
+    protected $fillable = [
         'name',
         'barcode',
-        'last_buying_price',
-        'selling_price',
+        'cost',
+        'price',
         'minimum_stock',
-        'has_expire_date',
-        'unit_or_weight',
+        'has_expiry_date',
+        'quantity_has_fraction',
         'unit',
-        'product_group_id',
+        'category_id',
     ];
 
-
-    public function setAvailableQuantityAttribute($value)
+    public function category()
     {
-        $this->attributes['available_quantity'] = $value;
+        return $this->belongsTo(Category::class);
     }
 
-    public function getAvailableQuantityAttribute()
+    public function posItems()
     {
-        if (isset($this->attributes['available_quantity']))
-            return $this->attributes['available_quantity'];
+        return $this->hasMany(PosItem::class);
     }
 
-    public function productGroup()
+    public function inventoryItems()
     {
-        return $this->belongsTo(ProductGroup::class);
-    }
-
-    public function boxes()
-    {
-        return $this->hasMany(Box::class);
+        return $this->hasMany(InventoryItem::class);
     }
 }
