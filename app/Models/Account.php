@@ -5,20 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Account extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
-        'phone',
+        'type',
+        'balance',
+        'client_id',
+        'client_type',
     ];
 
-    public function account()
+    public function client()
     {
-        return $this->morphOne(Account::class, 'client');
+        return $this->morphTo(__FUNCTION__, 'client_type', 'client_id');
     }
 
 }

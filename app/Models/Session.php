@@ -12,10 +12,14 @@ class Session extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name',
-        'start',
-        'end',
-        'status',
+        'start_cash',
+        'end_cash',
+        'deficit',
+        'is_closed',
+        'opened_at',
+        'closed_at',
+        'notes',
+        'user_id',
     ];
 
     public function user()

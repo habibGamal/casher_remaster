@@ -16,9 +16,9 @@ class Supplier extends Model
         'phone',
     ];
 
-    public function debits()
+    public function account()
     {
-        return $this->hasMany(Debit::class);
+        return $this->morphOne(Account::class, 'client');
     }
 
     public function receiptsFrom()

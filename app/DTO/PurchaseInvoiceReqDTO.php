@@ -2,7 +2,8 @@
 
 namespace App\DTO;
 
-class PurchaseInvoiceItem {
+class PurchaseInvoiceItemDTO extends DTO
+{
     public $product_id;
     public $quantity;
     public $expiry_date;
@@ -24,34 +25,46 @@ class PurchaseInvoiceItem {
     }
 }
 
+
 class PurchaseInvoiceReqDTO extends DTO
 {
     public $supplier_id;
     public $inventory_id;
+    public $session_id;
+
+
 
     /**
-     * @var PurchaseInvoiceItem[]
+     * @var PurchaseInvoiceItemDTO[]
      */
     public $items;
 
-    public function __construct($supplier_id, $inventory_id, $items)
+    /**
+     * @var PaymentDTO
+     */
+    public $payment;
+    public function __construct($supplier_id, $inventory_id, $session_id, $items, $payment)
     {
         $this->supplier_id = $supplier_id;
         $this->inventory_id = $inventory_id;
+        $this->session_id = $session_id;
         $this->items = $items;
+        $this->payment = $payment;
     }
 
     static public function fromArray(array $data)
     {
         $items = [];
         foreach ($data['items'] as $item) {
-            $items[] = PurchaseInvoiceItem::fromArray($item);
+            $items[] = PurchaseInvoiceItemDTO::fromArray($item);
         }
+        $payment = PaymentDTO::fromArray($data['payment']);
         return new self(
             $data['supplier_id'],
             $data['inventory_id'],
+            $data['session_id'],
             $items,
+            $payment,
         );
     }
-
 }

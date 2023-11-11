@@ -9,6 +9,7 @@ class ReceiptItem extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
 
     protected $fillable = [
         'receipt_id',

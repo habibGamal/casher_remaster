@@ -19,7 +19,7 @@ class Receipt extends Model
         'session_id',
     ];
 
-    public function payments()
+    public function payment()
     {
         return $this->hasOne(Payment::class);
     }
@@ -34,9 +34,9 @@ class Receipt extends Model
         return $this->morphTo(__FUNCTION__, 'to_id', 'to_type');
     }
 
-    public function posItems()
+    public function items()
     {
-        return $this->hasMany(PosItem::class);
+        return $this->hasMany(ReceiptItem::class);
     }
 
     static private function createFromTo($from, $to, $attributes)

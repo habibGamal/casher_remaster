@@ -5,17 +5,18 @@ namespace App\Services;
 use App\DTO\InventoryItemDTO;
 use App\DTO\IdQuantityPairDTO;
 use App\Models\InventoryItem;
+use Illuminate\Support\Collection;
 
 class InventoryServices
 {
     /**
-     * @param InventoryItemDTO[] $items
+     * @param Collection<InventoryItemDTO> $items
      * @return void
      */
     function addItemsToInventory($items)
     {
         InventoryItem::upsert(
-            collect($items)->toArray(),
+            dtoToArrayDeep($items->toArray()),
             ['inventory_id', 'product_id', 'expiry_date'],
             ['quantity']
         );
